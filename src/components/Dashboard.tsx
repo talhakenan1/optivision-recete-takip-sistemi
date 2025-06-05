@@ -3,9 +3,10 @@ import { Button } from "@/components/ui/button";
 
 interface DashboardProps {
   onNewPrescription: () => void;
+  onNavigate: (section: string) => void;
 }
 
-export function Dashboard({ onNewPrescription }: DashboardProps) {
+export function Dashboard({ onNewPrescription, onNavigate }: DashboardProps) {
   return (
     <div className="space-y-6">
       {/* Hero Section */}
@@ -25,14 +26,14 @@ export function Dashboard({ onNewPrescription }: DashboardProps) {
           </p>
           <div className="flex gap-4">
             <Button 
-              onClick={onNewPrescription}
+              onClick={() => onNavigate("orders")}
               className="bg-white text-gray-800 hover:bg-gray-100 px-8 py-3 text-lg font-semibold rounded-full"
             >
               Orders
             </Button>
             <Button 
-              variant="outline" 
-              className="border-white text-white hover:bg-white hover:text-gray-800 px-8 py-3 text-lg font-semibold rounded-full"
+              onClick={() => onNavigate("customers")}
+              className="border-white text-gray-800 bg-white hover:bg-gray-100 px-8 py-3 text-lg font-semibold rounded-full"
             >
               Customers
             </Button>

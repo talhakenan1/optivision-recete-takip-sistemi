@@ -24,23 +24,32 @@ const menuItems = [
     id: "dashboard",
     title: "Dashboard",
     icon: Home,
-    url: "#",
   },
   {
     id: "orders",
     title: "Orders",
     icon: Package,
-    url: "#",
   },
   {
     id: "customers",
     title: "Customers",
     icon: Users,
-    url: "#",
   },
 ];
 
 export function AppSidebar({ activeSection, onSectionChange, onNewPrescription }: AppSidebarProps) {
+  const handleMenuClick = (itemId: string) => {
+    onSectionChange(itemId);
+  };
+
+  const handleNewPrescriptionClick = () => {
+    onNewPrescription();
+  };
+
+  const handleSettingsClick = () => {
+    onSectionChange("settings");
+  };
+
   return (
     <Sidebar className="border-r border-gray-200">
       <SidebarHeader className="p-6">
@@ -59,14 +68,13 @@ export function AppSidebar({ activeSection, onSectionChange, onNewPrescription }
               {menuItems.map((item) => (
                 <SidebarMenuItem key={item.id}>
                   <SidebarMenuButton 
-                    asChild 
                     isActive={activeSection === item.id}
-                    onClick={() => onSectionChange(item.id)}
+                    onClick={() => handleMenuClick(item.id)}
                   >
-                    <a href={item.url} className="flex items-center gap-3">
+                    <div className="flex items-center gap-3">
                       <item.icon className="w-5 h-5" />
                       <span>{item.title}</span>
-                    </a>
+                    </div>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -76,7 +84,7 @@ export function AppSidebar({ activeSection, onSectionChange, onNewPrescription }
 
         <div className="px-4 mt-6">
           <Button 
-            onClick={onNewPrescription}
+            onClick={handleNewPrescriptionClick}
             className="w-full bg-blue-500 hover:bg-blue-600 text-white"
           >
             New Prescription
@@ -88,22 +96,21 @@ export function AppSidebar({ activeSection, onSectionChange, onNewPrescription }
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton 
-              asChild 
               isActive={activeSection === "settings"}
-              onClick={() => onSectionChange("settings")}
+              onClick={handleSettingsClick}
             >
-              <a href="#" className="flex items-center gap-3">
+              <div className="flex items-center gap-3">
                 <Settings className="w-5 h-5" />
                 <span>Settings</span>
-              </a>
+              </div>
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <a href="#" className="flex items-center gap-3">
+            <SidebarMenuButton>
+              <div className="flex items-center gap-3">
                 <HelpCircle className="w-5 h-5" />
                 <span>Help and docs</span>
-              </a>
+              </div>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

@@ -14,18 +14,30 @@ const Index = () => {
   const [isNewPrescriptionOpen, setIsNewPrescriptionOpen] = useState(false);
   const [isPersonalInfoOpen, setIsPersonalInfoOpen] = useState(false);
 
+  const handleSectionChange = (section: string) => {
+    setActiveSection(section);
+  };
+
+  const handleNewPrescription = () => {
+    setIsNewPrescriptionOpen(true);
+  };
+
+  const handlePersonalInfo = () => {
+    setIsPersonalInfoOpen(true);
+  };
+
   const renderContent = () => {
     switch (activeSection) {
       case "dashboard":
-        return <Dashboard onNewPrescription={() => setIsNewPrescriptionOpen(true)} />;
+        return <Dashboard onNewPrescription={handleNewPrescription} onNavigate={handleSectionChange} />;
       case "orders":
-        return <Orders onNewPrescription={() => setIsNewPrescriptionOpen(true)} />;
+        return <Orders onNewPrescription={handleNewPrescription} />;
       case "customers":
         return <Customers />;
       case "settings":
-        return <Settings onPersonalInfo={() => setIsPersonalInfoOpen(true)} />;
+        return <Settings onPersonalInfo={handlePersonalInfo} />;
       default:
-        return <Dashboard onNewPrescription={() => setIsNewPrescriptionOpen(true)} />;
+        return <Dashboard onNewPrescription={handleNewPrescription} onNavigate={handleSectionChange} />;
     }
   };
 
@@ -34,8 +46,8 @@ const Index = () => {
       <SidebarProvider>
         <AppSidebar 
           activeSection={activeSection} 
-          onSectionChange={setActiveSection}
-          onNewPrescription={() => setIsNewPrescriptionOpen(true)}
+          onSectionChange={handleSectionChange}
+          onNewPrescription={handleNewPrescription}
         />
         <main className="flex-1 p-6">
           {renderContent()}
