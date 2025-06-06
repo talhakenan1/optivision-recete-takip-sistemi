@@ -9,7 +9,116 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      customers: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          name: string
+          phone: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          name: string
+          phone?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          name?: string
+          phone?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      orders: {
+        Row: {
+          created_at: string
+          customer_id: string
+          id: string
+          order_date: string
+          status: string
+          total: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          customer_id: string
+          id?: string
+          order_date?: string
+          status?: string
+          total: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          customer_id?: string
+          id?: string
+          order_date?: string
+          status?: string
+          total?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "orders_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      prescriptions: {
+        Row: {
+          created_at: string
+          customer_id: string
+          id: string
+          notes: string | null
+          order_id: string | null
+          prescription_data: Json
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          customer_id: string
+          id?: string
+          notes?: string | null
+          order_id?: string | null
+          prescription_data: Json
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          customer_id?: string
+          id?: string
+          notes?: string | null
+          order_id?: string | null
+          prescription_data?: Json
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "prescriptions_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "prescriptions_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never

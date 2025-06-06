@@ -1,31 +1,50 @@
 
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Search } from "lucide-react";
-
-const mockCustomers = [
-  { id: "123456789", name: "Sophia Carter", email: "sophia.carter@email.com", phone: "(555) 123-4567", avatar: "/lovable-uploads/65022451-c59a-498a-8a20-f98913e71add.png" },
-  { id: "123456790", name: "Ethan Harper", email: "ethan.harper@email.com", phone: "(555) 234-5678", avatar: "" },
-  { id: "123456791", name: "Olivia Bennett", email: "olivia.bennett@email.com", phone: "(555) 345-6789", avatar: "" },
-  { id: "123456792", name: "Liam Carter", email: "liam.carter@email.com", phone: "(555) 456-7890", avatar: "" },
-  { id: "123456793", name: "Noah Evans", email: "noah.evans@email.com", phone: "(555) 567-8901", avatar: "" },
-  { id: "123456794", name: "Ava Foster", email: "ava.foster@email.com", phone: "(555) 678-9012", avatar: "" },
-  { id: "123456795", name: "Jackson Gray", email: "jackson.gray@email.com", phone: "(555) 789-0123", avatar: "" },
-  { id: "123456796", name: "Isabella Hayes", email: "isabella.hayes@email.com", phone: "(555) 890-1234", avatar: "" },
-];
+import { Search, Plus, Loader2 } from "lucide-react";
+import { useCustomers } from "@/hooks/useCustomers";
+import { AddCustomerModal } from "@/components/AddCustomerModal";
 
 export function Customers() {
   const [searchTerm, setSearchTerm] = useState("");
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const { customers, isLoading, error } = useCustomers();
 
-  const filteredCustomers = mockCustomers.filter(customer =>
+  const filteredCustomers = customers.filter(customer =>
     customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     customer.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="w-8 h-8 animate-spin" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="text-center text-red-600 p-6">
+        Error loading customers. Please try again.
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold text-gray-900">Customers</h1>
+      <div className="flex justify-between items-center">
+        <h1 className="text-3xl font-bold text-gray-900">Customers</h1>
+        <Button 
+          onClick={() => setIsAddModalOpen(true)}
+          className="bg-blue-500 hover:bg-blue-600 text-white"
+        >
+          <Plus className="w-4 h-4 mr-2" />
+          Add Customer
+        </Button>
+      </div>
 
       {/* Search */}
       <div className="relative">
@@ -44,19 +63,24 @@ export function Customers() {
           <div key={customer.id} className="bg-white p-6 rounded-lg shadow-sm border hover:shadow-md transition-shadow cursor-pointer">
             <div className="flex items-center space-x-4">
               <Avatar className="w-12 h-12">
-                <AvatarImage src={customer.avatar} alt={customer.name} />
+                <AvatarImage src="" alt={customer.name} />
                 <AvatarFallback>{customer.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
               </Avatar>
               <div className="flex-1">
                 <h3 className="font-semibold text-gray-900">{customer.name}</h3>
-                <p className="text-sm text-gray-500">ID: {customer.id}</p>
+                <p className="text-sm text-gray-500">ID: {customer.id.slice(0, 8)}</p>
                 <p className="text-sm text-gray-600">{customer.email}</p>
-                <p className="text-sm text-gray-600">{customer.phone}</p>
+                {customer.phone && <p className="text-sm text-gray-600">{customer.phone}</p>}
               </div>
             </div>
           </div>
         ))}
       </div>
+
+      <AddCustomerModal 
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+      />
     </div>
   );
 }

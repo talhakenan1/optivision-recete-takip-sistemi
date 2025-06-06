@@ -3,38 +3,62 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Search } from "lucide-react";
+import { Search, Loader2 } from "lucide-react";
+import { useOrders } from "@/hooks/useOrders";
 
 interface OrdersProps {
   onNewPrescription: () => void;
 }
 
-const mockOrders = [
-  { id: "#12345", customer: "Ethan Harper", date: "2023-08-15", status: "Shipped", total: "$250" },
-  { id: "#12346", customer: "Olivia Bennett", date: "2023-08-14", status: "New", total: "$180" },
-  { id: "#12347", customer: "Liam Carter", date: "2023-08-17", status: "Returned", total: "$300" },
-  { id: "#12348", customer: "Sophia Davis", date: "2023-08-18", status: "Shipped", total: "$220" },
-  { id: "#12349", customer: "Noah Evans", date: "2023-08-19", status: "New", total: "$150" },
-  { id: "#12350", customer: "Ava Foster", date: "2023-08-20", status: "Shipped", total: "$280" },
-  { id: "#12351", customer: "Jackson Gray", date: "2023-08-21", status: "Returned", total: "$350" },
-  { id: "#12352", customer: "Isabella Hayes", date: "2023-08-22", status: "New", total: "$200" },
-  { id: "#12353", customer: "Lucas Ingram", date: "2023-08-23", status: "Shipped", total: "$230" },
-  { id: "#12354", customer: "Mia Jenkins", date: "2023-08-24", status: "New", total: "$170" },
-];
-
-const statusFilters = ["All", "New", "Shipped", "Returned"];
+const statusFilters = ["All", "new", "shipped", "returned"];
 
 export function Orders({ onNewPrescription }: OrdersProps) {
   const [activeFilter, setActiveFilter] = useState("All");
+  const [searchTerm, setSearchTerm] = useState("");
+  const { orders, isLoading, error } = useOrders();
+
+  const filteredOrders = orders.filter(order => {
+    const matchesFilter = activeFilter === "All" || order.status === activeFilter;
+    const matchesSearch = order.customers?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         order.id.toLowerCase().includes(searchTerm.toLowerCase());
+    return matchesFilter && matchesSearch;
+  });
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "New": return "bg-blue-100 text-blue-800";
-      case "Shipped": return "bg-green-100 text-green-800";
-      case "Returned": return "bg-red-100 text-red-800";
+      case "new": return "bg-blue-100 text-blue-800";
+      case "shipped": return "bg-green-100 text-green-800";
+      case "returned": return "bg-red-100 text-red-800";
       default: return "bg-gray-100 text-gray-800";
     }
   };
+
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+    }).format(amount);
+  };
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString();
+  };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="w-8 h-8 animate-spin" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="text-center text-red-600 p-6">
+        Error loading orders. Please try again.
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -57,7 +81,7 @@ export function Orders({ onNewPrescription }: OrdersProps) {
             onClick={() => setActiveFilter(filter)}
             className={activeFilter === filter ? "bg-gray-900" : ""}
           >
-            {filter}
+            {filter.charAt(0).toUpperCase() + filter.slice(1)}
           </Button>
         ))}
       </div>
@@ -68,6 +92,8 @@ export function Orders({ onNewPrescription }: OrdersProps) {
         <Input
           placeholder="Search orders..."
           className="pl-10 bg-gray-50 border-gray-200"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
         />
       </div>
 
@@ -84,21 +110,26 @@ export function Orders({ onNewPrescription }: OrdersProps) {
             </tr>
           </thead>
           <tbody>
-            {mockOrders.map((order, index) => (
+            {filteredOrders.map((order, index) => (
               <tr key={order.id} className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}>
-                <td className="p-4 font-medium text-gray-900">{order.id}</td>
-                <td className="p-4 text-gray-600">{order.customer}</td>
-                <td className="p-4 text-gray-600">{order.date}</td>
+                <td className="p-4 font-medium text-gray-900">#{order.id.slice(0, 8)}</td>
+                <td className="p-4 text-gray-600">{order.customers?.name || 'Unknown'}</td>
+                <td className="p-4 text-gray-600">{formatDate(order.order_date)}</td>
                 <td className="p-4">
                   <Badge className={getStatusColor(order.status)}>
-                    {order.status}
+                    {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
                   </Badge>
                 </td>
-                <td className="p-4 font-medium text-gray-900">{order.total}</td>
+                <td className="p-4 font-medium text-gray-900">{formatCurrency(Number(order.total))}</td>
               </tr>
             ))}
           </tbody>
         </table>
+        {filteredOrders.length === 0 && (
+          <div className="p-8 text-center text-gray-500">
+            No orders found matching your criteria.
+          </div>
+        )}
       </div>
     </div>
   );
