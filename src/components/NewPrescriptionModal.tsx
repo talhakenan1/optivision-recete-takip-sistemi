@@ -10,6 +10,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
+import { usePrescriptions } from "@/hooks/usePrescriptions";
 
 interface NewPrescriptionModalProps {
   isOpen: boolean;
@@ -18,10 +19,13 @@ interface NewPrescriptionModalProps {
 
 export function NewPrescriptionModal({ isOpen, onClose }: NewPrescriptionModalProps) {
   const [date, setDate] = useState<Date>();
+  const { addPrescription, isAddingPrescription } = usePrescriptions();
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     idNumber: "",
+    email: "",
+    phone: "",
     productInfo: "",
     visionType: "",
     sph: "",
@@ -29,6 +33,7 @@ export function NewPrescriptionModal({ isOpen, onClose }: NewPrescriptionModalPr
     axis: "",
     distanceVision: "",
     nearVision: "",
+    price: "",
   });
 
   const handleInputChange = (field: string, value: string) => {
@@ -36,7 +41,40 @@ export function NewPrescriptionModal({ isOpen, onClose }: NewPrescriptionModalPr
   };
 
   const handleSave = () => {
-    console.log("Saving prescription:", { ...formData, purchaseDate: date });
+    if (!date) {
+      alert("Please select a purchase date");
+      return;
+    }
+
+    if (!formData.firstName || !formData.lastName || !formData.idNumber || !formData.email) {
+      alert("Please fill in all required fields");
+      return;
+    }
+
+    console.log("Saving prescription with form data:", formData);
+    addPrescription({
+      ...formData,
+      price: formData.price ? parseFloat(formData.price) : undefined,
+      purchaseDate: date,
+    });
+    
+    // Reset form
+    setFormData({
+      firstName: "",
+      lastName: "",
+      idNumber: "",
+      email: "",
+      phone: "",
+      productInfo: "",
+      visionType: "",
+      sph: "",
+      cyl: "",
+      axis: "",
+      distanceVision: "",
+      nearVision: "",
+      price: "",
+    });
+    setDate(undefined);
     onClose();
   };
 
@@ -53,36 +91,61 @@ export function NewPrescriptionModal({ isOpen, onClose }: NewPrescriptionModalPr
             <h3 className="text-lg font-semibold">Customer Information</h3>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="firstName">Name</Label>
+                <Label htmlFor="firstName">Name *</Label>
                 <Input
                   id="firstName"
                   placeholder="Enter customer's first name"
                   value={formData.firstName}
                   onChange={(e) => handleInputChange("firstName", e.target.value)}
+                  required
                 />
               </div>
               <div>
-                <Label htmlFor="lastName">Surname</Label>
+                <Label htmlFor="lastName">Surname *</Label>
                 <Input
                   id="lastName"
                   placeholder="Enter customer's last name"
                   value={formData.lastName}
                   onChange={(e) => handleInputChange("lastName", e.target.value)}
+                  required
                 />
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-3 gap-4">
               <div>
-                <Label htmlFor="idNumber">ID Number</Label>
+                <Label htmlFor="idNumber">ID Number *</Label>
                 <Input
                   id="idNumber"
                   placeholder="Enter customer's ID number"
                   value={formData.idNumber}
                   onChange={(e) => handleInputChange("idNumber", e.target.value)}
+                  required
                 />
               </div>
               <div>
-                <Label>Purchase Date</Label>
+                <Label htmlFor="email">Email *</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="customer@email.com"
+                  value={formData.email}
+                  onChange={(e) => handleInputChange("email", e.target.value)}
+                  required
+                />
+              </div>
+              <div>
+                <Label htmlFor="phone">Phone</Label>
+                <Input
+                  id="phone"
+                  placeholder="0545297..."
+                  value={formData.phone}
+                  onChange={(e) => handleInputChange("phone", e.target.value)}
+                />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label>Purchase Date *</Label>
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
@@ -107,6 +170,16 @@ export function NewPrescriptionModal({ isOpen, onClose }: NewPrescriptionModalPr
                   </PopoverContent>
                 </Popover>
               </div>
+              <div>
+                <Label htmlFor="price">Price</Label>
+                <Input
+                  id="price"
+                  type="number"
+                  placeholder="0.00"
+                  value={formData.price}
+                  onChange={(e) => handleInputChange("price", e.target.value)}
+                />
+              </div>
             </div>
           </div>
 
@@ -117,7 +190,7 @@ export function NewPrescriptionModal({ isOpen, onClose }: NewPrescriptionModalPr
               <Label htmlFor="productInfo">Product Information</Label>
               <Textarea
                 id="productInfo"
-                placeholder="Enter product details"
+                placeholder="Enter product details (e.g., Purchased glasses)"
                 value={formData.productInfo}
                 onChange={(e) => handleInputChange("productInfo", e.target.value)}
               />
@@ -181,9 +254,16 @@ export function NewPrescriptionModal({ isOpen, onClose }: NewPrescriptionModalPr
             </div>
           </div>
 
-          <div className="flex justify-end">
-            <Button onClick={handleSave} className="bg-blue-500 hover:bg-blue-600 text-white">
-              Save Prescription
+          <div className="flex justify-end space-x-3">
+            <Button type="button" variant="outline" onClick={onClose}>
+              Cancel
+            </Button>
+            <Button 
+              onClick={handleSave}
+              disabled={isAddingPrescription}
+              className="bg-blue-500 hover:bg-blue-600 text-white"
+            >
+              {isAddingPrescription ? "Saving..." : "Save Prescription"}
             </Button>
           </div>
         </div>

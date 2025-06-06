@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Search, Loader2 } from "lucide-react";
 import { useOrders } from "@/hooks/useOrders";
+import { OrderDetailsModal } from "@/components/OrderDetailsModal";
 
 interface OrdersProps {
   onNewPrescription: () => void;
@@ -15,10 +16,26 @@ const statusFilters = ["All", "new", "shipped", "returned"];
 export function Orders({ onNewPrescription }: OrdersProps) {
   const [activeFilter, setActiveFilter] = useState("All");
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedOrder, setSelectedOrder] = useState<any>(null);
   const { orders, isLoading, error } = useOrders();
 
-  const filteredOrders = orders.filter(order => {
-    const matchesFilter = activeFilter === "All" || order.status === activeFilter;
+  const getOrderStatus = (orderDate: string) => {
+    const today = new Date();
+    const orderDateTime = new Date(orderDate);
+    const diffInDays = Math.floor((today.getTime() - orderDateTime.getTime()) / (1000 * 60 * 60 * 24));
+    
+    if (diffInDays <= 7) {
+      return "new";
+    } else {
+      return "shipped";
+    }
+  };
+
+  const filteredOrders = orders.map(order => ({
+    ...order,
+    calculatedStatus: order.status === "returned" ? "returned" : getOrderStatus(order.order_date)
+  })).filter(order => {
+    const matchesFilter = activeFilter === "All" || order.calculatedStatus === activeFilter;
     const matchesSearch = order.customers?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          order.id.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesFilter && matchesSearch;
@@ -111,13 +128,17 @@ export function Orders({ onNewPrescription }: OrdersProps) {
           </thead>
           <tbody>
             {filteredOrders.map((order, index) => (
-              <tr key={order.id} className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}>
+              <tr 
+                key={order.id} 
+                className={`${index % 2 === 0 ? "bg-white" : "bg-gray-50"} hover:bg-blue-50 cursor-pointer`}
+                onClick={() => setSelectedOrder(order)}
+              >
                 <td className="p-4 font-medium text-gray-900">#{order.id.slice(0, 8)}</td>
                 <td className="p-4 text-gray-600">{order.customers?.name || 'Unknown'}</td>
                 <td className="p-4 text-gray-600">{formatDate(order.order_date)}</td>
                 <td className="p-4">
-                  <Badge className={getStatusColor(order.status)}>
-                    {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                  <Badge className={getStatusColor(order.calculatedStatus)}>
+                    {order.calculatedStatus.charAt(0).toUpperCase() + order.calculatedStatus.slice(1)}
                   </Badge>
                 </td>
                 <td className="p-4 font-medium text-gray-900">{formatCurrency(Number(order.total))}</td>
@@ -131,6 +152,14 @@ export function Orders({ onNewPrescription }: OrdersProps) {
           </div>
         )}
       </div>
+
+      {selectedOrder && (
+        <OrderDetailsModal
+          order={selectedOrder}
+          isOpen={!!selectedOrder}
+          onClose={() => setSelectedOrder(null)}
+        />
+      )}
     </div>
   );
 }

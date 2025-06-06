@@ -14,6 +14,7 @@ export type Database = {
           created_at: string
           email: string
           id: string
+          id_number: string | null
           name: string
           phone: string | null
           updated_at: string
@@ -22,6 +23,7 @@ export type Database = {
           created_at?: string
           email: string
           id?: string
+          id_number?: string | null
           name: string
           phone?: string | null
           updated_at?: string
@@ -30,6 +32,7 @@ export type Database = {
           created_at?: string
           email?: string
           id?: string
+          id_number?: string | null
           name?: string
           phone?: string | null
           updated_at?: string
@@ -78,28 +81,40 @@ export type Database = {
         Row: {
           created_at: string
           customer_id: string
+          email: string | null
           id: string
+          id_number: string | null
           notes: string | null
           order_id: string | null
+          phone: string | null
           prescription_data: Json
+          price: number | null
           updated_at: string
         }
         Insert: {
           created_at?: string
           customer_id: string
+          email?: string | null
           id?: string
+          id_number?: string | null
           notes?: string | null
           order_id?: string | null
+          phone?: string | null
           prescription_data: Json
+          price?: number | null
           updated_at?: string
         }
         Update: {
           created_at?: string
           customer_id?: string
+          email?: string | null
           id?: string
+          id_number?: string | null
           notes?: string | null
           order_id?: string | null
+          phone?: string | null
           prescription_data?: Json
+          price?: number | null
           updated_at?: string
         }
         Relationships: [

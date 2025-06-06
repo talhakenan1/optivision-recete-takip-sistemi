@@ -6,15 +6,18 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Search, Plus, Loader2 } from "lucide-react";
 import { useCustomers } from "@/hooks/useCustomers";
 import { AddCustomerModal } from "@/components/AddCustomerModal";
+import { CustomerDetailsModal } from "@/components/CustomerDetailsModal";
 
 export function Customers() {
   const [searchTerm, setSearchTerm] = useState("");
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [selectedCustomer, setSelectedCustomer] = useState<any>(null);
   const { customers, isLoading, error } = useCustomers();
 
   const filteredCustomers = customers.filter(customer =>
     customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    customer.email.toLowerCase().includes(searchTerm.toLowerCase())
+    customer.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (customer.id_number && customer.id_number.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
   if (isLoading) {
@@ -60,7 +63,11 @@ export function Customers() {
       {/* Customers Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredCustomers.map((customer) => (
-          <div key={customer.id} className="bg-white p-6 rounded-lg shadow-sm border hover:shadow-md transition-shadow cursor-pointer">
+          <div 
+            key={customer.id} 
+            className="bg-white p-6 rounded-lg shadow-sm border hover:shadow-md transition-shadow cursor-pointer"
+            onClick={() => setSelectedCustomer(customer)}
+          >
             <div className="flex items-center space-x-4">
               <Avatar className="w-12 h-12">
                 <AvatarImage src="" alt={customer.name} />
@@ -68,7 +75,7 @@ export function Customers() {
               </Avatar>
               <div className="flex-1">
                 <h3 className="font-semibold text-gray-900">{customer.name}</h3>
-                <p className="text-sm text-gray-500">ID: {customer.id.slice(0, 8)}</p>
+                <p className="text-sm text-gray-500">ID: {customer.id_number || customer.id.slice(0, 8)}</p>
                 <p className="text-sm text-gray-600">{customer.email}</p>
                 {customer.phone && <p className="text-sm text-gray-600">{customer.phone}</p>}
               </div>
@@ -81,6 +88,14 @@ export function Customers() {
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
       />
+
+      {selectedCustomer && (
+        <CustomerDetailsModal
+          customer={selectedCustomer}
+          isOpen={!!selectedCustomer}
+          onClose={() => setSelectedCustomer(null)}
+        />
+      )}
     </div>
   );
 }
