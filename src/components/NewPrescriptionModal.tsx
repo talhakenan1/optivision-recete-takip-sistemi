@@ -18,6 +18,15 @@ interface NewPrescriptionModalProps {
   onClose: () => void;
 }
 
+interface PrescriptionData {
+  visionType?: string;
+  sph?: string;
+  cyl?: string;
+  axis?: string;
+  distanceVision?: string;
+  nearVision?: string;
+}
+
 export function NewPrescriptionModal({ isOpen, onClose }: NewPrescriptionModalProps) {
   const [date, setDate] = useState<Date>();
   const { addPrescription, isAddingPrescription } = usePrescriptions();
@@ -68,6 +77,21 @@ export function NewPrescriptionModal({ isOpen, onClose }: NewPrescriptionModalPr
               .limit(1)
               .maybeSingle();
 
+            let prescriptionData: PrescriptionData = {};
+            if (lastPrescription && lastPrescription.prescription_data) {
+              // Safely parse prescription data
+              try {
+                if (typeof lastPrescription.prescription_data === 'string') {
+                  prescriptionData = JSON.parse(lastPrescription.prescription_data);
+                } else if (typeof lastPrescription.prescription_data === 'object') {
+                  prescriptionData = lastPrescription.prescription_data as PrescriptionData;
+                }
+              } catch (error) {
+                console.error("Error parsing prescription data:", error);
+                prescriptionData = {};
+              }
+            }
+
             setFormData(prev => ({
               ...prev,
               firstName,
@@ -75,12 +99,12 @@ export function NewPrescriptionModal({ isOpen, onClose }: NewPrescriptionModalPr
               email: customer.email || "",
               phone: customer.phone || "",
               // Fill prescription details from last prescription if available
-              visionType: lastPrescription?.prescription_data?.visionType || "",
-              sph: lastPrescription?.prescription_data?.sph || "",
-              cyl: lastPrescription?.prescription_data?.cyl || "",
-              axis: lastPrescription?.prescription_data?.axis || "",
-              distanceVision: lastPrescription?.prescription_data?.distanceVision || "",
-              nearVision: lastPrescription?.prescription_data?.nearVision || "",
+              visionType: prescriptionData.visionType || "",
+              sph: prescriptionData.sph || "",
+              cyl: prescriptionData.cyl || "",
+              axis: prescriptionData.axis || "",
+              distanceVision: prescriptionData.distanceVision || "",
+              nearVision: prescriptionData.nearVision || "",
             }));
           }
         } catch (error) {

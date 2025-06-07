@@ -12,14 +12,12 @@ export function useDashboardStats() {
         .select("*", { count: "exact", head: true });
 
       // Get active customers count (customers who have placed orders)
-      const { count: activeCustomers } = await supabase
-        .from("customers")
-        .select("id", { count: "exact", head: true })
-        .in("id", 
-          supabase
-            .from("orders")
-            .select("customer_id")
-        );
+      const { data: ordersWithCustomers } = await supabase
+        .from("orders")
+        .select("customer_id");
+      
+      const uniqueCustomerIds = new Set(ordersWithCustomers?.map(order => order.customer_id) || []);
+      const activeCustomers = uniqueCustomerIds.size;
 
       // Get total revenue
       const { data: revenueData } = await supabase
@@ -39,7 +37,7 @@ export function useDashboardStats() {
 
       return {
         totalOrders: totalOrders || 0,
-        activeCustomers: activeCustomers || 0,
+        activeCustomers: activeCustomers,
         totalRevenue: totalRevenue,
         newPrescriptions: newPrescriptions || 0,
       };
