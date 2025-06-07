@@ -2,10 +2,12 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useAuth";
 
 export function useCustomers() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { user } = useAuth();
 
   const {
     data: customers = [],
@@ -14,6 +16,8 @@ export function useCustomers() {
   } = useQuery({
     queryKey: ["customers"],
     queryFn: async () => {
+      if (!user) throw new Error("User not authenticated");
+      
       const { data, error } = await supabase
         .from("customers")
         .select("*")
@@ -22,13 +26,16 @@ export function useCustomers() {
       if (error) throw error;
       return data;
     },
+    enabled: !!user,
   });
 
   const addCustomer = useMutation({
     mutationFn: async (customer: { name: string; email: string; phone?: string }) => {
+      if (!user) throw new Error("User not authenticated");
+      
       const { data, error } = await supabase
         .from("customers")
-        .insert([customer])
+        .insert([{ ...customer, user_id: user.id }])
         .select()
         .single();
 

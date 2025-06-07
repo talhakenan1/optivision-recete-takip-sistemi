@@ -2,6 +2,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useAuth";
 
 interface PrescriptionData {
   firstName: string;
@@ -23,6 +24,7 @@ interface PrescriptionData {
 export function usePrescriptions() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { user } = useAuth();
 
   const {
     data: prescriptions = [],
@@ -31,6 +33,8 @@ export function usePrescriptions() {
   } = useQuery({
     queryKey: ["prescriptions"],
     queryFn: async () => {
+      if (!user) throw new Error("User not authenticated");
+      
       const { data, error } = await supabase
         .from("prescriptions")
         .select(`
@@ -46,10 +50,13 @@ export function usePrescriptions() {
       if (error) throw error;
       return data;
     },
+    enabled: !!user,
   });
 
   const addPrescription = useMutation({
     mutationFn: async (prescriptionData: PrescriptionData) => {
+      if (!user) throw new Error("User not authenticated");
+      
       console.log("Adding prescription with data:", prescriptionData);
       
       // First, check if customer exists by ID number
@@ -76,6 +83,7 @@ export function usePrescriptions() {
             email: prescriptionData.email,
             phone: prescriptionData.phone,
             id_number: prescriptionData.idNumber,
+            user_id: user.id,
           }])
           .select()
           .single();
@@ -98,7 +106,8 @@ export function usePrescriptions() {
           customer_id: customerId,
           total: prescriptionData.price || 0,
           order_date: prescriptionData.purchaseDate.toISOString().split('T')[0],
-          status: "new"
+          status: "new",
+          user_id: user.id,
         }])
         .select()
         .single();
@@ -118,6 +127,7 @@ export function usePrescriptions() {
         phone: prescriptionData.phone,
         id_number: prescriptionData.idNumber,
         price: prescriptionData.price,
+        user_id: user.id,
         prescription_data: {
           firstName: prescriptionData.firstName,
           lastName: prescriptionData.lastName,
@@ -152,6 +162,7 @@ export function usePrescriptions() {
       queryClient.invalidateQueries({ queryKey: ["prescriptions"] });
       queryClient.invalidateQueries({ queryKey: ["customers"] });
       queryClient.invalidateQueries({ queryKey: ["orders"] });
+      queryClient.invalidateQueries({ queryKey: ["dashboard-stats"] });
       toast({
         title: "Success",
         description: "Prescription saved successfully",

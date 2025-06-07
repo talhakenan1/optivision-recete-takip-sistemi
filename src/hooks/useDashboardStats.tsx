@@ -1,11 +1,16 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
 
 export function useDashboardStats() {
+  const { user } = useAuth();
+  
   const { data: stats, isLoading, error } = useQuery({
     queryKey: ["dashboard-stats"],
     queryFn: async () => {
+      if (!user) throw new Error("User not authenticated");
+      
       // Get total orders count
       const { count: totalOrders } = await supabase
         .from("orders")
@@ -43,6 +48,7 @@ export function useDashboardStats() {
         newPrescriptions: newPrescriptions || 0,
       };
     },
+    enabled: !!user,
   });
 
   return {

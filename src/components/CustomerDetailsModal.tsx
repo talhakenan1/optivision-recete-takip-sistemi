@@ -1,10 +1,10 @@
-
 import { useQuery } from "@tanstack/react-query";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { Loader2 } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
 
 interface CustomerDetailsModalProps {
   customer: any;
@@ -13,9 +13,13 @@ interface CustomerDetailsModalProps {
 }
 
 export function CustomerDetailsModal({ customer, isOpen, onClose }: CustomerDetailsModalProps) {
+  const { user } = useAuth();
+  
   const { data: customerOrders = [], isLoading } = useQuery({
     queryKey: ["customer-orders", customer.id],
     queryFn: async () => {
+      if (!user) throw new Error("User not authenticated");
+      
       const { data, error } = await supabase
         .from("orders")
         .select(`
@@ -31,7 +35,7 @@ export function CustomerDetailsModal({ customer, isOpen, onClose }: CustomerDeta
       if (error) throw error;
       return data;
     },
-    enabled: isOpen,
+    enabled: isOpen && !!user,
   });
 
   const getOrderStatus = (orderDate: string, status: string) => {
