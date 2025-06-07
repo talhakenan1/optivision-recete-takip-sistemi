@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,6 +11,7 @@ import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { usePrescriptions } from "@/hooks/usePrescriptions";
+import { supabase } from "@/integrations/supabase/client";
 
 interface NewPrescriptionModalProps {
   isOpen: boolean;
@@ -39,6 +40,58 @@ export function NewPrescriptionModal({ isOpen, onClose }: NewPrescriptionModalPr
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
+
+  // Auto-fill customer data when ID number is entered
+  useEffect(() => {
+    const fetchCustomerData = async () => {
+      if (formData.idNumber && formData.idNumber.length > 0) {
+        try {
+          // Find customer by ID number
+          const { data: customer } = await supabase
+            .from("customers")
+            .select("*")
+            .eq("id_number", formData.idNumber)
+            .maybeSingle();
+
+          if (customer) {
+            // Split the name into first and last name
+            const nameParts = customer.name.split(" ");
+            const firstName = nameParts[0] || "";
+            const lastName = nameParts.slice(1).join(" ") || "";
+
+            // Get the most recent prescription for this customer
+            const { data: lastPrescription } = await supabase
+              .from("prescriptions")
+              .select("prescription_data")
+              .eq("customer_id", customer.id)
+              .order("created_at", { ascending: false })
+              .limit(1)
+              .maybeSingle();
+
+            setFormData(prev => ({
+              ...prev,
+              firstName,
+              lastName,
+              email: customer.email || "",
+              phone: customer.phone || "",
+              // Fill prescription details from last prescription if available
+              visionType: lastPrescription?.prescription_data?.visionType || "",
+              sph: lastPrescription?.prescription_data?.sph || "",
+              cyl: lastPrescription?.prescription_data?.cyl || "",
+              axis: lastPrescription?.prescription_data?.axis || "",
+              distanceVision: lastPrescription?.prescription_data?.distanceVision || "",
+              nearVision: lastPrescription?.prescription_data?.nearVision || "",
+            }));
+          }
+        } catch (error) {
+          console.error("Error fetching customer data:", error);
+        }
+      }
+    };
+
+    const timeoutId = setTimeout(fetchCustomerData, 500); // Debounce the API call
+    return () => clearTimeout(timeoutId);
+  }, [formData.idNumber]);
 
   const handleSave = () => {
     if (!date) {
@@ -89,7 +142,18 @@ export function NewPrescriptionModal({ isOpen, onClose }: NewPrescriptionModalPr
           {/* Customer Information */}
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">Customer Information</h3>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-3 gap-4">
+              <div>
+                <Label htmlFor="idNumber">ID Number *</Label>
+                <Input
+                  id="idNumber"
+                  placeholder="Enter ID number"
+                  value={formData.idNumber}
+                  onChange={(e) => handleInputChange("idNumber", e.target.value)}
+                  required
+                />
+                <p className="text-xs text-gray-500 mt-1">Enter ID to auto-fill existing customer data</p>
+              </div>
               <div>
                 <Label htmlFor="firstName">Name *</Label>
                 <Input
@@ -111,17 +175,7 @@ export function NewPrescriptionModal({ isOpen, onClose }: NewPrescriptionModalPr
                 />
               </div>
             </div>
-            <div className="grid grid-cols-3 gap-4">
-              <div>
-                <Label htmlFor="idNumber">ID Number *</Label>
-                <Input
-                  id="idNumber"
-                  placeholder="Enter customer's ID number"
-                  value={formData.idNumber}
-                  onChange={(e) => handleInputChange("idNumber", e.target.value)}
-                  required
-                />
-              </div>
+            <div className="grid grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="email">Email *</Label>
                 <Input

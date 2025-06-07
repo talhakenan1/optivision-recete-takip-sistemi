@@ -11,14 +11,14 @@ import { PersonalInfoModal } from "@/components/PersonalInfoModal";
 import { AuthModal } from "@/components/AuthModal";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { LogOut, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 
 const Index = () => {
   const [activeSection, setActiveSection] = useState("dashboard");
   const [isNewPrescriptionOpen, setIsNewPrescriptionOpen] = useState(false);
   const [isPersonalInfoOpen, setIsPersonalInfoOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const { user, loading, signOut } = useAuth();
+  const { user, loading } = useAuth();
 
   const handleSectionChange = (section: string) => {
     setActiveSection(section);
@@ -91,18 +91,6 @@ const Index = () => {
           />
         )}
         <main className={`flex-1 p-6 ${!user ? 'w-full' : ''}`}>
-          {user && (
-            <div className="flex justify-end mb-4">
-              <Button
-                onClick={signOut}
-                variant="outline"
-                className="flex items-center gap-2"
-              >
-                <LogOut className="w-4 h-4" />
-                Sign Out
-              </Button>
-            </div>
-          )}
           {renderContent()}
         </main>
         

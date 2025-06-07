@@ -129,13 +129,37 @@ export function CustomerDetailsModal({ customer, isOpen, onClose }: CustomerDeta
                         <div className="mt-3 pt-3 border-t">
                           <h5 className="font-medium text-gray-700 mb-2">Prescription Details:</h5>
                           {order.prescriptions.map((prescription: any, index: number) => (
-                            <div key={index} className="text-sm text-gray-600 space-y-1">
+                            <div key={index} className="text-sm text-gray-600 space-y-2">
                               {prescription.prescription_data?.productInfo && (
                                 <p><span className="font-medium">Product:</span> {prescription.prescription_data.productInfo}</p>
                               )}
                               {prescription.prescription_data?.visionType && (
                                 <p><span className="font-medium">Vision Type:</span> {prescription.prescription_data.visionType}</p>
                               )}
+                              
+                              {/* Vision Details Grid */}
+                              <div className="grid grid-cols-2 gap-4 mt-2 p-3 bg-gray-50 rounded">
+                                <div className="space-y-1">
+                                  {prescription.prescription_data?.sph && (
+                                    <p><span className="font-medium">SPH:</span> {prescription.prescription_data.sph}</p>
+                                  )}
+                                  {prescription.prescription_data?.cyl && (
+                                    <p><span className="font-medium">CYL:</span> {prescription.prescription_data.cyl}</p>
+                                  )}
+                                  {prescription.prescription_data?.axis && (
+                                    <p><span className="font-medium">Axis:</span> {prescription.prescription_data.axis}</p>
+                                  )}
+                                </div>
+                                <div className="space-y-1">
+                                  {prescription.prescription_data?.distanceVision && (
+                                    <p><span className="font-medium">Distance Vision:</span> {prescription.prescription_data.distanceVision}</p>
+                                  )}
+                                  {prescription.prescription_data?.nearVision && (
+                                    <p><span className="font-medium">Near Vision:</span> {prescription.prescription_data.nearVision}</p>
+                                  )}
+                                </div>
+                              </div>
+
                               {prescription.notes && (
                                 <p><span className="font-medium">Notes:</span> {prescription.notes}</p>
                               )}

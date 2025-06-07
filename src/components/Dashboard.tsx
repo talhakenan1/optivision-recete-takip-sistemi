@@ -1,5 +1,7 @@
 
 import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
+import { useDashboardStats } from "@/hooks/useDashboardStats";
 
 interface DashboardProps {
   onNewPrescription: () => void;
@@ -7,6 +9,15 @@ interface DashboardProps {
 }
 
 export function Dashboard({ onNewPrescription, onNavigate }: DashboardProps) {
+  const { stats, isLoading, error } = useDashboardStats();
+
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+    }).format(amount);
+  };
+
   return (
     <div className="space-y-6">
       {/* Hero Section */}
@@ -43,26 +54,38 @@ export function Dashboard({ onNewPrescription, onNavigate }: DashboardProps) {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="bg-white p-6 rounded-lg shadow-sm border">
-          <h3 className="text-sm font-medium text-gray-500">Total Orders</h3>
-          <p className="text-3xl font-bold text-gray-900">1,234</p>
-          <p className="text-sm text-green-600">+12% from last month</p>
-        </div>
-        <div className="bg-white p-6 rounded-lg shadow-sm border">
-          <h3 className="text-sm font-medium text-gray-500">Active Customers</h3>
-          <p className="text-3xl font-bold text-gray-900">856</p>
-          <p className="text-sm text-green-600">+8% from last month</p>
-        </div>
-        <div className="bg-white p-6 rounded-lg shadow-sm border">
-          <h3 className="text-sm font-medium text-gray-500">Revenue</h3>
-          <p className="text-3xl font-bold text-gray-900">$45,678</p>
-          <p className="text-sm text-green-600">+15% from last month</p>
-        </div>
-        <div className="bg-white p-6 rounded-lg shadow-sm border">
-          <h3 className="text-sm font-medium text-gray-500">New Prescriptions</h3>
-          <p className="text-3xl font-bold text-gray-900">23</p>
-          <p className="text-sm text-green-600">+5% from last month</p>
-        </div>
+        {isLoading ? (
+          <div className="col-span-4 flex items-center justify-center p-8">
+            <Loader2 className="w-8 h-8 animate-spin" />
+          </div>
+        ) : error ? (
+          <div className="col-span-4 text-center text-red-600 p-6">
+            Error loading dashboard statistics
+          </div>
+        ) : (
+          <>
+            <div className="bg-white p-6 rounded-lg shadow-sm border">
+              <h3 className="text-sm font-medium text-gray-500">Total Orders</h3>
+              <p className="text-3xl font-bold text-gray-900">{stats?.totalOrders}</p>
+              <p className="text-sm text-green-600">Updated in real-time</p>
+            </div>
+            <div className="bg-white p-6 rounded-lg shadow-sm border">
+              <h3 className="text-sm font-medium text-gray-500">Active Customers</h3>
+              <p className="text-3xl font-bold text-gray-900">{stats?.activeCustomers}</p>
+              <p className="text-sm text-green-600">Customers with orders</p>
+            </div>
+            <div className="bg-white p-6 rounded-lg shadow-sm border">
+              <h3 className="text-sm font-medium text-gray-500">Revenue</h3>
+              <p className="text-3xl font-bold text-gray-900">{formatCurrency(stats?.totalRevenue || 0)}</p>
+              <p className="text-sm text-green-600">Total revenue</p>
+            </div>
+            <div className="bg-white p-6 rounded-lg shadow-sm border">
+              <h3 className="text-sm font-medium text-gray-500">New Prescriptions</h3>
+              <p className="text-3xl font-bold text-gray-900">{stats?.newPrescriptions}</p>
+              <p className="text-sm text-green-600">Last 30 days</p>
+            </div>
+          </>
+        )}
       </div>
 
       {/* Copyright Footer */}
