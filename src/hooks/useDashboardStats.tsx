@@ -19,10 +19,11 @@ export function useDashboardStats() {
       const uniqueCustomerIds = new Set(ordersWithCustomers?.map(order => order.customer_id) || []);
       const activeCustomers = uniqueCustomerIds.size;
 
-      // Get total revenue
+      // Get total revenue (excluding returned orders)
       const { data: revenueData } = await supabase
         .from("orders")
-        .select("total");
+        .select("total, status")
+        .neq("status", "returned");
       
       const totalRevenue = revenueData?.reduce((sum, order) => sum + Number(order.total), 0) || 0;
 
