@@ -14,9 +14,11 @@ export function useOrders() {
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["orders"],
+    queryKey: ["orders", user?.id],
     queryFn: async () => {
       if (!user) throw new Error("User not authenticated");
+      
+      console.log("Fetching orders for user:", user.id);
       
       const { data, error } = await supabase
         .from("orders")
@@ -26,10 +28,16 @@ export function useOrders() {
             name
           )
         `)
+        .eq("user_id", user.id)
         .order("created_at", { ascending: false });
 
-      if (error) throw error;
-      return data;
+      if (error) {
+        console.error("Error fetching orders:", error);
+        throw error;
+      }
+      
+      console.log("Fetched orders:", data);
+      return data || [];
     },
     enabled: !!user,
   });
@@ -38,25 +46,34 @@ export function useOrders() {
     mutationFn: async ({ id, status }: { id: string; status: string }) => {
       if (!user) throw new Error("User not authenticated");
       
+      console.log("Updating order status for user:", user.id, "order:", id, "status:", status);
+      
       const { data, error } = await supabase
         .from("orders")
         .update({ status })
         .eq("id", id)
+        .eq("user_id", user.id)
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error("Error updating order:", error);
+        throw error;
+      }
+      
+      console.log("Updated order:", data);
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["orders"] });
-      queryClient.invalidateQueries({ queryKey: ["dashboard-stats"] });
+      queryClient.invalidateQueries({ queryKey: ["orders", user?.id] });
+      queryClient.invalidateQueries({ queryKey: ["dashboard-stats", user?.id] });
       toast({
         title: "Success",
         description: "Order status updated successfully",
       });
     },
     onError: (error: any) => {
+      console.error("Order update error:", error);
       toast({
         title: "Error",
         description: error.message,

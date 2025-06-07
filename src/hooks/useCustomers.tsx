@@ -14,17 +14,25 @@ export function useCustomers() {
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["customers"],
+    queryKey: ["customers", user?.id],
     queryFn: async () => {
       if (!user) throw new Error("User not authenticated");
+      
+      console.log("Fetching customers for user:", user.id);
       
       const { data, error } = await supabase
         .from("customers")
         .select("*")
+        .eq("user_id", user.id)
         .order("created_at", { ascending: false });
 
-      if (error) throw error;
-      return data;
+      if (error) {
+        console.error("Error fetching customers:", error);
+        throw error;
+      }
+      
+      console.log("Fetched customers:", data);
+      return data || [];
     },
     enabled: !!user,
   });
@@ -33,23 +41,31 @@ export function useCustomers() {
     mutationFn: async (customer: { name: string; email: string; phone?: string }) => {
       if (!user) throw new Error("User not authenticated");
       
+      console.log("Adding customer for user:", user.id);
+      
       const { data, error } = await supabase
         .from("customers")
         .insert([{ ...customer, user_id: user.id }])
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error("Error adding customer:", error);
+        throw error;
+      }
+      
+      console.log("Added customer:", data);
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["customers"] });
+      queryClient.invalidateQueries({ queryKey: ["customers", user?.id] });
       toast({
         title: "Success",
         description: "Customer added successfully",
       });
     },
     onError: (error: any) => {
+      console.error("Customer creation error:", error);
       toast({
         title: "Error",
         description: error.message,

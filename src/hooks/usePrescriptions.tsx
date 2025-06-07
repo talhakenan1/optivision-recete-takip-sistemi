@@ -31,9 +31,11 @@ export function usePrescriptions() {
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["prescriptions"],
+    queryKey: ["prescriptions", user?.id],
     queryFn: async () => {
       if (!user) throw new Error("User not authenticated");
+      
+      console.log("Fetching prescriptions for user:", user.id);
       
       const { data, error } = await supabase
         .from("prescriptions")
@@ -45,10 +47,16 @@ export function usePrescriptions() {
             phone
           )
         `)
+        .eq("user_id", user.id)
         .order("created_at", { ascending: false });
 
-      if (error) throw error;
-      return data;
+      if (error) {
+        console.error("Error fetching prescriptions:", error);
+        throw error;
+      }
+      
+      console.log("Fetched prescriptions:", data);
+      return data || [];
     },
     enabled: !!user,
   });
@@ -57,13 +65,14 @@ export function usePrescriptions() {
     mutationFn: async (prescriptionData: PrescriptionData) => {
       if (!user) throw new Error("User not authenticated");
       
-      console.log("Adding prescription with data:", prescriptionData);
+      console.log("Adding prescription with data:", prescriptionData, "for user:", user.id);
       
-      // First, check if customer exists by ID number
+      // First, check if customer exists by ID number for this specific user
       const { data: existingCustomer, error: customerError } = await supabase
         .from("customers")
         .select("*")
         .eq("id_number", prescriptionData.idNumber)
+        .eq("user_id", user.id)
         .maybeSingle();
 
       if (customerError) {
@@ -74,8 +83,8 @@ export function usePrescriptions() {
       let customerId;
 
       if (!existingCustomer) {
-        // Create new customer
-        console.log("Creating new customer");
+        // Create new customer for this user
+        console.log("Creating new customer for user:", user.id);
         const { data: newCustomer, error: createError } = await supabase
           .from("customers")
           .insert([{
@@ -99,7 +108,7 @@ export function usePrescriptions() {
         console.log("Using existing customer with ID:", customerId);
       }
 
-      // Create order
+      // Create order for this user
       const { data: newOrder, error: orderError } = await supabase
         .from("orders")
         .insert([{
@@ -119,7 +128,7 @@ export function usePrescriptions() {
 
       console.log("Order created with ID:", newOrder.id);
 
-      // Create prescription
+      // Create prescription for this user
       const prescriptionRecord = {
         customer_id: customerId,
         order_id: newOrder.id,
@@ -159,10 +168,10 @@ export function usePrescriptions() {
       return prescription;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["prescriptions"] });
-      queryClient.invalidateQueries({ queryKey: ["customers"] });
-      queryClient.invalidateQueries({ queryKey: ["orders"] });
-      queryClient.invalidateQueries({ queryKey: ["dashboard-stats"] });
+      queryClient.invalidateQueries({ queryKey: ["prescriptions", user?.id] });
+      queryClient.invalidateQueries({ queryKey: ["customers", user?.id] });
+      queryClient.invalidateQueries({ queryKey: ["orders", user?.id] });
+      queryClient.invalidateQueries({ queryKey: ["dashboard-stats", user?.id] });
       toast({
         title: "Success",
         description: "Prescription saved successfully",

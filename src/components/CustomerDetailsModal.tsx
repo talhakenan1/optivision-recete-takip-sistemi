@@ -16,9 +16,11 @@ export function CustomerDetailsModal({ customer, isOpen, onClose }: CustomerDeta
   const { user } = useAuth();
   
   const { data: customerOrders = [], isLoading } = useQuery({
-    queryKey: ["customer-orders", customer.id],
+    queryKey: ["customer-orders", customer.id, user?.id],
     queryFn: async () => {
       if (!user) throw new Error("User not authenticated");
+      
+      console.log("Fetching orders for customer:", customer.id, "and user:", user.id);
       
       const { data, error } = await supabase
         .from("orders")
@@ -30,10 +32,16 @@ export function CustomerDetailsModal({ customer, isOpen, onClose }: CustomerDeta
           )
         `)
         .eq("customer_id", customer.id)
+        .eq("user_id", user.id)
         .order("created_at", { ascending: false });
 
-      if (error) throw error;
-      return data;
+      if (error) {
+        console.error("Error fetching customer orders:", error);
+        throw error;
+      }
+      
+      console.log("Fetched customer orders:", data);
+      return data || [];
     },
     enabled: isOpen && !!user,
   });

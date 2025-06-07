@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -12,6 +11,7 @@ import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { usePrescriptions } from "@/hooks/usePrescriptions";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
 
 interface NewPrescriptionModalProps {
   isOpen: boolean;
@@ -30,6 +30,7 @@ interface PrescriptionData {
 export function NewPrescriptionModal({ isOpen, onClose }: NewPrescriptionModalProps) {
   const [date, setDate] = useState<Date>();
   const { addPrescription, isAddingPrescription } = usePrescriptions();
+  const { user } = useAuth();
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -53,14 +54,19 @@ export function NewPrescriptionModal({ isOpen, onClose }: NewPrescriptionModalPr
   // Auto-fill customer data when ID number is entered
   useEffect(() => {
     const fetchCustomerData = async () => {
-      if (formData.idNumber && formData.idNumber.length > 0) {
+      if (formData.idNumber && formData.idNumber.length > 0 && user) {
         try {
-          // Find customer by ID number
+          console.log("Fetching customer data for ID:", formData.idNumber, "and user:", user.id);
+          
+          // Find customer by ID number for this specific user
           const { data: customer } = await supabase
             .from("customers")
             .select("*")
             .eq("id_number", formData.idNumber)
+            .eq("user_id", user.id)
             .maybeSingle();
+
+          console.log("Found customer:", customer);
 
           if (customer) {
             // Split the name into first and last name
@@ -68,14 +74,17 @@ export function NewPrescriptionModal({ isOpen, onClose }: NewPrescriptionModalPr
             const firstName = nameParts[0] || "";
             const lastName = nameParts.slice(1).join(" ") || "";
 
-            // Get the most recent prescription for this customer
+            // Get the most recent prescription for this customer and user
             const { data: lastPrescription } = await supabase
               .from("prescriptions")
               .select("prescription_data")
               .eq("customer_id", customer.id)
+              .eq("user_id", user.id)
               .order("created_at", { ascending: false })
               .limit(1)
               .maybeSingle();
+
+            console.log("Found last prescription:", lastPrescription);
 
             let prescriptionData: PrescriptionData = {};
             if (lastPrescription && lastPrescription.prescription_data) {
@@ -115,7 +124,7 @@ export function NewPrescriptionModal({ isOpen, onClose }: NewPrescriptionModalPr
 
     const timeoutId = setTimeout(fetchCustomerData, 500); // Debounce the API call
     return () => clearTimeout(timeoutId);
-  }, [formData.idNumber]);
+  }, [formData.idNumber, user]);
 
   const handleSave = () => {
     if (!date) {
