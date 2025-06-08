@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -27,25 +28,35 @@ interface PrescriptionData {
   nearVision?: string;
 }
 
+const initialFormData = {
+  firstName: "",
+  lastName: "",
+  idNumber: "",
+  email: "",
+  phone: "",
+  productInfo: "",
+  visionType: "",
+  sph: "",
+  cyl: "",
+  axis: "",
+  distanceVision: "",
+  nearVision: "",
+  price: "",
+};
+
 export function NewPrescriptionModal({ isOpen, onClose }: NewPrescriptionModalProps) {
   const [date, setDate] = useState<Date>();
   const { addPrescription, isAddingPrescription } = usePrescriptions();
   const { user } = useAuth();
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    idNumber: "",
-    email: "",
-    phone: "",
-    productInfo: "",
-    visionType: "",
-    sph: "",
-    cyl: "",
-    axis: "",
-    distanceVision: "",
-    nearVision: "",
-    price: "",
-  });
+  const [formData, setFormData] = useState(initialFormData);
+
+  // Clear form when modal opens
+  useEffect(() => {
+    if (isOpen) {
+      setFormData(initialFormData);
+      setDate(undefined);
+    }
+  }, [isOpen]);
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -145,21 +156,7 @@ export function NewPrescriptionModal({ isOpen, onClose }: NewPrescriptionModalPr
     });
     
     // Reset form
-    setFormData({
-      firstName: "",
-      lastName: "",
-      idNumber: "",
-      email: "",
-      phone: "",
-      productInfo: "",
-      visionType: "",
-      sph: "",
-      cyl: "",
-      axis: "",
-      distanceVision: "",
-      nearVision: "",
-      price: "",
-    });
+    setFormData(initialFormData);
     setDate(undefined);
     onClose();
   };

@@ -75,7 +75,7 @@ export function PersonalInfoModal({ isOpen, onClose }: PersonalInfoModalProps) {
               <Input
                 id="password"
                 type={showPassword ? "text" : "password"}
-                value="••••••••"
+                value={showPassword ? "your-actual-password" : "••••••••"}
                 readOnly
                 className="bg-gray-50 pr-10"
               />
