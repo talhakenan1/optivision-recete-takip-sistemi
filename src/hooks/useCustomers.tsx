@@ -38,10 +38,22 @@ export function useCustomers() {
   });
 
   const addCustomer = useMutation({
-    mutationFn: async (customer: { name: string; email: string; phone?: string }) => {
+    mutationFn: async (customer: { name: string; email: string; phone?: string; id_number: string }) => {
       if (!user) throw new Error("User not authenticated");
       
       console.log("Adding customer for user:", user.id);
+      
+      // Check if customer with same ID number already exists for this user
+      const { data: existingCustomer } = await supabase
+        .from("customers")
+        .select("id")
+        .eq("id_number", customer.id_number)
+        .eq("user_id", user.id)
+        .maybeSingle();
+
+      if (existingCustomer) {
+        throw new Error("There is already a customer with this ID number");
+      }
       
       const { data, error } = await supabase
         .from("customers")

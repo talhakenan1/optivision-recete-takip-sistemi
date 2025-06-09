@@ -85,28 +85,28 @@ export function CustomerDetailsModal({ customer, isOpen, onClose }: CustomerDeta
 
         <div className="space-y-6">
           {/* Customer Information */}
-          <div className="bg-gray-50 p-6 rounded-lg">
+          <div className="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
             <h3 className="text-lg font-semibold mb-4">Customer Information</h3>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <span className="font-medium text-gray-700">Name:</span>
-                <p className="text-gray-900">{customer.name}</p>
+                <span className="font-medium text-gray-700 dark:text-gray-300">Name:</span>
+                <p className="text-gray-900 dark:text-gray-100">{customer.name}</p>
               </div>
               <div>
-                <span className="font-medium text-gray-700">Email:</span>
-                <p className="text-gray-900">{customer.email}</p>
+                <span className="font-medium text-gray-700 dark:text-gray-300">Email:</span>
+                <p className="text-gray-900 dark:text-gray-100">{customer.email}</p>
               </div>
               <div>
-                <span className="font-medium text-gray-700">Phone:</span>
-                <p className="text-gray-900">{customer.phone || 'N/A'}</p>
+                <span className="font-medium text-gray-700 dark:text-gray-300">Phone:</span>
+                <p className="text-gray-900 dark:text-gray-100">{customer.phone || 'N/A'}</p>
               </div>
               <div>
-                <span className="font-medium text-gray-700">ID Number:</span>
-                <p className="text-gray-900">{customer.id_number || 'N/A'}</p>
+                <span className="font-medium text-gray-700 dark:text-gray-300">ID Number:</span>
+                <p className="text-gray-900 dark:text-gray-100">{customer.id_number || 'N/A'}</p>
               </div>
               <div>
-                <span className="font-medium text-gray-700">Customer Since:</span>
-                <p className="text-gray-900">{formatDate(customer.created_at)}</p>
+                <span className="font-medium text-gray-700 dark:text-gray-300">Customer Since:</span>
+                <p className="text-gray-900 dark:text-gray-100">{formatDate(customer.created_at)}</p>
               </div>
             </div>
           </div>
@@ -123,54 +123,90 @@ export function CustomerDetailsModal({ customer, isOpen, onClose }: CustomerDeta
                 {customerOrders.map((order) => {
                   const orderStatus = getOrderStatus(order.order_date, order.status);
                   return (
-                    <div key={order.id} className="border rounded-lg p-4 bg-white">
+                    <div key={order.id} className="border dark:border-gray-700 rounded-lg p-4 bg-white dark:bg-gray-800">
                       <div className="flex justify-between items-start mb-3">
                         <div>
-                          <h4 className="font-medium text-gray-900">Order #{order.id.slice(0, 8)}</h4>
-                          <p className="text-sm text-gray-600">Date: {formatDate(order.order_date)}</p>
+                          <h4 className="font-medium text-gray-900 dark:text-gray-100">Order #{order.id.slice(0, 8)}</h4>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">Date: {formatDate(order.order_date)}</p>
                         </div>
                         <div className="text-right">
                           <Badge className={getStatusColor(orderStatus)}>
                             {orderStatus.charAt(0).toUpperCase() + orderStatus.slice(1)}
                           </Badge>
-                          <p className="text-lg font-semibold mt-1">{formatCurrency(Number(order.total))}</p>
+                          <p className="text-lg font-semibold mt-1 dark:text-gray-100">{formatCurrency(Number(order.total))}</p>
                         </div>
                       </div>
                       
                       {order.prescriptions && order.prescriptions.length > 0 && (
-                        <div className="mt-3 pt-3 border-t">
-                          <h5 className="font-medium text-gray-700 mb-2">Prescription Details:</h5>
+                        <div className="mt-3 pt-3 border-t dark:border-gray-700">
+                          <h5 className="font-medium text-gray-700 dark:text-gray-300 mb-2">Prescription Details:</h5>
                           {order.prescriptions.map((prescription: any, index: number) => (
-                            <div key={index} className="text-sm text-gray-600 space-y-2">
+                            <div key={index} className="text-sm text-gray-600 dark:text-gray-400 space-y-2">
                               {prescription.prescription_data?.productInfo && (
                                 <p><span className="font-medium">Product:</span> {prescription.prescription_data.productInfo}</p>
                               )}
-                              {prescription.prescription_data?.visionType && (
-                                <p><span className="font-medium">Vision Type:</span> {prescription.prescription_data.visionType}</p>
+                              {prescription.prescription_data?.lensType && (
+                                <p><span className="font-medium">Lens Type:</span> {prescription.prescription_data.lensType}</p>
                               )}
                               
-                              {/* Vision Details Grid */}
-                              <div className="grid grid-cols-2 gap-4 mt-2 p-3 bg-gray-50 rounded">
-                                <div className="space-y-1">
-                                  {prescription.prescription_data?.sph && (
-                                    <p><span className="font-medium">SPH:</span> {prescription.prescription_data.sph}</p>
-                                  )}
-                                  {prescription.prescription_data?.cyl && (
-                                    <p><span className="font-medium">CYL:</span> {prescription.prescription_data.cyl}</p>
-                                  )}
-                                  {prescription.prescription_data?.axis && (
-                                    <p><span className="font-medium">Axis:</span> {prescription.prescription_data.axis}</p>
-                                  )}
+                              {/* New Vision Details Grid - prioritize new format */}
+                              {prescription.prescription_data?.rightEye || prescription.prescription_data?.leftEye ? (
+                                <div className="grid grid-cols-2 gap-4 mt-2 p-3 bg-gray-50 dark:bg-gray-700 rounded">
+                                  <div className="space-y-1">
+                                    <h6 className="font-medium text-gray-700 dark:text-gray-300">Right Eye (OD)</h6>
+                                    {prescription.prescription_data?.rightEye?.sph && (
+                                      <p><span className="font-medium">SPH:</span> {prescription.prescription_data.rightEye.sph}</p>
+                                    )}
+                                    {prescription.prescription_data?.rightEye?.cyl && (
+                                      <p><span className="font-medium">CYL:</span> {prescription.prescription_data.rightEye.cyl}</p>
+                                    )}
+                                    {prescription.prescription_data?.rightEye?.axis && (
+                                      <p><span className="font-medium">AXIS:</span> {prescription.prescription_data.rightEye.axis}</p>
+                                    )}
+                                    {prescription.prescription_data?.add && (
+                                      <p><span className="font-medium">ADD:</span> {prescription.prescription_data.add}</p>
+                                    )}
+                                  </div>
+                                  <div className="space-y-1">
+                                    <h6 className="font-medium text-gray-700 dark:text-gray-300">Left Eye (OS)</h6>
+                                    {prescription.prescription_data?.leftEye?.sph && (
+                                      <p><span className="font-medium">SPH:</span> {prescription.prescription_data.leftEye.sph}</p>
+                                    )}
+                                    {prescription.prescription_data?.leftEye?.cyl && (
+                                      <p><span className="font-medium">CYL:</span> {prescription.prescription_data.leftEye.cyl}</p>
+                                    )}
+                                    {prescription.prescription_data?.leftEye?.axis && (
+                                      <p><span className="font-medium">AXIS:</span> {prescription.prescription_data.leftEye.axis}</p>
+                                    )}
+                                    {prescription.prescription_data?.pd && (
+                                      <p><span className="font-medium">PD:</span> {prescription.prescription_data.pd}</p>
+                                    )}
+                                  </div>
                                 </div>
-                                <div className="space-y-1">
-                                  {prescription.prescription_data?.distanceVision && (
-                                    <p><span className="font-medium">Distance Vision:</span> {prescription.prescription_data.distanceVision}</p>
-                                  )}
-                                  {prescription.prescription_data?.nearVision && (
-                                    <p><span className="font-medium">Near Vision:</span> {prescription.prescription_data.nearVision}</p>
-                                  )}
+                              ) : (
+                                // Fallback to old format if new format not available
+                                <div className="grid grid-cols-2 gap-4 mt-2 p-3 bg-gray-50 dark:bg-gray-700 rounded">
+                                  <div className="space-y-1">
+                                    {prescription.prescription_data?.sph && (
+                                      <p><span className="font-medium">SPH:</span> {prescription.prescription_data.sph}</p>
+                                    )}
+                                    {prescription.prescription_data?.cyl && (
+                                      <p><span className="font-medium">CYL:</span> {prescription.prescription_data.cyl}</p>
+                                    )}
+                                    {prescription.prescription_data?.axis && (
+                                      <p><span className="font-medium">Axis:</span> {prescription.prescription_data.axis}</p>
+                                    )}
+                                  </div>
+                                  <div className="space-y-1">
+                                    {prescription.prescription_data?.distanceVision && (
+                                      <p><span className="font-medium">Distance Vision:</span> {prescription.prescription_data.distanceVision}</p>
+                                    )}
+                                    {prescription.prescription_data?.nearVision && (
+                                      <p><span className="font-medium">Near Vision:</span> {prescription.prescription_data.nearVision}</p>
+                                    )}
+                                  </div>
                                 </div>
-                              </div>
+                              )}
 
                               {prescription.notes && (
                                 <p><span className="font-medium">Notes:</span> {prescription.notes}</p>
@@ -184,13 +220,13 @@ export function CustomerDetailsModal({ customer, isOpen, onClose }: CustomerDeta
                 })}
               </div>
             ) : (
-              <div className="text-center py-8 text-gray-500">
+              <div className="text-center py-8 text-gray-500 dark:text-gray-400">
                 No orders found for this customer.
               </div>
             )}
           </div>
 
-          <div className="flex justify-end pt-4 border-t">
+          <div className="flex justify-end pt-4 border-t dark:border-gray-700">
             <Button onClick={onClose}>Close</Button>
           </div>
         </div>

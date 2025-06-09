@@ -1,4 +1,3 @@
-
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -19,6 +18,19 @@ interface PrescriptionData {
   nearVision: string;
   price?: number;
   purchaseDate: Date;
+  add: string;
+  pd: string;
+  lensType: string;
+  rightEye: {
+    sph: string;
+    cyl: string;
+    axis: string;
+  };
+  leftEye: {
+    sph: string;
+    cyl: string;
+    axis: string;
+  };
 }
 
 export function usePrescriptions() {
@@ -128,7 +140,7 @@ export function usePrescriptions() {
 
       console.log("Order created with ID:", newOrder.id);
 
-      // Create prescription for this user
+      // Create prescription for this user with the new structure
       const prescriptionRecord = {
         customer_id: customerId,
         order_id: newOrder.id,
@@ -142,12 +154,19 @@ export function usePrescriptions() {
           lastName: prescriptionData.lastName,
           productInfo: prescriptionData.productInfo,
           visionType: prescriptionData.visionType,
+          // Store the new prescription format
+          rightEye: prescriptionData.rightEye,
+          leftEye: prescriptionData.leftEye,
+          add: prescriptionData.add,
+          pd: prescriptionData.pd,
+          lensType: prescriptionData.lensType,
+          purchaseDate: prescriptionData.purchaseDate.toISOString(),
+          // Keep old fields for backward compatibility but don't use them primarily
           sph: prescriptionData.sph,
           cyl: prescriptionData.cyl,
           axis: prescriptionData.axis,
           distanceVision: prescriptionData.distanceVision,
           nearVision: prescriptionData.nearVision,
-          purchaseDate: prescriptionData.purchaseDate.toISOString(),
         }
       };
 

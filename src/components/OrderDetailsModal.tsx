@@ -32,10 +32,10 @@ export function OrderDetailsModal({ order, isOpen, onClose }: OrderDetailsModalP
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "new": return "bg-blue-100 text-blue-800";
-      case "shipped": return "bg-green-100 text-green-800";
-      case "returned": return "bg-red-100 text-red-800";
-      default: return "bg-gray-100 text-gray-800";
+      case "new": return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300";
+      case "shipped": return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300";
+      case "returned": return "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300";
+      default: return "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300";
     }
   };
 
@@ -65,15 +65,15 @@ export function OrderDetailsModal({ order, isOpen, onClose }: OrderDetailsModalP
               <h3 className="text-lg font-semibold mb-4">Order Information</h3>
               <div className="space-y-3">
                 <div>
-                  <span className="font-medium text-gray-700">Order ID:</span>
-                  <p className="text-gray-900">#{order.id.slice(0, 8)}</p>
+                  <span className="font-medium text-gray-700 dark:text-gray-300">Order ID:</span>
+                  <p className="text-gray-900 dark:text-gray-100">#{order.id.slice(0, 8)}</p>
                 </div>
                 <div>
-                  <span className="font-medium text-gray-700">Order Date:</span>
-                  <p className="text-gray-900">{formatDate(order.order_date)}</p>
+                  <span className="font-medium text-gray-700 dark:text-gray-300">Order Date:</span>
+                  <p className="text-gray-900 dark:text-gray-100">{formatDate(order.order_date)}</p>
                 </div>
                 <div>
-                  <span className="font-medium text-gray-700">Status:</span>
+                  <span className="font-medium text-gray-700 dark:text-gray-300">Status:</span>
                   <div className="mt-1">
                     <Badge className={getStatusColor(displayStatus)}>
                       {displayStatus.charAt(0).toUpperCase() + displayStatus.slice(1)}
@@ -81,8 +81,8 @@ export function OrderDetailsModal({ order, isOpen, onClose }: OrderDetailsModalP
                   </div>
                 </div>
                 <div>
-                  <span className="font-medium text-gray-700">Total:</span>
-                  <p className="text-gray-900 text-lg font-semibold">{formatCurrency(Number(order.total))}</p>
+                  <span className="font-medium text-gray-700 dark:text-gray-300">Total:</span>
+                  <p className="text-gray-900 dark:text-gray-100 text-lg font-semibold">{formatCurrency(Number(order.total))}</p>
                 </div>
               </div>
             </div>
@@ -91,23 +91,23 @@ export function OrderDetailsModal({ order, isOpen, onClose }: OrderDetailsModalP
               <h3 className="text-lg font-semibold mb-4">Customer Information</h3>
               <div className="space-y-3">
                 <div>
-                  <span className="font-medium text-gray-700">Name:</span>
-                  <p className="text-gray-900">{order.customers?.name || 'Unknown'}</p>
+                  <span className="font-medium text-gray-700 dark:text-gray-300">Name:</span>
+                  <p className="text-gray-900 dark:text-gray-100">{order.customers?.name || 'Unknown'}</p>
                 </div>
                 <div>
-                  <span className="font-medium text-gray-700">Customer ID:</span>
-                  <p className="text-gray-900">{order.customers?.id_number || order.customer_id.slice(0, 8)}</p>
+                  <span className="font-medium text-gray-700 dark:text-gray-300">Customer ID:</span>
+                  <p className="text-gray-900 dark:text-gray-100">{order.customers?.id_number || 'N/A'}</p>
                 </div>
                 {order.customers?.email && (
                   <div>
-                    <span className="font-medium text-gray-700">Email:</span>
-                    <p className="text-gray-900">{order.customers.email}</p>
+                    <span className="font-medium text-gray-700 dark:text-gray-300">Email:</span>
+                    <p className="text-gray-900 dark:text-gray-100">{order.customers.email}</p>
                   </div>
                 )}
                 {order.customers?.phone && (
                   <div>
-                    <span className="font-medium text-gray-700">Phone:</span>
-                    <p className="text-gray-900">{order.customers.phone}</p>
+                    <span className="font-medium text-gray-700 dark:text-gray-300">Phone:</span>
+                    <p className="text-gray-900 dark:text-gray-100">{order.customers.phone}</p>
                   </div>
                 )}
               </div>
@@ -117,18 +117,18 @@ export function OrderDetailsModal({ order, isOpen, onClose }: OrderDetailsModalP
           <div>
             <h3 className="text-lg font-semibold mb-4">Order Timeline</h3>
             <div className="space-y-2">
-              <div className="flex items-center text-sm text-gray-600">
+              <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
                 <div className="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
                 Order placed on {formatDate(order.order_date)}
               </div>
               {displayStatus === "shipped" && (
-                <div className="flex items-center text-sm text-gray-600">
+                <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
                   <div className="w-2 h-2 bg-green-500 rounded-full mr-3"></div>
                   Order shipped (more than 7 days old)
                 </div>
               )}
               {displayStatus === "returned" && (
-                <div className="flex items-center text-sm text-gray-600">
+                <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
                   <div className="w-2 h-2 bg-red-500 rounded-full mr-3"></div>
                   Order returned
                 </div>
@@ -136,7 +136,7 @@ export function OrderDetailsModal({ order, isOpen, onClose }: OrderDetailsModalP
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-3 pt-4 border-t">
+          <div className="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-3 pt-4 border-t dark:border-gray-700">
             <Button variant="outline" onClick={onClose} className="w-full sm:w-auto">
               Close
             </Button>
