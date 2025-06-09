@@ -13,6 +13,7 @@ import { cn } from "@/lib/utils";
 import { usePrescriptions } from "@/hooks/usePrescriptions";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import { PrescriptionForm } from "@/components/PrescriptionForm";
 
 interface NewPrescriptionModalProps {
   isOpen: boolean;
@@ -26,6 +27,19 @@ interface PrescriptionData {
   axis?: string;
   distanceVision?: string;
   nearVision?: string;
+  add?: string;
+  pd?: string;
+  lensType?: string;
+  rightEye?: {
+    sph: string;
+    cyl: string;
+    axis: string;
+  };
+  leftEye?: {
+    sph: string;
+    cyl: string;
+    axis: string;
+  };
 }
 
 const initialFormData = {
@@ -42,6 +56,19 @@ const initialFormData = {
   distanceVision: "",
   nearVision: "",
   price: "",
+  add: "",
+  pd: "",
+  lensType: "",
+  rightEye: {
+    sph: "",
+    cyl: "",
+    axis: "",
+  },
+  leftEye: {
+    sph: "",
+    cyl: "",
+    axis: "",
+  },
 };
 
 export function NewPrescriptionModal({ isOpen, onClose }: NewPrescriptionModalProps) {
@@ -50,7 +77,7 @@ export function NewPrescriptionModal({ isOpen, onClose }: NewPrescriptionModalPr
   const { user } = useAuth();
   const [formData, setFormData] = useState(initialFormData);
 
-  // Clear form when modal opens
+  // Clear form when modal opens/closes
   useEffect(() => {
     if (isOpen) {
       setFormData(initialFormData);
@@ -60,6 +87,16 @@ export function NewPrescriptionModal({ isOpen, onClose }: NewPrescriptionModalPr
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleEyeChange = (eye: 'rightEye' | 'leftEye', field: string, value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      [eye]: {
+        ...prev[eye],
+        [field]: value
+      }
+    }));
   };
 
   // Auto-fill customer data when ID number is entered
@@ -125,6 +162,11 @@ export function NewPrescriptionModal({ isOpen, onClose }: NewPrescriptionModalPr
               axis: prescriptionData.axis || "",
               distanceVision: prescriptionData.distanceVision || "",
               nearVision: prescriptionData.nearVision || "",
+              add: prescriptionData.add || "",
+              pd: prescriptionData.pd || "",
+              lensType: prescriptionData.lensType || "",
+              rightEye: prescriptionData.rightEye || { sph: "", cyl: "", axis: "" },
+              leftEye: prescriptionData.leftEye || { sph: "", cyl: "", axis: "" },
             }));
           }
         } catch (error) {
@@ -163,16 +205,16 @@ export function NewPrescriptionModal({ isOpen, onClose }: NewPrescriptionModalPr
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-bold">New Prescription</DialogTitle>
+          <DialogTitle className="text-xl sm:text-2xl font-bold">New Prescription</DialogTitle>
         </DialogHeader>
 
         <div className="space-y-6">
           {/* Customer Information */}
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">Customer Information</h3>
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
                 <Label htmlFor="idNumber">ID Number *</Label>
                 <Input
@@ -205,7 +247,7 @@ export function NewPrescriptionModal({ isOpen, onClose }: NewPrescriptionModalPr
                 />
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="email">Email *</Label>
                 <Input
@@ -227,7 +269,7 @@ export function NewPrescriptionModal({ isOpen, onClose }: NewPrescriptionModalPr
                 />
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <Label>Purchase Date *</Label>
                 <Popover>
@@ -281,71 +323,21 @@ export function NewPrescriptionModal({ isOpen, onClose }: NewPrescriptionModalPr
             </div>
           </div>
 
-          {/* Prescription Details */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Prescription Details</h3>
-            <div className="grid grid-cols-3 gap-4">
-              <div>
-                <Label htmlFor="visionType">Vision Type</Label>
-                <Input
-                  id="visionType"
-                  value={formData.visionType}
-                  onChange={(e) => handleInputChange("visionType", e.target.value)}
-                />
-              </div>
-              <div>
-                <Label htmlFor="sph">SPH</Label>
-                <Input
-                  id="sph"
-                  value={formData.sph}
-                  onChange={(e) => handleInputChange("sph", e.target.value)}
-                />
-              </div>
-              <div>
-                <Label htmlFor="cyl">CYL</Label>
-                <Input
-                  id="cyl"
-                  value={formData.cyl}
-                  onChange={(e) => handleInputChange("cyl", e.target.value)}
-                />
-              </div>
-            </div>
-            <div className="grid grid-cols-3 gap-4">
-              <div>
-                <Label htmlFor="axis">Axis</Label>
-                <Input
-                  id="axis"
-                  value={formData.axis}
-                  onChange={(e) => handleInputChange("axis", e.target.value)}
-                />
-              </div>
-              <div>
-                <Label htmlFor="distanceVision">Distance Vision</Label>
-                <Input
-                  id="distanceVision"
-                  value={formData.distanceVision}
-                  onChange={(e) => handleInputChange("distanceVision", e.target.value)}
-                />
-              </div>
-              <div>
-                <Label htmlFor="nearVision">Near Vision</Label>
-                <Input
-                  id="nearVision"
-                  value={formData.nearVision}
-                  onChange={(e) => handleInputChange("nearVision", e.target.value)}
-                />
-              </div>
-            </div>
-          </div>
+          {/* Prescription Details using new form */}
+          <PrescriptionForm 
+            formData={formData}
+            onChange={handleInputChange}
+            onEyeChange={handleEyeChange}
+          />
 
-          <div className="flex justify-end space-x-3">
-            <Button type="button" variant="outline" onClick={onClose}>
+          <div className="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-3">
+            <Button type="button" variant="outline" onClick={onClose} className="w-full sm:w-auto">
               Cancel
             </Button>
             <Button 
               onClick={handleSave}
               disabled={isAddingPrescription}
-              className="bg-blue-500 hover:bg-blue-600 text-white"
+              className="bg-blue-500 hover:bg-blue-600 text-white w-full sm:w-auto"
             >
               {isAddingPrescription ? "Saving..." : "Save Prescription"}
             </Button>

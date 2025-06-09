@@ -54,13 +54,13 @@ export function OrderDetailsModal({ order, isOpen, onClose }: OrderDetailsModalP
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl">
+      <DialogContent className="max-w-2xl mx-4 sm:mx-0">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-bold">Order Details</DialogTitle>
+          <DialogTitle className="text-xl sm:text-2xl font-bold">Order Details</DialogTitle>
         </DialogHeader>
 
         <div className="space-y-6">
-          <div className="grid grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div>
               <h3 className="text-lg font-semibold mb-4">Order Information</h3>
               <div className="space-y-3">
@@ -96,8 +96,20 @@ export function OrderDetailsModal({ order, isOpen, onClose }: OrderDetailsModalP
                 </div>
                 <div>
                   <span className="font-medium text-gray-700">Customer ID:</span>
-                  <p className="text-gray-900">{order.customer_id.slice(0, 8)}</p>
+                  <p className="text-gray-900">{order.customers?.id_number || order.customer_id.slice(0, 8)}</p>
                 </div>
+                {order.customers?.email && (
+                  <div>
+                    <span className="font-medium text-gray-700">Email:</span>
+                    <p className="text-gray-900">{order.customers.email}</p>
+                  </div>
+                )}
+                {order.customers?.phone && (
+                  <div>
+                    <span className="font-medium text-gray-700">Phone:</span>
+                    <p className="text-gray-900">{order.customers.phone}</p>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -124,8 +136,8 @@ export function OrderDetailsModal({ order, isOpen, onClose }: OrderDetailsModalP
             </div>
           </div>
 
-          <div className="flex justify-end space-x-3 pt-4 border-t">
-            <Button variant="outline" onClick={onClose}>
+          <div className="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-3 pt-4 border-t">
+            <Button variant="outline" onClick={onClose} className="w-full sm:w-auto">
               Close
             </Button>
             {displayStatus !== "returned" && (
@@ -133,6 +145,7 @@ export function OrderDetailsModal({ order, isOpen, onClose }: OrderDetailsModalP
                 onClick={handleReturnOrder}
                 disabled={isUpdatingOrder}
                 variant="destructive"
+                className="w-full sm:w-auto"
               >
                 {isUpdatingOrder ? "Processing..." : "Mark as Returned"}
               </Button>

@@ -16,13 +16,23 @@ export function AddCustomerModal({ isOpen, onClose }: AddCustomerModalProps) {
     name: "",
     email: "",
     phone: "",
+    idNumber: "",
   });
   const { addCustomer, isAddingCustomer } = useCustomers();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    addCustomer(formData);
-    setFormData({ name: "", email: "", phone: "" });
+    if (!formData.idNumber.trim()) {
+      alert("ID Number is required");
+      return;
+    }
+    addCustomer({
+      name: formData.name,
+      email: formData.email,
+      phone: formData.phone,
+      id_number: formData.idNumber,
+    });
+    setFormData({ name: "", email: "", phone: "", idNumber: "" });
     onClose();
   };
 
@@ -32,14 +42,26 @@ export function AddCustomerModal({ isOpen, onClose }: AddCustomerModalProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-w-md mx-4 sm:mx-0">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-bold">Add New Customer</DialogTitle>
+          <DialogTitle className="text-xl sm:text-2xl font-bold">Add New Customer</DialogTitle>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <Label htmlFor="name">Name</Label>
+            <Label htmlFor="idNumber">ID Number *</Label>
+            <Input
+              id="idNumber"
+              value={formData.idNumber}
+              onChange={(e) => handleInputChange("idNumber", e.target.value)}
+              required
+              className="mt-1"
+              placeholder="Enter customer's ID number"
+            />
+          </div>
+
+          <div>
+            <Label htmlFor="name">Name *</Label>
             <Input
               id="name"
               value={formData.name}
@@ -51,7 +73,7 @@ export function AddCustomerModal({ isOpen, onClose }: AddCustomerModalProps) {
           </div>
 
           <div>
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email">Email *</Label>
             <Input
               id="email"
               type="email"
@@ -74,14 +96,14 @@ export function AddCustomerModal({ isOpen, onClose }: AddCustomerModalProps) {
             />
           </div>
 
-          <div className="flex justify-end space-x-3">
-            <Button type="button" variant="outline" onClick={onClose}>
+          <div className="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-3">
+            <Button type="button" variant="outline" onClick={onClose} className="w-full sm:w-auto">
               Cancel
             </Button>
             <Button 
               type="submit" 
               disabled={isAddingCustomer}
-              className="bg-blue-500 hover:bg-blue-600 text-white"
+              className="bg-blue-500 hover:bg-blue-600 text-white w-full sm:w-auto"
             >
               {isAddingCustomer ? "Adding..." : "Add Customer"}
             </Button>

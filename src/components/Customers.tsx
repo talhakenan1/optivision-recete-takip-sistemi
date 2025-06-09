@@ -38,11 +38,11 @@ export function Customers() {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold text-gray-900">Customers</h1>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Customers</h1>
         <Button 
           onClick={() => setIsAddModalOpen(true)}
-          className="bg-blue-500 hover:bg-blue-600 text-white"
+          className="bg-blue-500 hover:bg-blue-600 text-white w-full sm:w-auto"
         >
           <Plus className="w-4 h-4 mr-2" />
           Add Customer
@@ -61,28 +61,34 @@ export function Customers() {
       </div>
 
       {/* Customers Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         {filteredCustomers.map((customer) => (
           <div 
             key={customer.id} 
-            className="bg-white p-6 rounded-lg shadow-sm border hover:shadow-md transition-shadow cursor-pointer"
+            className="bg-white p-4 sm:p-6 rounded-lg shadow-sm border hover:shadow-md transition-shadow cursor-pointer"
             onClick={() => setSelectedCustomer(customer)}
           >
-            <div className="flex items-center space-x-4">
-              <Avatar className="w-12 h-12">
+            <div className="flex items-center space-x-3 sm:space-x-4">
+              <Avatar className="w-10 h-10 sm:w-12 sm:h-12 flex-shrink-0">
                 <AvatarImage src="" alt={customer.name} />
-                <AvatarFallback>{customer.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                <AvatarFallback className="text-sm">{customer.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
               </Avatar>
-              <div className="flex-1">
-                <h3 className="font-semibold text-gray-900">{customer.name}</h3>
-                <p className="text-sm text-gray-500">ID: {customer.id_number || customer.id.slice(0, 8)}</p>
-                <p className="text-sm text-gray-600">{customer.email}</p>
-                {customer.phone && <p className="text-sm text-gray-600">{customer.phone}</p>}
+              <div className="flex-1 min-w-0">
+                <h3 className="font-semibold text-gray-900 truncate">{customer.name}</h3>
+                <p className="text-sm text-gray-500 truncate">ID: {customer.id_number || customer.id.slice(0, 8)}</p>
+                <p className="text-sm text-gray-600 truncate">{customer.email}</p>
+                {customer.phone && <p className="text-sm text-gray-600 truncate">{customer.phone}</p>}
               </div>
             </div>
           </div>
         ))}
       </div>
+
+      {filteredCustomers.length === 0 && (
+        <div className="text-center py-12">
+          <p className="text-gray-500">No customers found.</p>
+        </div>
+      )}
 
       <AddCustomerModal 
         isOpen={isAddModalOpen}

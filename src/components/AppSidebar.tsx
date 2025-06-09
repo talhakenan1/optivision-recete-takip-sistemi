@@ -1,5 +1,5 @@
 
-import { Home, Package, Users, Settings, User, HelpCircle } from "lucide-react";
+import { Home, Package, Users, Settings, HelpCircle } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -52,12 +52,12 @@ export function AppSidebar({ activeSection, onSectionChange, onNewPrescription }
 
   return (
     <Sidebar className="border-r border-gray-200">
-      <SidebarHeader className="p-6">
+      <SidebarHeader className="p-4 sm:p-6">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 bg-black rounded-md flex items-center justify-center">
             <span className="text-white font-bold text-sm">V</span>
           </div>
-          <span className="font-semibold text-lg">OptiVision</span>
+          <span className="font-semibold text-base sm:text-lg">OptiVision</span>
         </div>
       </SidebarHeader>
       
@@ -70,10 +70,11 @@ export function AppSidebar({ activeSection, onSectionChange, onNewPrescription }
                   <SidebarMenuButton 
                     isActive={activeSection === item.id}
                     onClick={() => handleMenuClick(item.id)}
+                    className="w-full"
                   >
                     <div className="flex items-center gap-3">
-                      <item.icon className="w-5 h-5" />
-                      <span>{item.title}</span>
+                      <item.icon className="w-5 h-5 flex-shrink-0" />
+                      <span className="truncate">{item.title}</span>
                     </div>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -85,7 +86,7 @@ export function AppSidebar({ activeSection, onSectionChange, onNewPrescription }
         <div className="px-4 mt-6">
           <Button 
             onClick={handleNewPrescriptionClick}
-            className="w-full bg-blue-500 hover:bg-blue-600 text-white"
+            className="w-full bg-blue-500 hover:bg-blue-600 text-white text-sm sm:text-base"
           >
             New Prescription
           </Button>
@@ -98,18 +99,19 @@ export function AppSidebar({ activeSection, onSectionChange, onNewPrescription }
             <SidebarMenuButton 
               isActive={activeSection === "settings"}
               onClick={handleSettingsClick}
+              className="w-full"
             >
               <div className="flex items-center gap-3">
-                <Settings className="w-5 h-5" />
-                <span>Settings</span>
+                <Settings className="w-5 h-5 flex-shrink-0" />
+                <span className="truncate">Settings</span>
               </div>
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarMenuButton>
+            <SidebarMenuButton className="w-full">
               <div className="flex items-center gap-3">
-                <HelpCircle className="w-5 h-5" />
-                <span>Help and docs</span>
+                <HelpCircle className="w-5 h-5 flex-shrink-0" />
+                <span className="truncate">Help and docs</span>
               </div>
             </SidebarMenuButton>
           </SidebarMenuItem>

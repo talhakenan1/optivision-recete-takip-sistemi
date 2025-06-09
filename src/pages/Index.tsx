@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { SidebarProvider } from "@/components/ui/sidebar";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { Dashboard } from "@/components/Dashboard";
 import { Orders } from "@/components/Orders";
@@ -11,7 +11,8 @@ import { PersonalInfoModal } from "@/components/PersonalInfoModal";
 import { AuthModal } from "@/components/AuthModal";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
+import { Loader2, Menu } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const Index = () => {
   const [activeSection, setActiveSection] = useState("dashboard");
@@ -19,6 +20,7 @@ const Index = () => {
   const [isPersonalInfoOpen, setIsPersonalInfoOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const { user, loading } = useAuth();
+  const isMobile = useIsMobile();
 
   const handleSectionChange = (section: string) => {
     setActiveSection(section);
@@ -82,7 +84,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen flex w-full bg-gray-50">
-      <SidebarProvider>
+      <SidebarProvider defaultOpen={!isMobile}>
         {user && (
           <AppSidebar 
             activeSection={activeSection} 
@@ -90,8 +92,18 @@ const Index = () => {
             onNewPrescription={handleNewPrescription}
           />
         )}
-        <main className={`flex-1 p-3 sm:p-6 ${!user ? 'w-full' : ''}`}>
-          {renderContent()}
+        <main className="flex-1 flex flex-col">
+          {user && isMobile && (
+            <div className="flex items-center p-3 border-b bg-white">
+              <SidebarTrigger>
+                <Menu className="w-6 h-6" />
+              </SidebarTrigger>
+              <h1 className="ml-3 text-lg font-semibold">OptiVision</h1>
+            </div>
+          )}
+          <div className="flex-1 p-3 sm:p-6">
+            {renderContent()}
+          </div>
         </main>
         
         {user && (
