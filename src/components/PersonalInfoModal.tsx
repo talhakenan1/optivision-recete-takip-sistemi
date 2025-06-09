@@ -27,7 +27,7 @@ export function PersonalInfoModal({ isOpen, onClose }: PersonalInfoModalProps) {
     
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(user.email, {
-        redirectTo: `${window.location.origin}/`,
+        redirectTo: `${window.location.origin}/reset-password`,
       });
 
       if (error) throw error;
@@ -51,10 +51,10 @@ export function PersonalInfoModal({ isOpen, onClose }: PersonalInfoModalProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-w-md mx-4 sm:mx-0">
         <DialogHeader>
           <div className="text-sm text-gray-500 mb-2">Settings / Personal Information</div>
-          <DialogTitle className="text-2xl font-bold">Personal Information</DialogTitle>
+          <DialogTitle className="text-xl sm:text-2xl font-bold">Personal Information</DialogTitle>
         </DialogHeader>
 
         <div className="space-y-6">
@@ -74,36 +74,30 @@ export function PersonalInfoModal({ isOpen, onClose }: PersonalInfoModalProps) {
             <div className="relative mt-1">
               <Input
                 id="password"
-                type={showPassword ? "text" : "password"}
-                value={showPassword ? "your-actual-password" : "••••••••"}
+                type="password"
+                value="••••••••"
                 readOnly
                 className="bg-gray-50 pr-10"
               />
-              <Button
-                type="button"
-                variant="ghost"
-                size="sm"
-                className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? (
-                  <EyeOff className="h-4 w-4" />
-                ) : (
-                  <Eye className="h-4 w-4" />
-                )}
-              </Button>
+              <div className="absolute right-3 top-3 text-gray-400 text-sm">
+                Hidden for security
+              </div>
             </div>
           </div>
 
-          <div className="flex justify-between">
+          <div className="flex flex-col sm:flex-row justify-between gap-3">
             <Button 
               variant="outline"
               onClick={handleChangePassword}
               disabled={isChangingPassword}
+              className="w-full sm:w-auto"
             >
               {isChangingPassword ? "Sending..." : "Change Password"}
             </Button>
-            <Button onClick={onClose} className="bg-blue-500 hover:bg-blue-600 text-white">
+            <Button 
+              onClick={onClose} 
+              className="bg-blue-500 hover:bg-blue-600 text-white w-full sm:w-auto"
+            >
               Close
             </Button>
           </div>

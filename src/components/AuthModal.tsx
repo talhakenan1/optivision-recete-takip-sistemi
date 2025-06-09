@@ -60,12 +60,12 @@ export function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-w-md mx-4 sm:mx-0">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-bold text-center">
+          <DialogTitle className="text-xl sm:text-2xl font-bold text-center">
             {isLogin ? "Welcome Back" : "Create Account"}
           </DialogTitle>
-          <p className="text-gray-600 text-center">
+          <p className="text-gray-600 text-center text-sm">
             {isLogin ? "Sign in to your Visionary Optics account" : "Join Visionary Optics today"}
           </p>
         </DialogHeader>

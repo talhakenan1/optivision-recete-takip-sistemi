@@ -43,13 +43,13 @@ const Index = () => {
   const renderContent = () => {
     if (!user) {
       return (
-        <div className="flex items-center justify-center h-full">
+        <div className="flex items-center justify-center h-full px-4">
           <div className="text-center space-y-6 max-w-md">
-            <h2 className="text-3xl font-bold text-gray-900">Welcome to Visionary Optics</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">Welcome to Visionary Optics</h2>
             <p className="text-gray-600">Please sign in to access the management system.</p>
             <Button 
               onClick={() => setIsAuthModalOpen(true)}
-              className="bg-blue-500 hover:bg-blue-600 text-white px-8 py-3"
+              className="bg-blue-500 hover:bg-blue-600 text-white px-8 py-3 w-full sm:w-auto"
             >
               Sign In
             </Button>
@@ -90,7 +90,7 @@ const Index = () => {
             onNewPrescription={handleNewPrescription}
           />
         )}
-        <main className={`flex-1 p-6 ${!user ? 'w-full' : ''}`}>
+        <main className={`flex-1 p-3 sm:p-6 ${!user ? 'w-full' : ''}`}>
           {renderContent()}
         </main>
         
