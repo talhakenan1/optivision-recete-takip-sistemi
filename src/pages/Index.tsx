@@ -83,7 +83,7 @@ const Index = () => {
   }
 
   return (
-    <div className="min-h-screen flex w-full bg-gray-50">
+    <div className="min-h-screen flex bg-gray-50 dark:bg-[#1f2937]">
       <SidebarProvider defaultOpen={!isMobile}>
         {user && (
           <AppSidebar 
@@ -94,7 +94,7 @@ const Index = () => {
         )}
         <main className="flex-1 flex flex-col">
           {user && isMobile && (
-            <div className="flex items-center p-3 border-b bg-white">
+            <div className="flex items-center p-3 border-b bg-white dark:bg-[#1f2937]">
               <SidebarTrigger>
                 <Menu className="w-6 h-6" />
               </SidebarTrigger>

@@ -19,7 +19,7 @@ export function Dashboard({ onNewPrescription, onNavigate }: DashboardProps) {
   };
 
   return (
-    <div className="min-h-screen bg-background dark:bg-[#4f5450]">
+    <div className="min-h-screen bg-background dark:bg-[#1f2937]">
       <div className="space-y-6 p-6">
         {/* Hero Section */}
         <div 

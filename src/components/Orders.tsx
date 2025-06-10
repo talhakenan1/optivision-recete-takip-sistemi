@@ -78,7 +78,7 @@ export function Orders({ onNewPrescription }: OrdersProps) {
   }
 
   return (
-    <div className="min-h-screen bg-background dark:bg-[#4f5450]">
+    <div className="min-h-screen bg-background dark:bg-[#1f2937]">
       <div className="space-y-6 p-6">
         <div className="flex justify-between items-center">
           <h1 className="text-3xl font-bold text-foreground dark:text-white">Orders</h1>
@@ -122,7 +122,7 @@ export function Orders({ onNewPrescription }: OrdersProps) {
         {/* Orders Table */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border dark:border-gray-700 overflow-hidden">
           <table className="w-full">
-            <thead className="bg-gray-100 dark:bg-gray-900">
+            <thead className="bg-gray-100 dark:bg-[#374151]">
               <tr>
                 <th className="text-left p-4 font-medium text-gray-700 dark:text-gray-300">Order ID</th>
                 <th className="text-left p-4 font-medium text-gray-700 dark:text-gray-300">Customer</th>
@@ -135,7 +135,7 @@ export function Orders({ onNewPrescription }: OrdersProps) {
               {filteredOrders.map((order, index) => (
                 <tr 
                   key={order.id} 
-                  className={`${index % 2 === 0 ? "bg-white dark:bg-gray-700" : "bg-gray-50 dark:bg-gray-600"} hover:bg-blue-50 dark:hover:bg-gray-500 cursor-pointer`}
+                  className={`${index % 2 === 0 ? "bg-white dark:bg-gray-700" : "bg-gray-50 dark:bg-[#374151]"} hover:bg-blue-50 dark:hover:bg-gray-500 cursor-pointer`}
                   onClick={() => setSelectedOrder(order)}
                 >
                   <td className="p-4 font-medium text-gray-900 dark:text-gray-200">#{order.id.slice(0, 8)}</td>
