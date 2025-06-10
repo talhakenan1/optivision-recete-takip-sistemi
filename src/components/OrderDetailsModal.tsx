@@ -54,23 +54,23 @@ export function OrderDetailsModal({ order, isOpen, onClose }: OrderDetailsModalP
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl mx-4 sm:mx-0">
+      <DialogContent className="max-w-2xl mx-4 sm:mx-0 bg-background dark:bg-[#4f5450]">
         <DialogHeader>
-          <DialogTitle className="text-xl sm:text-2xl font-bold">Order Details</DialogTitle>
+          <DialogTitle className="text-xl sm:text-2xl font-bold text-foreground dark:text-white">Order Details</DialogTitle>
         </DialogHeader>
 
         <div className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div>
-              <h3 className="text-lg font-semibold mb-4">Order Information</h3>
+              <h3 className="text-lg font-semibold mb-4 text-foreground dark:text-white">Order Information</h3>
               <div className="space-y-3">
                 <div>
                   <span className="font-medium text-gray-700 dark:text-gray-300">Order ID:</span>
-                  <p className="text-gray-900 dark:text-gray-100">#{order.id.slice(0, 8)}</p>
+                  <p className="text-gray-900 dark:text-white">#{order.id.slice(0, 8)}</p>
                 </div>
                 <div>
                   <span className="font-medium text-gray-700 dark:text-gray-300">Order Date:</span>
-                  <p className="text-gray-900 dark:text-gray-100">{formatDate(order.order_date)}</p>
+                  <p className="text-gray-900 dark:text-white">{formatDate(order.order_date)}</p>
                 </div>
                 <div>
                   <span className="font-medium text-gray-700 dark:text-gray-300">Status:</span>
@@ -82,32 +82,32 @@ export function OrderDetailsModal({ order, isOpen, onClose }: OrderDetailsModalP
                 </div>
                 <div>
                   <span className="font-medium text-gray-700 dark:text-gray-300">Total:</span>
-                  <p className="text-gray-900 dark:text-gray-100 text-lg font-semibold">{formatCurrency(Number(order.total))}</p>
+                  <p className="text-gray-900 dark:text-white text-lg font-semibold">{formatCurrency(Number(order.total))}</p>
                 </div>
               </div>
             </div>
 
             <div>
-              <h3 className="text-lg font-semibold mb-4">Customer Information</h3>
+              <h3 className="text-lg font-semibold mb-4 text-foreground dark:text-white">Customer Information</h3>
               <div className="space-y-3">
                 <div>
                   <span className="font-medium text-gray-700 dark:text-gray-300">Name:</span>
-                  <p className="text-gray-900 dark:text-gray-100">{order.customers?.name || 'Unknown'}</p>
+                  <p className="text-gray-900 dark:text-white">{order.customers?.name || 'Unknown'}</p>
                 </div>
                 <div>
                   <span className="font-medium text-gray-700 dark:text-gray-300">Customer ID:</span>
-                  <p className="text-gray-900 dark:text-gray-100">{order.customers?.id_number || 'N/A'}</p>
+                  <p className="text-gray-900 dark:text-white">{order.customers?.id_number || 'N/A'}</p>
                 </div>
                 {order.customers?.email && (
                   <div>
                     <span className="font-medium text-gray-700 dark:text-gray-300">Email:</span>
-                    <p className="text-gray-900 dark:text-gray-100">{order.customers.email}</p>
+                    <p className="text-gray-900 dark:text-white">{order.customers.email}</p>
                   </div>
                 )}
                 {order.customers?.phone && (
                   <div>
                     <span className="font-medium text-gray-700 dark:text-gray-300">Phone:</span>
-                    <p className="text-gray-900 dark:text-gray-100">{order.customers.phone}</p>
+                    <p className="text-gray-900 dark:text-white">{order.customers.phone}</p>
                   </div>
                 )}
               </div>
@@ -115,20 +115,20 @@ export function OrderDetailsModal({ order, isOpen, onClose }: OrderDetailsModalP
           </div>
 
           <div>
-            <h3 className="text-lg font-semibold mb-4">Order Timeline</h3>
+            <h3 className="text-lg font-semibold mb-4 text-foreground dark:text-white">Order Timeline</h3>
             <div className="space-y-2">
-              <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
+              <div className="flex items-center text-sm text-gray-600 dark:text-gray-300">
                 <div className="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
                 Order placed on {formatDate(order.order_date)}
               </div>
               {displayStatus === "shipped" && (
-                <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
+                <div className="flex items-center text-sm text-gray-600 dark:text-gray-300">
                   <div className="w-2 h-2 bg-green-500 rounded-full mr-3"></div>
                   Order shipped (more than 7 days old)
                 </div>
               )}
               {displayStatus === "returned" && (
-                <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
+                <div className="flex items-center text-sm text-gray-600 dark:text-gray-300">
                   <div className="w-2 h-2 bg-red-500 rounded-full mr-3"></div>
                   Order returned
                 </div>
@@ -136,8 +136,8 @@ export function OrderDetailsModal({ order, isOpen, onClose }: OrderDetailsModalP
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-3 pt-4 border-t dark:border-gray-700">
-            <Button variant="outline" onClick={onClose} className="w-full sm:w-auto">
+          <div className="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-3 pt-4 border-t dark:border-gray-600">
+            <Button variant="outline" onClick={onClose} className="w-full sm:w-auto dark:border-gray-600 dark:text-white dark:hover:bg-gray-600">
               Close
             </Button>
             {displayStatus !== "returned" && (

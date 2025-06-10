@@ -27,33 +27,33 @@ export function Settings({ onPersonalInfo }: SettingsProps) {
   };
 
   return (
-    <div className="space-y-8">
-      <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Settings</h1>
+    <div className="space-y-8 bg-background dark:bg-[#4f5450] min-h-screen p-6">
+      <h1 className="text-2xl sm:text-3xl font-bold text-foreground dark:text-white">Settings</h1>
 
       {/* Account Section */}
       <div className="space-y-4">
-        <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Account</h2>
-        <div className="bg-white rounded-lg shadow-sm border space-y-0">
+        <h2 className="text-lg sm:text-xl font-semibold text-foreground dark:text-white">Account</h2>
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border dark:border-gray-700 space-y-0">
           <Button
             variant="ghost"
-            className="w-full justify-start p-4 sm:p-6 h-auto border-b rounded-none text-left"
+            className="w-full justify-start p-4 sm:p-6 h-auto border-b dark:border-gray-700 rounded-none text-left text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-700"
             onClick={onPersonalInfo}
           >
             <User className="w-5 h-5 mr-3 sm:mr-4 flex-shrink-0" />
             <div className="min-w-0 flex-1">
               <div className="font-medium">Personal Information</div>
-              <div className="text-sm text-gray-500">Manage your personal information</div>
+              <div className="text-sm text-gray-500 dark:text-gray-400">Manage your personal information</div>
             </div>
           </Button>
           <Button
             variant="ghost"
-            className="w-full justify-start p-4 sm:p-6 h-auto rounded-none text-left"
+            className="w-full justify-start p-4 sm:p-6 h-auto rounded-none text-left text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-700"
             onClick={signOut}
           >
             <LogOut className="w-5 h-5 mr-3 sm:mr-4 flex-shrink-0" />
             <div className="min-w-0 flex-1">
               <div className="font-medium">Sign Out</div>
-              <div className="text-sm text-gray-500">Sign out of your account</div>
+              <div className="text-sm text-gray-500 dark:text-gray-400">Sign out of your account</div>
             </div>
           </Button>
         </div>
@@ -61,18 +61,18 @@ export function Settings({ onPersonalInfo }: SettingsProps) {
 
       {/* Display Section */}
       <div className="space-y-4">
-        <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Display</h2>
-        <div className="bg-white rounded-lg shadow-sm border p-4 sm:p-6">
+        <h2 className="text-lg sm:text-xl font-semibold text-foreground dark:text-white">Display</h2>
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border dark:border-gray-700 p-4 sm:p-6">
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
-              <Sun className="w-5 h-5" />
-              <span className="font-medium">Theme</span>
+              <Sun className="w-5 h-5 text-foreground dark:text-white" />
+              <span className="font-medium text-foreground dark:text-white">Theme</span>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <Button
                 variant={theme === "light" ? "default" : "outline"}
                 onClick={() => handleThemeChange("light")}
-                className="flex items-center justify-center space-x-2 h-auto py-3"
+                className="flex items-center justify-center space-x-2 h-auto py-3 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700"
               >
                 <Sun className="w-4 h-4" />
                 <span>Light</span>
@@ -80,7 +80,7 @@ export function Settings({ onPersonalInfo }: SettingsProps) {
               <Button
                 variant={theme === "dark" ? "default" : "outline"}
                 onClick={() => handleThemeChange("dark")}
-                className="flex items-center justify-center space-x-2 h-auto py-3"
+                className="flex items-center justify-center space-x-2 h-auto py-3 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700"
               >
                 <Moon className="w-4 h-4" />
                 <span>Dark</span>
@@ -88,7 +88,7 @@ export function Settings({ onPersonalInfo }: SettingsProps) {
               <Button
                 variant={theme === "system" ? "default" : "outline"}
                 onClick={() => handleThemeChange("system")}
-                className="flex items-center justify-center space-x-2 h-auto py-3"
+                className="flex items-center justify-center space-x-2 h-auto py-3 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700"
               >
                 <Monitor className="w-4 h-4" />
                 <span>System</span>
@@ -100,21 +100,21 @@ export function Settings({ onPersonalInfo }: SettingsProps) {
 
       {/* Notifications Section */}
       <div className="space-y-4">
-        <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Notification Preferences</h2>
-        <div className="bg-white rounded-lg shadow-sm border p-4 sm:p-6">
+        <h2 className="text-lg sm:text-xl font-semibold text-foreground dark:text-white">Notification Preferences</h2>
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border dark:border-gray-700 p-4 sm:p-6">
           <div className="space-y-6">
             <div className="flex items-center space-x-2 mb-4">
-              <Bell className="w-5 h-5" />
-              <span className="font-medium">Notifications</span>
+              <Bell className="w-5 h-5 text-foreground dark:text-white" />
+              <span className="font-medium text-foreground dark:text-white">Notifications</span>
             </div>
             
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
-                  <Label htmlFor="email-notifications" className="text-base font-medium">
+                  <Label htmlFor="email-notifications" className="text-base font-medium text-foreground dark:text-white">
                     Email Notifications
                   </Label>
-                  <div className="text-sm text-gray-500">
+                  <div className="text-sm text-gray-500 dark:text-gray-400">
                     Receive notifications via email
                   </div>
                 </div>
@@ -127,10 +127,10 @@ export function Settings({ onPersonalInfo }: SettingsProps) {
 
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
-                  <Label htmlFor="push-notifications" className="text-base font-medium">
+                  <Label htmlFor="push-notifications" className="text-base font-medium text-foreground dark:text-white">
                     Push Notifications
                   </Label>
-                  <div className="text-sm text-gray-500">
+                  <div className="text-sm text-gray-500 dark:text-gray-400">
                     Receive push notifications in browser
                   </div>
                 </div>
@@ -143,10 +143,10 @@ export function Settings({ onPersonalInfo }: SettingsProps) {
 
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
-                  <Label htmlFor="order-updates" className="text-base font-medium">
+                  <Label htmlFor="order-updates" className="text-base font-medium text-foreground dark:text-white">
                     Order Updates
                   </Label>
-                  <div className="text-sm text-gray-500">
+                  <div className="text-sm text-gray-500 dark:text-gray-400">
                     Get notified about order status changes
                   </div>
                 </div>
@@ -159,10 +159,10 @@ export function Settings({ onPersonalInfo }: SettingsProps) {
 
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
-                  <Label htmlFor="marketing-emails" className="text-base font-medium">
+                  <Label htmlFor="marketing-emails" className="text-base font-medium text-foreground dark:text-white">
                     Marketing Emails
                   </Label>
-                  <div className="text-sm text-gray-500">
+                  <div className="text-sm text-gray-500 dark:text-gray-400">
                     Receive promotional emails and updates
                   </div>
                 </div>
@@ -179,27 +179,27 @@ export function Settings({ onPersonalInfo }: SettingsProps) {
 
       {/* Help & Support Section */}
       <div className="space-y-4">
-        <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Help & Support</h2>
-        <div className="bg-white rounded-lg shadow-sm border space-y-0">
+        <h2 className="text-lg sm:text-xl font-semibold text-foreground dark:text-white">Help & Support</h2>
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border dark:border-gray-700 space-y-0">
           <Button
             variant="ghost"
-            className="w-full justify-start p-4 sm:p-6 h-auto border-b rounded-none text-left"
+            className="w-full justify-start p-4 sm:p-6 h-auto border-b dark:border-gray-700 rounded-none text-left text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-700"
             onClick={() => setIsHelpModalOpen(true)}
           >
             <HelpCircle className="w-5 h-5 mr-3 sm:mr-4 flex-shrink-0" />
             <div className="min-w-0 flex-1">
               <div className="font-medium">Help & Documentation</div>
-              <div className="text-sm text-gray-500">View user guide and documentation</div>
+              <div className="text-sm text-gray-500 dark:text-gray-400">View user guide and documentation</div>
             </div>
           </Button>
           <Button
             variant="ghost"
-            className="w-full justify-start p-4 sm:p-6 h-auto rounded-none text-left"
+            className="w-full justify-start p-4 sm:p-6 h-auto rounded-none text-left text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-700"
           >
             <Headphones className="w-5 h-5 mr-3 sm:mr-4 flex-shrink-0" />
             <div className="min-w-0 flex-1">
               <div className="font-medium">Contact Support</div>
-              <div className="text-sm text-gray-500">Contact customer support</div>
+              <div className="text-sm text-gray-500 dark:text-gray-400">Contact customer support</div>
             </div>
           </Button>
         </div>

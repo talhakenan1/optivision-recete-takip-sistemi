@@ -19,7 +19,7 @@ export function Dashboard({ onNewPrescription, onNavigate }: DashboardProps) {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 bg-background dark:bg-[#4f5450] min-h-screen p-6">
       {/* Hero Section */}
       <div 
         className="relative h-96 rounded-2xl overflow-hidden bg-gradient-to-r from-gray-800 to-gray-600"
@@ -64,32 +64,32 @@ export function Dashboard({ onNewPrescription, onNavigate }: DashboardProps) {
           </div>
         ) : (
           <>
-            <div className="bg-white p-6 rounded-lg shadow-sm border">
-              <h3 className="text-sm font-medium text-gray-500">Total Orders</h3>
-              <p className="text-3xl font-bold text-gray-900">{stats?.totalOrders}</p>
-              <p className="text-sm text-green-600">Updated in real-time</p>
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border dark:border-gray-700">
+              <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">Total Orders</h3>
+              <p className="text-3xl font-bold text-gray-900 dark:text-white">{stats?.totalOrders}</p>
+              <p className="text-sm text-green-600 dark:text-green-400">Updated in real-time</p>
             </div>
-            <div className="bg-white p-6 rounded-lg shadow-sm border">
-              <h3 className="text-sm font-medium text-gray-500">Active Customers</h3>
-              <p className="text-3xl font-bold text-gray-900">{stats?.activeCustomers}</p>
-              <p className="text-sm text-green-600">Customers with orders</p>
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border dark:border-gray-700">
+              <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">Active Customers</h3>
+              <p className="text-3xl font-bold text-gray-900 dark:text-white">{stats?.activeCustomers}</p>
+              <p className="text-sm text-green-600 dark:text-green-400">Customers with orders</p>
             </div>
-            <div className="bg-white p-6 rounded-lg shadow-sm border">
-              <h3 className="text-sm font-medium text-gray-500">Revenue</h3>
-              <p className="text-3xl font-bold text-gray-900">{formatCurrency(stats?.totalRevenue || 0)}</p>
-              <p className="text-sm text-green-600">Total revenue</p>
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border dark:border-gray-700">
+              <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">Revenue</h3>
+              <p className="text-3xl font-bold text-gray-900 dark:text-white">{formatCurrency(stats?.totalRevenue || 0)}</p>
+              <p className="text-sm text-green-600 dark:text-green-400">Total revenue</p>
             </div>
-            <div className="bg-white p-6 rounded-lg shadow-sm border">
-              <h3 className="text-sm font-medium text-gray-500">New Prescriptions</h3>
-              <p className="text-3xl font-bold text-gray-900">{stats?.newPrescriptions}</p>
-              <p className="text-sm text-green-600">Last 30 days</p>
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border dark:border-gray-700">
+              <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">New Prescriptions</h3>
+              <p className="text-3xl font-bold text-gray-900 dark:text-white">{stats?.newPrescriptions}</p>
+              <p className="text-sm text-green-600 dark:text-green-400">Last 30 days</p>
             </div>
           </>
         )}
       </div>
 
       {/* Copyright Footer */}
-      <div className="text-center text-gray-500 text-sm mt-12">
+      <div className="text-center text-gray-500 dark:text-gray-400 text-sm mt-12">
         © 2024 Visionary Optics. All rights reserved.
       </div>
     </div>
