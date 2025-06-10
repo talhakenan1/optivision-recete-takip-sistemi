@@ -13,7 +13,8 @@ interface AddCustomerModalProps {
 
 export function AddCustomerModal({ isOpen, onClose }: AddCustomerModalProps) {
   const [formData, setFormData] = useState({
-    name: "",
+    firstName: "",
+    lastName: "",
     email: "",
     phone: "",
     idNumber: "",
@@ -26,13 +27,14 @@ export function AddCustomerModal({ isOpen, onClose }: AddCustomerModalProps) {
       alert("ID Number is required");
       return;
     }
+    const fullName = `${formData.firstName} ${formData.lastName}`.trim();
     addCustomer({
-      name: formData.name,
+      name: fullName,
       email: formData.email,
       phone: formData.phone,
       id_number: formData.idNumber,
     });
-    setFormData({ name: "", email: "", phone: "", idNumber: "" });
+    setFormData({ firstName: "", lastName: "", email: "", phone: "", idNumber: "" });
     onClose();
   };
 
@@ -61,14 +63,26 @@ export function AddCustomerModal({ isOpen, onClose }: AddCustomerModalProps) {
           </div>
 
           <div>
-            <Label htmlFor="name">Name *</Label>
+            <Label htmlFor="firstName">First Name *</Label>
             <Input
-              id="name"
-              value={formData.name}
-              onChange={(e) => handleInputChange("name", e.target.value)}
+              id="firstName"
+              value={formData.firstName}
+              onChange={(e) => handleInputChange("firstName", e.target.value)}
               required
               className="mt-1"
-              placeholder="Customer's full name"
+              placeholder="Customer's first name"
+            />
+          </div>
+
+          <div>
+            <Label htmlFor="lastName">Last Name *</Label>
+            <Input
+              id="lastName"
+              value={formData.lastName}
+              onChange={(e) => handleInputChange("lastName", e.target.value)}
+              required
+              className="mt-1"
+              placeholder="Customer's last name"
             />
           </div>
 

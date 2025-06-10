@@ -101,7 +101,7 @@ const Index = () => {
               <h1 className="ml-3 text-lg font-semibold">OptiVision</h1>
             </div>
           )}
-          <div className="flex-1 p-3 sm:p-6">
+          <div className="flex-1">
             {renderContent()}
           </div>
         </main>

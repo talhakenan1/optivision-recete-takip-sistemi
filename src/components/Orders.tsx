@@ -78,92 +78,94 @@ export function Orders({ onNewPrescription }: OrdersProps) {
   }
 
   return (
-    <div className="space-y-6 bg-background dark:bg-[#4f5450] min-h-screen p-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold text-foreground dark:text-white">Orders</h1>
-        <Button 
-          onClick={onNewPrescription}
-          className="bg-blue-500 hover:bg-blue-600 text-white"
-        >
-          New Prescription
-        </Button>
-      </div>
-
-      {/* Filters */}
-      <div className="flex gap-4">
-        {statusFilters.map((filter) => (
-          <Button
-            key={filter}
-            variant={activeFilter === filter ? "default" : "outline"}
-            onClick={() => setActiveFilter(filter)}
-            className={
-              activeFilter === filter 
-                ? "bg-gray-900 text-white hover:bg-gray-800 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-100" 
-                : "border-gray-300 text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:border-gray-600 dark:text-white dark:hover:bg-gray-600 dark:hover:text-white"
-            }
+    <div className="min-h-screen bg-background dark:bg-[#4f5450]">
+      <div className="space-y-6 p-6">
+        <div className="flex justify-between items-center">
+          <h1 className="text-3xl font-bold text-foreground dark:text-white">Orders</h1>
+          <Button 
+            onClick={onNewPrescription}
+            className="bg-blue-500 hover:bg-blue-600 text-white"
           >
-            {filter.charAt(0).toUpperCase() + filter.slice(1)}
+            New Prescription
           </Button>
-        ))}
-      </div>
+        </div>
 
-      {/* Search */}
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-        <Input
-          placeholder="Search orders..."
-          className="pl-10 bg-gray-50 border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-300"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-      </div>
+        {/* Filters */}
+        <div className="flex gap-4">
+          {statusFilters.map((filter) => (
+            <Button
+              key={filter}
+              variant={activeFilter === filter ? "default" : "outline"}
+              onClick={() => setActiveFilter(filter)}
+              className={
+                activeFilter === filter 
+                  ? "bg-gray-900 text-white hover:bg-gray-800 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-100" 
+                  : "border-gray-300 text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:border-gray-600 dark:text-white dark:hover:bg-gray-600 dark:hover:text-white"
+              }
+            >
+              {filter.charAt(0).toUpperCase() + filter.slice(1)}
+            </Button>
+          ))}
+        </div>
 
-      {/* Orders Table */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border dark:border-gray-700 overflow-hidden">
-        <table className="w-full">
-          <thead className="bg-gray-50 dark:bg-gray-700">
-            <tr>
-              <th className="text-left p-4 font-medium text-gray-700 dark:text-gray-300">Order ID</th>
-              <th className="text-left p-4 font-medium text-gray-700 dark:text-gray-300">Customer</th>
-              <th className="text-left p-4 font-medium text-gray-700 dark:text-gray-300">Date</th>
-              <th className="text-left p-4 font-medium text-gray-700 dark:text-gray-300">Status</th>
-              <th className="text-left p-4 font-medium text-gray-700 dark:text-gray-300">Total</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredOrders.map((order, index) => (
-              <tr 
-                key={order.id} 
-                className={`${index % 2 === 0 ? "bg-white dark:bg-gray-800" : "bg-gray-50 dark:bg-gray-700"} hover:bg-blue-50 dark:hover:bg-gray-600 cursor-pointer`}
-                onClick={() => setSelectedOrder(order)}
-              >
-                <td className="p-4 font-medium text-gray-900 dark:text-white">#{order.id.slice(0, 8)}</td>
-                <td className="p-4 text-gray-600 dark:text-gray-300">{order.customers?.name || 'Unknown'}</td>
-                <td className="p-4 text-gray-600 dark:text-gray-300">{formatDate(order.order_date)}</td>
-                <td className="p-4">
-                  <Badge className={getStatusColor(order.calculatedStatus)}>
-                    {order.calculatedStatus.charAt(0).toUpperCase() + order.calculatedStatus.slice(1)}
-                  </Badge>
-                </td>
-                <td className="p-4 font-medium text-gray-900 dark:text-white">{formatCurrency(Number(order.total))}</td>
+        {/* Search */}
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+          <Input
+            placeholder="Search orders..."
+            className="pl-10 bg-gray-50 border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-300"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+
+        {/* Orders Table */}
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border dark:border-gray-700 overflow-hidden">
+          <table className="w-full">
+            <thead className="bg-gray-100 dark:bg-gray-900">
+              <tr>
+                <th className="text-left p-4 font-medium text-gray-700 dark:text-gray-300">Order ID</th>
+                <th className="text-left p-4 font-medium text-gray-700 dark:text-gray-300">Customer</th>
+                <th className="text-left p-4 font-medium text-gray-700 dark:text-gray-300">Date</th>
+                <th className="text-left p-4 font-medium text-gray-700 dark:text-gray-300">Status</th>
+                <th className="text-left p-4 font-medium text-gray-700 dark:text-gray-300">Total</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-        {filteredOrders.length === 0 && (
-          <div className="p-8 text-center text-gray-500 dark:text-gray-400">
-            No orders found matching your criteria.
-          </div>
+            </thead>
+            <tbody>
+              {filteredOrders.map((order, index) => (
+                <tr 
+                  key={order.id} 
+                  className={`${index % 2 === 0 ? "bg-white dark:bg-gray-700" : "bg-gray-50 dark:bg-gray-600"} hover:bg-blue-50 dark:hover:bg-gray-500 cursor-pointer`}
+                  onClick={() => setSelectedOrder(order)}
+                >
+                  <td className="p-4 font-medium text-gray-900 dark:text-gray-200">#{order.id.slice(0, 8)}</td>
+                  <td className="p-4 text-gray-600 dark:text-gray-300">{order.customers?.name || 'Unknown'}</td>
+                  <td className="p-4 text-gray-600 dark:text-gray-300">{formatDate(order.order_date)}</td>
+                  <td className="p-4">
+                    <Badge className={getStatusColor(order.calculatedStatus)}>
+                      {order.calculatedStatus.charAt(0).toUpperCase() + order.calculatedStatus.slice(1)}
+                    </Badge>
+                  </td>
+                  <td className="p-4 font-medium text-gray-900 dark:text-gray-200">{formatCurrency(Number(order.total))}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          {filteredOrders.length === 0 && (
+            <div className="p-8 text-center text-gray-500 dark:text-gray-400">
+              No orders found matching your criteria.
+            </div>
+          )}
+        </div>
+
+        {selectedOrder && (
+          <OrderDetailsModal
+            order={selectedOrder}
+            isOpen={!!selectedOrder}
+            onClose={() => setSelectedOrder(null)}
+          />
         )}
       </div>
-
-      {selectedOrder && (
-        <OrderDetailsModal
-          order={selectedOrder}
-          isOpen={!!selectedOrder}
-          onClose={() => setSelectedOrder(null)}
-        />
-      )}
     </div>
   );
 }
