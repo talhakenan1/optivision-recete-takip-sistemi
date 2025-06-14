@@ -134,7 +134,7 @@ export function usePrescriptions() {
             email: prescriptionData.email,
             phone: prescriptionData.phone,
             id_number: prescriptionData.idNumber,
-            address: prescriptionData.address,
+            address: prescriptionData.address || null,
             user_id: user.id,
           }])
           .select()

@@ -240,7 +240,7 @@ export function NewPrescriptionModal({ isOpen, onClose }: NewPrescriptionModalPr
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-7xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-xl sm:text-2xl font-bold">New Prescription</DialogTitle>
         </DialogHeader>
