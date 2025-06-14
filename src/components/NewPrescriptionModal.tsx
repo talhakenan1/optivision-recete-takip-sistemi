@@ -20,34 +20,13 @@ interface NewPrescriptionModalProps {
   onClose: () => void;
 }
 
-interface PrescriptionData {
-  visionType?: string;
-  sph?: string;
-  cyl?: string;
-  axis?: string;
-  distanceVision?: string;
-  nearVision?: string;
-  add?: string;
-  pd?: string;
-  lensType?: string;
-  rightEye?: {
-    sph: string;
-    cyl: string;
-    axis: string;
-  };
-  leftEye?: {
-    sph: string;
-    cyl: string;
-    axis: string;
-  };
-}
-
 const initialFormData = {
   firstName: "",
   lastName: "",
   idNumber: "",
   email: "",
   phone: "",
+  address: "",
   productInfo: "",
   visionType: "",
   sph: "",
@@ -55,7 +34,10 @@ const initialFormData = {
   axis: "",
   distanceVision: "",
   nearVision: "",
-  price: "",
+  nearGlassPrice: "",
+  farGlassPrice: "",
+  nearFramePrice: "",
+  farFramePrice: "",
   add: "",
   pd: "",
   lensType: "",
@@ -68,6 +50,34 @@ const initialFormData = {
     sph: "",
     cyl: "",
     axis: "",
+  },
+  rightEyeFar: {
+    sph: "",
+    cyl: "",
+    axis: "",
+    lensType: "",
+    lensColor: "",
+  },
+  rightEyeNear: {
+    sph: "",
+    cyl: "",
+    axis: "",
+    lensType: "",
+    lensColor: "",
+  },
+  leftEyeFar: {
+    sph: "",
+    cyl: "",
+    axis: "",
+    lensType: "",
+    lensColor: "",
+  },
+  leftEyeNear: {
+    sph: "",
+    cyl: "",
+    axis: "",
+    lensType: "",
+    lensColor: "",
   },
 };
 
@@ -90,6 +100,16 @@ export function NewPrescriptionModal({ isOpen, onClose }: NewPrescriptionModalPr
   };
 
   const handleEyeChange = (eye: 'rightEye' | 'leftEye', field: string, value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      [eye]: {
+        ...prev[eye],
+        [field]: value
+      }
+    }));
+  };
+
+  const handleComplexEyeChange = (eye: 'rightEyeFar' | 'rightEyeNear' | 'leftEyeFar' | 'leftEyeNear', field: string, value: string) => {
     setFormData(prev => ({
       ...prev,
       [eye]: {
@@ -134,14 +154,14 @@ export function NewPrescriptionModal({ isOpen, onClose }: NewPrescriptionModalPr
 
             console.log("Found last prescription:", lastPrescription);
 
-            let prescriptionData: PrescriptionData = {};
+            let prescriptionData: any = {};
             if (lastPrescription && lastPrescription.prescription_data) {
               // Safely parse prescription data
               try {
                 if (typeof lastPrescription.prescription_data === 'string') {
                   prescriptionData = JSON.parse(lastPrescription.prescription_data);
                 } else if (typeof lastPrescription.prescription_data === 'object') {
-                  prescriptionData = lastPrescription.prescription_data as PrescriptionData;
+                  prescriptionData = lastPrescription.prescription_data;
                 }
               } catch (error) {
                 console.error("Error parsing prescription data:", error);
@@ -155,6 +175,7 @@ export function NewPrescriptionModal({ isOpen, onClose }: NewPrescriptionModalPr
               lastName,
               email: customer.email || "",
               phone: customer.phone || "",
+              address: customer.address || "",
               // Fill prescription details from last prescription if available
               visionType: prescriptionData.visionType || "",
               sph: prescriptionData.sph || "",
@@ -167,6 +188,10 @@ export function NewPrescriptionModal({ isOpen, onClose }: NewPrescriptionModalPr
               lensType: prescriptionData.lensType || "",
               rightEye: prescriptionData.rightEye || { sph: "", cyl: "", axis: "" },
               leftEye: prescriptionData.leftEye || { sph: "", cyl: "", axis: "" },
+              rightEyeFar: prescriptionData.rightEyeFar || { sph: "", cyl: "", axis: "", lensType: "", lensColor: "" },
+              rightEyeNear: prescriptionData.rightEyeNear || { sph: "", cyl: "", axis: "", lensType: "", lensColor: "" },
+              leftEyeFar: prescriptionData.leftEyeFar || { sph: "", cyl: "", axis: "", lensType: "", lensColor: "" },
+              leftEyeNear: prescriptionData.leftEyeNear || { sph: "", cyl: "", axis: "", lensType: "", lensColor: "" },
             }));
           }
         } catch (error) {
@@ -179,6 +204,14 @@ export function NewPrescriptionModal({ isOpen, onClose }: NewPrescriptionModalPr
     return () => clearTimeout(timeoutId);
   }, [formData.idNumber, user]);
 
+  const calculateTotalPrice = () => {
+    const nearGlass = parseFloat(formData.nearGlassPrice) || 0;
+    const farGlass = parseFloat(formData.farGlassPrice) || 0;
+    const nearFrame = parseFloat(formData.nearFramePrice) || 0;
+    const farFrame = parseFloat(formData.farFramePrice) || 0;
+    return nearGlass + farGlass + nearFrame + farFrame;
+  };
+
   const handleSave = () => {
     if (!date) {
       alert("Please select a purchase date");
@@ -190,10 +223,12 @@ export function NewPrescriptionModal({ isOpen, onClose }: NewPrescriptionModalPr
       return;
     }
 
+    const totalPrice = calculateTotalPrice();
+
     console.log("Saving prescription with form data:", formData);
     addPrescription({
       ...formData,
-      price: formData.price ? parseFloat(formData.price) : undefined,
+      price: totalPrice,
       purchaseDate: date,
     });
     
@@ -205,7 +240,7 @@ export function NewPrescriptionModal({ isOpen, onClose }: NewPrescriptionModalPr
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-xl sm:text-2xl font-bold">New Prescription</DialogTitle>
         </DialogHeader>
@@ -269,6 +304,15 @@ export function NewPrescriptionModal({ isOpen, onClose }: NewPrescriptionModalPr
                 />
               </div>
             </div>
+            <div>
+              <Label htmlFor="address">Address</Label>
+              <Textarea
+                id="address"
+                placeholder="Enter customer's address"
+                value={formData.address}
+                onChange={(e) => handleInputChange("address", e.target.value)}
+              />
+            </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <Label>Purchase Date *</Label>
@@ -296,16 +340,6 @@ export function NewPrescriptionModal({ isOpen, onClose }: NewPrescriptionModalPr
                   </PopoverContent>
                 </Popover>
               </div>
-              <div>
-                <Label htmlFor="price">Price</Label>
-                <Input
-                  id="price"
-                  type="number"
-                  placeholder="0.00"
-                  value={formData.price}
-                  onChange={(e) => handleInputChange("price", e.target.value)}
-                />
-              </div>
             </div>
           </div>
 
@@ -323,11 +357,65 @@ export function NewPrescriptionModal({ isOpen, onClose }: NewPrescriptionModalPr
             </div>
           </div>
 
+          {/* Price Information */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold">Price Information</h3>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              <div>
+                <Label htmlFor="nearGlassPrice">Near Glass Price</Label>
+                <Input
+                  id="nearGlassPrice"
+                  type="number"
+                  placeholder="0.00"
+                  value={formData.nearGlassPrice}
+                  onChange={(e) => handleInputChange("nearGlassPrice", e.target.value)}
+                />
+              </div>
+              <div>
+                <Label htmlFor="farGlassPrice">Far Glass Price</Label>
+                <Input
+                  id="farGlassPrice"
+                  type="number"
+                  placeholder="0.00"
+                  value={formData.farGlassPrice}
+                  onChange={(e) => handleInputChange("farGlassPrice", e.target.value)}
+                />
+              </div>
+              <div>
+                <Label htmlFor="nearFramePrice">Near Frame Price</Label>
+                <Input
+                  id="nearFramePrice"
+                  type="number"
+                  placeholder="0.00"
+                  value={formData.nearFramePrice}
+                  onChange={(e) => handleInputChange("nearFramePrice", e.target.value)}
+                />
+              </div>
+              <div>
+                <Label htmlFor="farFramePrice">Far Frame Price</Label>
+                <Input
+                  id="farFramePrice"
+                  type="number"
+                  placeholder="0.00"
+                  value={formData.farFramePrice}
+                  onChange={(e) => handleInputChange("farFramePrice", e.target.value)}
+                />
+              </div>
+            </div>
+            <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg">
+              <div className="flex justify-between items-center">
+                <span className="font-semibold">Total Price:</span>
+                <span className="text-xl font-bold">${calculateTotalPrice().toFixed(2)}</span>
+              </div>
+            </div>
+          </div>
+
           {/* Prescription Details using new form */}
           <PrescriptionForm 
             formData={formData}
             onChange={handleInputChange}
             onEyeChange={handleEyeChange}
+            onComplexEyeChange={handleComplexEyeChange}
           />
 
           <div className="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-3">

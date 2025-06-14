@@ -61,6 +61,10 @@ export function Orders({ onNewPrescription }: OrdersProps) {
     return new Date(dateString).toLocaleDateString();
   };
 
+  const calculateTotal = () => {
+    return filteredOrders.reduce((sum, order) => sum + Number(order.total), 0);
+  };
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -150,6 +154,16 @@ export function Orders({ onNewPrescription }: OrdersProps) {
                 </tr>
               ))}
             </tbody>
+            <tfoot className="bg-gray-100 dark:bg-[#374151]">
+              <tr>
+                <td colSpan={4} className="p-4 font-medium text-gray-700 dark:text-gray-300 text-right">
+                  Total:
+                </td>
+                <td className="p-4 font-bold text-gray-900 dark:text-gray-200">
+                  {formatCurrency(calculateTotal())}
+                </td>
+              </tr>
+            </tfoot>
           </table>
           {filteredOrders.length === 0 && (
             <div className="p-8 text-center text-gray-500 dark:text-gray-400">

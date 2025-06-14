@@ -1,3 +1,4 @@
+
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -9,6 +10,7 @@ interface PrescriptionData {
   idNumber: string;
   email: string;
   phone: string;
+  address?: string;
   productInfo: string;
   visionType: string;
   sph: string;
@@ -30,6 +32,34 @@ interface PrescriptionData {
     sph: string;
     cyl: string;
     axis: string;
+  };
+  rightEyeFar?: {
+    sph: string;
+    cyl: string;
+    axis: string;
+    lensType: string;
+    lensColor: string;
+  };
+  rightEyeNear?: {
+    sph: string;
+    cyl: string;
+    axis: string;
+    lensType: string;
+    lensColor: string;
+  };
+  leftEyeFar?: {
+    sph: string;
+    cyl: string;
+    axis: string;
+    lensType: string;
+    lensColor: string;
+  };
+  leftEyeNear?: {
+    sph: string;
+    cyl: string;
+    axis: string;
+    lensType: string;
+    lensColor: string;
   };
 }
 
@@ -104,6 +134,7 @@ export function usePrescriptions() {
             email: prescriptionData.email,
             phone: prescriptionData.phone,
             id_number: prescriptionData.idNumber,
+            address: prescriptionData.address,
             user_id: user.id,
           }])
           .select()
@@ -118,6 +149,14 @@ export function usePrescriptions() {
       } else {
         customerId = existingCustomer.id;
         console.log("Using existing customer with ID:", customerId);
+        
+        // Update customer address if provided
+        if (prescriptionData.address) {
+          await supabase
+            .from("customers")
+            .update({ address: prescriptionData.address })
+            .eq("id", customerId);
+        }
       }
 
       // Create order for this user
@@ -152,11 +191,16 @@ export function usePrescriptions() {
         prescription_data: {
           firstName: prescriptionData.firstName,
           lastName: prescriptionData.lastName,
+          address: prescriptionData.address,
           productInfo: prescriptionData.productInfo,
           visionType: prescriptionData.visionType,
           // Store the new prescription format
           rightEye: prescriptionData.rightEye,
           leftEye: prescriptionData.leftEye,
+          rightEyeFar: prescriptionData.rightEyeFar,
+          rightEyeNear: prescriptionData.rightEyeNear,
+          leftEyeFar: prescriptionData.leftEyeFar,
+          leftEyeNear: prescriptionData.leftEyeNear,
           add: prescriptionData.add,
           pd: prescriptionData.pd,
           lensType: prescriptionData.lensType,

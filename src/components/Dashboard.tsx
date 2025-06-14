@@ -11,13 +11,6 @@ interface DashboardProps {
 export function Dashboard({ onNewPrescription, onNavigate }: DashboardProps) {
   const { stats, isLoading, error } = useDashboardStats();
 
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-    }).format(amount);
-  };
-
   return (
     <div className="min-h-screen bg-background dark:bg-[#1f2937]">
       <div className="space-y-6 p-6">
@@ -54,13 +47,13 @@ export function Dashboard({ onNewPrescription, onNavigate }: DashboardProps) {
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {isLoading ? (
-            <div className="col-span-4 flex items-center justify-center p-8">
+            <div className="col-span-3 flex items-center justify-center p-8">
               <Loader2 className="w-8 h-8 animate-spin" />
             </div>
           ) : error ? (
-            <div className="col-span-4 text-center text-red-600 p-6">
+            <div className="col-span-3 text-center text-red-600 p-6">
               Error loading dashboard statistics
             </div>
           ) : (
@@ -74,11 +67,6 @@ export function Dashboard({ onNewPrescription, onNavigate }: DashboardProps) {
                 <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">Active Customers</h3>
                 <p className="text-3xl font-bold text-gray-900 dark:text-white">{stats?.activeCustomers}</p>
                 <p className="text-sm text-green-600 dark:text-green-400">Customers with orders</p>
-              </div>
-              <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border dark:border-gray-700">
-                <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">Revenue</h3>
-                <p className="text-3xl font-bold text-gray-900 dark:text-white">{formatCurrency(stats?.totalRevenue || 0)}</p>
-                <p className="text-sm text-green-600 dark:text-green-400">Total revenue</p>
               </div>
               <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border dark:border-gray-700">
                 <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">New Prescriptions</h3>

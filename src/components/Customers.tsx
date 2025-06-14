@@ -1,16 +1,13 @@
 
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Search, Plus, Loader2 } from "lucide-react";
+import { Search, Loader2 } from "lucide-react";
 import { useCustomers } from "@/hooks/useCustomers";
-import { AddCustomerModal } from "@/components/AddCustomerModal";
 import { CustomerDetailsModal } from "@/components/CustomerDetailsModal";
 
 export function Customers() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [selectedCustomer, setSelectedCustomer] = useState<any>(null);
   const { customers, isLoading, error } = useCustomers();
 
@@ -37,17 +34,10 @@ export function Customers() {
   }
 
   return (
-    <div className="min-h-screen bg-background dark:bg-[#4f5450]">
+    <div className="min-h-screen bg-background dark:bg-[#1f2937]">
       <div className="space-y-6 p-6">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <h1 className="text-2xl sm:text-3xl font-bold text-foreground dark:text-white">Customers</h1>
-          <Button 
-            onClick={() => setIsAddModalOpen(true)}
-            className="bg-blue-500 hover:bg-blue-600 text-white w-full sm:w-auto"
-          >
-            <Plus className="w-4 h-4 mr-2" />
-            Add Customer
-          </Button>
         </div>
 
         {/* Search */}
@@ -90,11 +80,6 @@ export function Customers() {
             <p className="text-gray-500 dark:text-gray-400">No customers found.</p>
           </div>
         )}
-
-        <AddCustomerModal 
-          isOpen={isAddModalOpen}
-          onClose={() => setIsAddModalOpen(false)}
-        />
 
         {selectedCustomer && (
           <CustomerDetailsModal
