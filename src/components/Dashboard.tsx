@@ -34,13 +34,13 @@ export function Dashboard({ onNewPrescription, onNavigate }: DashboardProps) {
                 onClick={() => onNavigate("orders")}
                 className="bg-white text-gray-800 hover:bg-gray-100 px-8 py-3 text-lg font-semibold rounded-full"
               >
-                Orders
+                Siparişler
               </Button>
               <Button 
                 onClick={() => onNavigate("customers")}
                 className="border-white text-gray-800 bg-white hover:bg-gray-100 px-8 py-3 text-lg font-semibold rounded-full"
               >
-                Customers
+                Müşteriler
               </Button>
             </div>
           </div>
@@ -59,19 +59,19 @@ export function Dashboard({ onNewPrescription, onNavigate }: DashboardProps) {
           ) : (
             <>
               <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border dark:border-gray-700">
-                <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">Total Orders</h3>
+                <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">Toplam Siparişler</h3>
                 <p className="text-3xl font-bold text-gray-900 dark:text-white">{stats?.totalOrders}</p>
-                <p className="text-sm text-green-600 dark:text-green-400">Updated in real-time</p>
+                <p className="text-sm text-green-600 dark:text-green-400">Eş zamanlı güncellenir</p>
               </div>
               <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border dark:border-gray-700">
-                <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">Active Customers</h3>
+                <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">Müşteriler</h3>
                 <p className="text-3xl font-bold text-gray-900 dark:text-white">{stats?.activeCustomers}</p>
-                <p className="text-sm text-green-600 dark:text-green-400">Customers with orders</p>
+                <p className="text-sm text-green-600 dark:text-green-400">Sipariş veren müşteriler</p>
               </div>
               <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border dark:border-gray-700">
-                <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">New Prescriptions</h3>
+                <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">Yeni Reçeteler</h3>
                 <p className="text-3xl font-bold text-gray-900 dark:text-white">{stats?.newPrescriptions}</p>
-                <p className="text-sm text-green-600 dark:text-green-400">Last 30 days</p>
+                <p className="text-sm text-green-600 dark:text-green-400">Son 30 gün</p>
               </div>
             </>
           )}

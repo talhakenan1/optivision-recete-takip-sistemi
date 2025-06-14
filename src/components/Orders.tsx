@@ -42,6 +42,15 @@ export function Orders() {
     return matchesSearch && orderStatus === statusFilter;
   });
 
+  // Calculate total amount excluding returned orders
+  const totalAmount = filteredOrders.reduce((sum, order) => {
+    const orderStatus = getOrderStatus(order.order_date, order.status);
+    if (orderStatus === "returned") {
+      return sum - Number(order.total);
+    }
+    return sum + Number(order.total);
+  }, 0);
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case "new": return "bg-blue-100 text-blue-800";
@@ -164,6 +173,14 @@ export function Orders() {
                   </TableRow>
                 );
               })}
+              
+              {/* Total Row */}
+              {filteredOrders.length > 0 && (
+                <TableRow className="bg-gray-50 dark:bg-gray-700 font-semibold">
+                  <TableCell colSpan={4} className="text-right">Toplam:</TableCell>
+                  <TableCell className="font-bold text-lg">{formatCurrency(totalAmount)}</TableCell>
+                </TableRow>
+              )}
             </TableBody>
           </Table>
 
