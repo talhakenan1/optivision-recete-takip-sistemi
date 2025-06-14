@@ -39,15 +39,24 @@ export function OrderDetailsModal({ order, isOpen, onClose }: OrderDetailsModalP
     }
   };
 
+  const getStatusText = (status: string) => {
+    switch (status) {
+      case "new": return "Yeni";
+      case "shipped": return "Teslim";
+      case "returned": return "İade";
+      default: return status;
+    }
+  };
+
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
+    return new Intl.NumberFormat('tr-TR', {
       style: 'currency',
-      currency: 'USD',
+      currency: 'TRY',
     }).format(amount);
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString();
+    return new Date(dateString).toLocaleDateString('tr-TR');
   };
 
   const displayStatus = order.status === "returned" ? "returned" : getOrderStatus(order.order_date);
@@ -56,47 +65,47 @@ export function OrderDetailsModal({ order, isOpen, onClose }: OrderDetailsModalP
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl mx-4 sm:mx-0 bg-background dark:bg-[#4f5450]">
         <DialogHeader>
-          <DialogTitle className="text-xl sm:text-2xl font-bold text-foreground dark:text-white">Order Details</DialogTitle>
+          <DialogTitle className="text-xl sm:text-2xl font-bold text-foreground dark:text-white">Sipariş Detayları</DialogTitle>
         </DialogHeader>
 
         <div className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div>
-              <h3 className="text-lg font-semibold mb-4 text-foreground dark:text-white">Order Information</h3>
+              <h3 className="text-lg font-semibold mb-4 text-foreground dark:text-white">Sipariş Bilgisi</h3>
               <div className="space-y-3">
                 <div>
-                  <span className="font-medium text-gray-700 dark:text-gray-300">Order ID:</span>
+                  <span className="font-medium text-gray-700 dark:text-gray-300">Sipariş Numarası:</span>
                   <p className="text-gray-900 dark:text-white">#{order.id.slice(0, 8)}</p>
                 </div>
                 <div>
-                  <span className="font-medium text-gray-700 dark:text-gray-300">Order Date:</span>
+                  <span className="font-medium text-gray-700 dark:text-gray-300">Sipariş Tarihi:</span>
                   <p className="text-gray-900 dark:text-white">{formatDate(order.order_date)}</p>
                 </div>
                 <div>
-                  <span className="font-medium text-gray-700 dark:text-gray-300">Status:</span>
+                  <span className="font-medium text-gray-700 dark:text-gray-300">Durum:</span>
                   <div className="mt-1">
                     <Badge className={getStatusColor(displayStatus)}>
-                      {displayStatus.charAt(0).toUpperCase() + displayStatus.slice(1)}
+                      {getStatusText(displayStatus)}
                     </Badge>
                   </div>
                 </div>
                 <div>
-                  <span className="font-medium text-gray-700 dark:text-gray-300">Total:</span>
+                  <span className="font-medium text-gray-700 dark:text-gray-300">Toplam:</span>
                   <p className="text-gray-900 dark:text-white text-lg font-semibold">{formatCurrency(Number(order.total))}</p>
                 </div>
               </div>
             </div>
 
             <div>
-              <h3 className="text-lg font-semibold mb-4 text-foreground dark:text-white">Customer Information</h3>
+              <h3 className="text-lg font-semibold mb-4 text-foreground dark:text-white">Müşteri Bilgisi</h3>
               <div className="space-y-3">
                 <div>
-                  <span className="font-medium text-gray-700 dark:text-gray-300">Name:</span>
-                  <p className="text-gray-900 dark:text-white">{order.customers?.name || 'Unknown'}</p>
+                  <span className="font-medium text-gray-700 dark:text-gray-300">İsim:</span>
+                  <p className="text-gray-900 dark:text-white">{order.customers?.name || 'Bilinmiyor'}</p>
                 </div>
                 <div>
-                  <span className="font-medium text-gray-700 dark:text-gray-300">Customer ID:</span>
-                  <p className="text-gray-900 dark:text-white">{order.customers?.id_number || 'N/A'}</p>
+                  <span className="font-medium text-gray-700 dark:text-gray-300">Müşteri TC Numarası:</span>
+                  <p className="text-gray-900 dark:text-white">{order.customers?.id_number || 'Yok'}</p>
                 </div>
                 {order.customers?.email && (
                   <div>
@@ -106,7 +115,7 @@ export function OrderDetailsModal({ order, isOpen, onClose }: OrderDetailsModalP
                 )}
                 {order.customers?.phone && (
                   <div>
-                    <span className="font-medium text-gray-700 dark:text-gray-300">Phone:</span>
+                    <span className="font-medium text-gray-700 dark:text-gray-300">Telefon:</span>
                     <p className="text-gray-900 dark:text-white">{order.customers.phone}</p>
                   </div>
                 )}
@@ -115,22 +124,22 @@ export function OrderDetailsModal({ order, isOpen, onClose }: OrderDetailsModalP
           </div>
 
           <div>
-            <h3 className="text-lg font-semibold mb-4 text-foreground dark:text-white">Order Timeline</h3>
+            <h3 className="text-lg font-semibold mb-4 text-foreground dark:text-white">Sipariş Zaman Çizelgesi</h3>
             <div className="space-y-2">
               <div className="flex items-center text-sm text-gray-600 dark:text-gray-300">
                 <div className="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
-                Order placed on {formatDate(order.order_date)}
+                Sipariş {formatDate(order.order_date)} tarihinde verildi
               </div>
               {displayStatus === "shipped" && (
                 <div className="flex items-center text-sm text-gray-600 dark:text-gray-300">
                   <div className="w-2 h-2 bg-green-500 rounded-full mr-3"></div>
-                  Order shipped (more than 7 days old)
+                  Sipariş teslim edildi (7 günden eski)
                 </div>
               )}
               {displayStatus === "returned" && (
                 <div className="flex items-center text-sm text-gray-600 dark:text-gray-300">
                   <div className="w-2 h-2 bg-red-500 rounded-full mr-3"></div>
-                  Order returned
+                  Sipariş iade edildi
                 </div>
               )}
             </div>
@@ -138,7 +147,7 @@ export function OrderDetailsModal({ order, isOpen, onClose }: OrderDetailsModalP
 
           <div className="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-3 pt-4 border-t dark:border-gray-600">
             <Button variant="outline" onClick={onClose} className="w-full sm:w-auto dark:border-gray-600 dark:text-white dark:hover:bg-gray-600">
-              Close
+              Kapat
             </Button>
             {displayStatus !== "returned" && (
               <Button 
@@ -147,7 +156,7 @@ export function OrderDetailsModal({ order, isOpen, onClose }: OrderDetailsModalP
                 variant="destructive"
                 className="w-full sm:w-auto"
               >
-                {isUpdatingOrder ? "Processing..." : "Mark as Returned"}
+                {isUpdatingOrder ? "İşleniyor..." : "İade Olarak İşaretle"}
               </Button>
             )}
           </div>

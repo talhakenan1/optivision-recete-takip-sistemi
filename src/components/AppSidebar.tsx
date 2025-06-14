@@ -22,17 +22,17 @@ interface AppSidebarProps {
 const menuItems = [
   {
     id: "dashboard",
-    title: "Dashboard",
+    title: "Ana Sayfa",
     icon: Home,
   },
   {
     id: "orders",
-    title: "Orders",
+    title: "Siparişler",
     icon: Package,
   },
   {
     id: "customers",
-    title: "Customers",
+    title: "Müşteriler",
     icon: Users,
   },
 ];
@@ -88,7 +88,7 @@ export function AppSidebar({ activeSection, onSectionChange, onNewPrescription }
             onClick={handleNewPrescriptionClick}
             className="w-full bg-blue-500 hover:bg-blue-600 text-white text-sm sm:text-base"
           >
-            New Prescription
+            Yeni Reçete
           </Button>
         </div>
       </SidebarContent>
@@ -103,7 +103,7 @@ export function AppSidebar({ activeSection, onSectionChange, onNewPrescription }
             >
               <div className="flex items-center gap-3">
                 <Settings className="w-5 h-5 flex-shrink-0" />
-                <span className="truncate">Settings</span>
+                <span className="truncate">Ayarlar</span>
               </div>
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -111,7 +111,7 @@ export function AppSidebar({ activeSection, onSectionChange, onNewPrescription }
             <SidebarMenuButton className="w-full">
               <div className="flex items-center gap-3">
                 <HelpCircle className="w-5 h-5 flex-shrink-0" />
-                <span className="truncate">Help and docs</span>
+                <span className="truncate">Yardım</span>
               </div>
             </SidebarMenuButton>
           </SidebarMenuItem>

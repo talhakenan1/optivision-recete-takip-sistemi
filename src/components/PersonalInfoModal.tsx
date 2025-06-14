@@ -33,14 +33,14 @@ export function PersonalInfoModal({ isOpen, onClose }: PersonalInfoModalProps) {
       if (error) throw error;
 
       toast({
-        title: "Password Reset Email Sent",
-        description: "Please check your email for the password reset link.",
+        title: "Şifre Sıfırlama E-postası Gönderildi",
+        description: "Lütfen şifre sıfırlama bağlantısı için e-postanızı kontrol edin.",
       });
       
       onClose();
     } catch (error: any) {
       toast({
-        title: "Error",
+        title: "Hata",
         description: error.message,
         variant: "destructive",
       });
@@ -53,8 +53,8 @@ export function PersonalInfoModal({ isOpen, onClose }: PersonalInfoModalProps) {
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-md mx-4 sm:mx-0">
         <DialogHeader>
-          <div className="text-sm text-gray-500 mb-2">Settings / Personal Information</div>
-          <DialogTitle className="text-xl sm:text-2xl font-bold">Personal Information</DialogTitle>
+          <div className="text-sm text-gray-500 mb-2">Ayarlar / Kişisel Bilgiler</div>
+          <DialogTitle className="text-xl sm:text-2xl font-bold">Kişisel Bilgiler</DialogTitle>
         </DialogHeader>
 
         <div className="space-y-6">
@@ -70,7 +70,7 @@ export function PersonalInfoModal({ isOpen, onClose }: PersonalInfoModalProps) {
           </div>
 
           <div>
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor="password">Şifre</Label>
             <div className="relative mt-1">
               <Input
                 id="password"
@@ -80,7 +80,7 @@ export function PersonalInfoModal({ isOpen, onClose }: PersonalInfoModalProps) {
                 className="bg-gray-50 pr-10"
               />
               <div className="absolute right-3 top-3 text-gray-400 text-sm">
-                Hidden for security
+                Güvenlik için gizli
               </div>
             </div>
           </div>
@@ -92,13 +92,13 @@ export function PersonalInfoModal({ isOpen, onClose }: PersonalInfoModalProps) {
               disabled={isChangingPassword}
               className="w-full sm:w-auto"
             >
-              {isChangingPassword ? "Sending..." : "Change Password"}
+              {isChangingPassword ? "Gönderiliyor..." : "Şifre Değiştir"}
             </Button>
             <Button 
               onClick={onClose} 
               className="bg-blue-500 hover:bg-blue-600 text-white w-full sm:w-auto"
             >
-              Close
+              Kapat
             </Button>
           </div>
         </div>

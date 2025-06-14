@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -17,13 +18,8 @@ import { OrderDetailsModal } from "@/components/OrderDetailsModal";
 export function Orders() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedOrder, setSelectedOrder] = useState<any>(null);
+  const [statusFilter, setStatusFilter] = useState("all");
   const { orders, isLoading, error } = useOrders();
-
-  const filteredOrders = orders.filter(order =>
-    order.customers?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    order.customers?.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    order.id.toString().includes(searchTerm.toLowerCase())
-  );
 
   const getOrderStatus = (orderDate: string, status: string) => {
     if (status === "returned") return "returned";
@@ -34,6 +30,17 @@ export function Orders() {
     
     return diffInDays <= 7 ? "new" : "shipped";
   };
+
+  const filteredOrders = orders.filter(order => {
+    const matchesSearch = order.customers?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      order.customers?.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      order.id.toString().includes(searchTerm.toLowerCase());
+    
+    if (statusFilter === "all") return matchesSearch;
+    
+    const orderStatus = getOrderStatus(order.order_date, order.status);
+    return matchesSearch && orderStatus === statusFilter;
+  });
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -64,6 +71,13 @@ export function Orders() {
     return new Date(dateString).toLocaleDateString('tr-TR');
   };
 
+  const statusButtons = [
+    { key: "all", label: "Hepsi" },
+    { key: "new", label: "Yeni" },
+    { key: "shipped", label: "Teslim" },
+    { key: "returned", label: "İade" },
+  ];
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -85,6 +99,20 @@ export function Orders() {
       <div className="space-y-6 p-6">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <h1 className="text-2xl sm:text-3xl font-bold text-foreground dark:text-white">Siparişler</h1>
+        </div>
+
+        {/* Status Filter Buttons */}
+        <div className="flex flex-wrap gap-2">
+          {statusButtons.map((button) => (
+            <Button
+              key={button.key}
+              variant={statusFilter === button.key ? "default" : "outline"}
+              onClick={() => setStatusFilter(button.key)}
+              className={statusFilter === button.key ? "bg-blue-500 hover:bg-blue-600 text-white" : ""}
+            >
+              {button.label}
+            </Button>
+          ))}
         </div>
 
         {/* Search */}

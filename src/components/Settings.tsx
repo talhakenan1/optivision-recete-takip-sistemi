@@ -56,11 +56,11 @@ export function Settings({ onPersonalInfo }: SettingsProps) {
   return (
     <div className="min-h-screen bg-background dark:bg-[#4f5450]">
       <div className="space-y-8 p-6">
-        <h1 className="text-2xl sm:text-3xl font-bold text-foreground dark:text-white">Settings</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold text-foreground dark:text-white">Ayarlar</h1>
 
         {/* Account Section */}
         <div className="space-y-4">
-          <h2 className="text-lg sm:text-xl font-semibold text-foreground dark:text-white">Account</h2>
+          <h2 className="text-lg sm:text-xl font-semibold text-foreground dark:text-white">Hesap</h2>
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border dark:border-gray-700 space-y-0">
             <Button
               variant="ghost"
@@ -69,8 +69,8 @@ export function Settings({ onPersonalInfo }: SettingsProps) {
             >
               <User className="w-5 h-5 mr-3 sm:mr-4 flex-shrink-0" />
               <div className="min-w-0 flex-1">
-                <div className="font-medium">Personal Information</div>
-                <div className="text-sm text-gray-500 dark:text-gray-400">Manage your personal information</div>
+                <div className="font-medium">Kişisel Bilgiler</div>
+                <div className="text-sm text-gray-500 dark:text-gray-400">Kişisel bilgilerinizi yönetin</div>
               </div>
             </Button>
             <Button
@@ -80,8 +80,8 @@ export function Settings({ onPersonalInfo }: SettingsProps) {
             >
               <LogOut className="w-5 h-5 mr-3 sm:mr-4 flex-shrink-0" />
               <div className="min-w-0 flex-1">
-                <div className="font-medium">Sign Out</div>
-                <div className="text-sm text-gray-500 dark:text-gray-400">Sign out of your account</div>
+                <div className="font-medium">Çıkış Yap</div>
+                <div className="text-sm text-gray-500 dark:text-gray-400">Hesabınızdan çıkış yapın</div>
               </div>
             </Button>
           </div>
@@ -89,12 +89,12 @@ export function Settings({ onPersonalInfo }: SettingsProps) {
 
         {/* Display Section */}
         <div className="space-y-4">
-          <h2 className="text-lg sm:text-xl font-semibold text-foreground dark:text-white">Display</h2>
+          <h2 className="text-lg sm:text-xl font-semibold text-foreground dark:text-white">Görünüm</h2>
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border dark:border-gray-700 p-4 sm:p-6">
             <div className="space-y-4">
               <div className="flex items-center space-x-2">
                 <Sun className="w-5 h-5 text-foreground dark:text-white" />
-                <span className="font-medium text-foreground dark:text-white">Theme</span>
+                <span className="font-medium text-foreground dark:text-white">Tema</span>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <Button
@@ -107,7 +107,7 @@ export function Settings({ onPersonalInfo }: SettingsProps) {
                   }`}
                 >
                   <Sun className="w-4 h-4" />
-                  <span>Light</span>
+                  <span>Aydınlık</span>
                 </Button>
                 <Button
                   variant={theme === "dark" ? "default" : "outline"}
@@ -119,7 +119,7 @@ export function Settings({ onPersonalInfo }: SettingsProps) {
                   }`}
                 >
                   <Moon className="w-4 h-4" />
-                  <span>Dark</span>
+                  <span>Karanlık</span>
                 </Button>
                 <Button
                   variant={theme === "system" ? "default" : "outline"}
@@ -131,7 +131,7 @@ export function Settings({ onPersonalInfo }: SettingsProps) {
                   }`}
                 >
                   <Monitor className="w-4 h-4" />
-                  <span>System</span>
+                  <span>Sistem</span>
                 </Button>
               </div>
             </div>
@@ -140,22 +140,22 @@ export function Settings({ onPersonalInfo }: SettingsProps) {
 
         {/* Notifications Section */}
         <div className="space-y-4">
-          <h2 className="text-lg sm:text-xl font-semibold text-foreground dark:text-white">Notification Preferences</h2>
+          <h2 className="text-lg sm:text-xl font-semibold text-foreground dark:text-white">Bildirim Tercihleri</h2>
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border dark:border-gray-700 p-4 sm:p-6">
             <div className="space-y-6">
               <div className="flex items-center space-x-2 mb-4">
                 <Bell className="w-5 h-5 text-foreground dark:text-white" />
-                <span className="font-medium text-foreground dark:text-white">Notifications</span>
+                <span className="font-medium text-foreground dark:text-white">Bildirimler</span>
               </div>
               
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
                     <Label htmlFor="email-notifications" className="text-base font-medium text-foreground dark:text-white">
-                      Email Notifications
+                      Email Bildirimleri
                     </Label>
                     <div className="text-sm text-gray-500 dark:text-gray-400">
-                      Receive notifications via email
+                      Email ile bildirim alın
                     </div>
                   </div>
                   <Switch
@@ -169,10 +169,10 @@ export function Settings({ onPersonalInfo }: SettingsProps) {
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
                     <Label htmlFor="push-notifications" className="text-base font-medium text-foreground dark:text-white">
-                      Push Notifications
+                      Anlık Bildirimler
                     </Label>
                     <div className="text-sm text-gray-500 dark:text-gray-400">
-                      Receive push notifications in browser
+                      Tarayıcıda anlık bildirim alın
                     </div>
                   </div>
                   <Switch
@@ -186,10 +186,10 @@ export function Settings({ onPersonalInfo }: SettingsProps) {
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
                     <Label htmlFor="order-updates" className="text-base font-medium text-foreground dark:text-white">
-                      Order Updates
+                      Sipariş Güncellemesi
                     </Label>
                     <div className="text-sm text-gray-500 dark:text-gray-400">
-                      Get notified about order status changes
+                      Sipariş durumu değişikliklerinden haberdar olun
                     </div>
                   </div>
                   <Switch
@@ -203,10 +203,10 @@ export function Settings({ onPersonalInfo }: SettingsProps) {
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
                     <Label htmlFor="marketing-emails" className="text-base font-medium text-foreground dark:text-white">
-                      Marketing Emails
+                      Pazarlama Mailleri
                     </Label>
                     <div className="text-sm text-gray-500 dark:text-gray-400">
-                      Receive promotional emails and updates
+                      Promosyon emaillerini ve güncellemeleri alın
                     </div>
                   </div>
                   <Switch
@@ -223,7 +223,7 @@ export function Settings({ onPersonalInfo }: SettingsProps) {
 
         {/* Help & Support Section */}
         <div className="space-y-4">
-          <h2 className="text-lg sm:text-xl font-semibold text-foreground dark:text-white">Help & Support</h2>
+          <h2 className="text-lg sm:text-xl font-semibold text-foreground dark:text-white">Yardım ve Destek</h2>
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border dark:border-gray-700 space-y-0">
             <Button
               variant="ghost"
@@ -232,8 +232,8 @@ export function Settings({ onPersonalInfo }: SettingsProps) {
             >
               <HelpCircle className="w-5 h-5 mr-3 sm:mr-4 flex-shrink-0" />
               <div className="min-w-0 flex-1">
-                <div className="font-medium">Help & Documentation</div>
-                <div className="text-sm text-gray-500 dark:text-gray-400">View user guide and documentation</div>
+                <div className="font-medium">Yardım</div>
+                <div className="text-sm text-gray-500 dark:text-gray-400">Kullanıcı kılavuzunu ve dokümantasyonu görüntüleyin</div>
               </div>
             </Button>
             <Button
@@ -242,8 +242,8 @@ export function Settings({ onPersonalInfo }: SettingsProps) {
             >
               <Headphones className="w-5 h-5 mr-3 sm:mr-4 flex-shrink-0" />
               <div className="min-w-0 flex-1">
-                <div className="font-medium">Contact Support</div>
-                <div className="text-sm text-gray-500 dark:text-gray-400">Contact customer support</div>
+                <div className="font-medium">Destek</div>
+                <div className="text-sm text-gray-500 dark:text-gray-400">Müşteri desteğiyle iletişime geçin</div>
               </div>
             </Button>
           </div>
