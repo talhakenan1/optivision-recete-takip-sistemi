@@ -11,8 +11,6 @@ export function useDashboardStats() {
     queryFn: async () => {
       if (!user) throw new Error("User not authenticated");
       
-      console.log("Fetching dashboard stats for user:", user.id);
-      
       // Get total orders count for this user
       const { count: totalOrders } = await supabase
         .from("orders")
@@ -54,7 +52,6 @@ export function useDashboardStats() {
         newPrescriptions: newPrescriptions || 0,
       };
       
-      console.log("Dashboard stats for user:", user.id, statsResult);
       return statsResult;
     },
     enabled: !!user,

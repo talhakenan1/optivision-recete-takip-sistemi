@@ -18,8 +18,6 @@ export function useOrders() {
     queryFn: async () => {
       if (!user) throw new Error("User not authenticated");
       
-      console.log("Fetching orders for user:", user.id);
-      
       const { data, error } = await supabase
         .from("orders")
         .select(`
@@ -38,7 +36,6 @@ export function useOrders() {
         throw error;
       }
       
-      console.log("Fetched orders:", data);
       return data || [];
     },
     enabled: !!user,
@@ -47,8 +44,6 @@ export function useOrders() {
   const updateOrderStatus = useMutation({
     mutationFn: async ({ id, status }: { id: string; status: string }) => {
       if (!user) throw new Error("User not authenticated");
-      
-      console.log("Updating order status for user:", user.id, "order:", id, "status:", status);
       
       const { data, error } = await supabase
         .from("orders")
@@ -63,7 +58,6 @@ export function useOrders() {
         throw error;
       }
       
-      console.log("Updated order:", data);
       return data;
     },
     onSuccess: () => {

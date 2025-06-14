@@ -18,8 +18,6 @@ export function useCustomers() {
     queryFn: async () => {
       if (!user) throw new Error("User not authenticated");
       
-      console.log("Fetching customers for user:", user.id);
-      
       const { data, error } = await supabase
         .from("customers")
         .select("*")
@@ -31,7 +29,6 @@ export function useCustomers() {
         throw error;
       }
       
-      console.log("Fetched customers:", data);
       return data || [];
     },
     enabled: !!user,
@@ -41,7 +38,32 @@ export function useCustomers() {
     mutationFn: async (customer: { name: string; email: string; phone?: string; id_number: string }) => {
       if (!user) throw new Error("User not authenticated");
       
-      console.log("Adding customer for user:", user.id);
+      // Basic input validation
+      if (!customer.name.trim()) {
+        throw new Error("Name is required");
+      }
+      
+      if (!customer.email.trim()) {
+        throw new Error("Email is required");
+      }
+      
+      // Email format validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(customer.email)) {
+        throw new Error("Please enter a valid email address");
+      }
+      
+      if (!customer.id_number.trim()) {
+        throw new Error("ID number is required");
+      }
+      
+      // Turkish phone number validation (optional field)
+      if (customer.phone && customer.phone.trim()) {
+        const phoneRegex = /^(\+90|0)?[5][0-9]{9}$/;
+        if (!phoneRegex.test(customer.phone.replace(/\s/g, ''))) {
+          throw new Error("Please enter a valid Turkish phone number (e.g., 05XX XXX XX XX)");
+        }
+      }
       
       // Check if customer with same ID number already exists for this user
       const { data: existingCustomer } = await supabase
@@ -66,7 +88,6 @@ export function useCustomers() {
         throw error;
       }
       
-      console.log("Added customer:", data);
       return data;
     },
     onSuccess: () => {

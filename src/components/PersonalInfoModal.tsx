@@ -39,6 +39,7 @@ export function PersonalInfoModal({ isOpen, onClose }: PersonalInfoModalProps) {
       
       onClose();
     } catch (error: any) {
+      console.error("Password reset error:", error);
       toast({
         title: "Hata",
         description: error.message,
