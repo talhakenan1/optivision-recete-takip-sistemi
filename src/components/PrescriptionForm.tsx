@@ -84,7 +84,7 @@ export function PrescriptionForm({ formData, onChange, onEyeChange, onComplexEye
 
   return (
     <div className="space-y-6">
-      <h3 className="text-lg font-semibold">Prescription Details</h3>
+      <h3 className="text-lg font-semibold">Reçete Bilgileri</h3>
       
       {/* New Enhanced Prescription Table */}
       <div className="overflow-x-auto">
@@ -94,20 +94,22 @@ export function PrescriptionForm({ formData, onChange, onEyeChange, onComplexEye
               <th className="border border-gray-300 dark:border-gray-600 p-2 text-left"></th>
               <th className="border border-gray-300 dark:border-gray-600 p-2 text-center" colSpan={3}>SAĞ</th>
               <th className="border border-gray-300 dark:border-gray-600 p-2 text-center" colSpan={3}>SOL</th>
+              <th className="border border-gray-300 dark:border-gray-600 p-2 text-center">Cam Tipi</th>
             </tr>
             <tr className="bg-gray-50 dark:bg-gray-800">
               <th className="border border-gray-300 dark:border-gray-600 p-2 text-left"></th>
-              <th className="border border-gray-300 dark:border-gray-600 p-2 text-center">Uzak</th>
-              <th className="border border-gray-300 dark:border-gray-600 p-2 text-center">Yakın</th>
-              <th className="border border-gray-300 dark:border-gray-600 p-2 text-center">Cam Tipi</th>
-              <th className="border border-gray-300 dark:border-gray-600 p-2 text-center">Uzak</th>
-              <th className="border border-gray-300 dark:border-gray-600 p-2 text-center">Yakın</th>
+              <th className="border border-gray-300 dark:border-gray-600 p-2 text-center">Sferik</th>
+              <th className="border border-gray-300 dark:border-gray-600 p-2 text-center">Silinderik</th>
+              <th className="border border-gray-300 dark:border-gray-600 p-2 text-center">Aks</th>
+              <th className="border border-gray-300 dark:border-gray-600 p-2 text-center">Sferik</th>
+              <th className="border border-gray-300 dark:border-gray-600 p-2 text-center">Silinderik</th>
+              <th className="border border-gray-300 dark:border-gray-600 p-2 text-center">Aks</th>
               <th className="border border-gray-300 dark:border-gray-600 p-2 text-center">Cam Rengi</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td className="border border-gray-300 dark:border-gray-600 p-2 font-medium">Sferik</td>
+              <td className="border border-gray-300 dark:border-gray-600 p-2 font-medium">Uzak</td>
               <td className="border border-gray-300 dark:border-gray-600 p-1">
                 <Input
                   value={formData.rightEyeFar?.sph || ''}
@@ -117,27 +119,17 @@ export function PrescriptionForm({ formData, onChange, onEyeChange, onComplexEye
               </td>
               <td className="border border-gray-300 dark:border-gray-600 p-1">
                 <Input
-                  value={formData.rightEyeNear?.sph || ''}
-                  onChange={(e) => onComplexEyeChange?.('rightEyeNear', 'sph', e.target.value)}
+                  value={formData.rightEyeFar?.cyl || ''}
+                  onChange={(e) => onComplexEyeChange?.('rightEyeFar', 'cyl', e.target.value)}
                   className="h-8"
                 />
               </td>
-              <td className="border border-gray-300 dark:border-gray-600 p-1" rowSpan={3}>
-                <Select 
-                  value={formData.rightEyeFar?.lensType || ''} 
-                  onValueChange={(value) => onComplexEyeChange?.('rightEyeFar', 'lensType', value)}
-                >
-                  <SelectTrigger className="h-8">
-                    <SelectValue placeholder="Lens tipi" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {lensTypeOptions.map((option) => (
-                      <SelectItem key={option.value} value={option.value}>
-                        {option.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+              <td className="border border-gray-300 dark:border-gray-600 p-1">
+                <Input
+                  value={formData.rightEyeFar?.axis || ''}
+                  onChange={(e) => onComplexEyeChange?.('rightEyeFar', 'axis', e.target.value)}
+                  className="h-8"
+                />
               </td>
               <td className="border border-gray-300 dark:border-gray-600 p-1">
                 <Input
@@ -148,12 +140,19 @@ export function PrescriptionForm({ formData, onChange, onEyeChange, onComplexEye
               </td>
               <td className="border border-gray-300 dark:border-gray-600 p-1">
                 <Input
-                  value={formData.leftEyeNear?.sph || ''}
-                  onChange={(e) => onComplexEyeChange?.('leftEyeNear', 'sph', e.target.value)}
+                  value={formData.leftEyeFar?.cyl || ''}
+                  onChange={(e) => onComplexEyeChange?.('leftEyeFar', 'cyl', e.target.value)}
                   className="h-8"
                 />
               </td>
-              <td className="border border-gray-300 dark:border-gray-600 p-1" rowSpan={3}>
+              <td className="border border-gray-300 dark:border-gray-600 p-1">
+                <Input
+                  value={formData.leftEyeFar?.axis || ''}
+                  onChange={(e) => onComplexEyeChange?.('leftEyeFar', 'axis', e.target.value)}
+                  className="h-8"
+                />
+              </td>
+              <td className="border border-gray-300 dark:border-gray-600 p-1" rowSpan={2}>
                 <Select 
                   value={formData.leftEyeFar?.lensColor || ''} 
                   onValueChange={(value) => onComplexEyeChange?.('leftEyeFar', 'lensColor', value)}
@@ -172,11 +171,11 @@ export function PrescriptionForm({ formData, onChange, onEyeChange, onComplexEye
               </td>
             </tr>
             <tr>
-              <td className="border border-gray-300 dark:border-gray-600 p-2 font-medium">Silinderik</td>
+              <td className="border border-gray-300 dark:border-gray-600 p-2 font-medium">Yakın</td>
               <td className="border border-gray-300 dark:border-gray-600 p-1">
                 <Input
-                  value={formData.rightEyeFar?.cyl || ''}
-                  onChange={(e) => onComplexEyeChange?.('rightEyeFar', 'cyl', e.target.value)}
+                  value={formData.rightEyeNear?.sph || ''}
+                  onChange={(e) => onComplexEyeChange?.('rightEyeNear', 'sph', e.target.value)}
                   className="h-8"
                 />
               </td>
@@ -189,30 +188,6 @@ export function PrescriptionForm({ formData, onChange, onEyeChange, onComplexEye
               </td>
               <td className="border border-gray-300 dark:border-gray-600 p-1">
                 <Input
-                  value={formData.leftEyeFar?.cyl || ''}
-                  onChange={(e) => onComplexEyeChange?.('leftEyeFar', 'cyl', e.target.value)}
-                  className="h-8"
-                />
-              </td>
-              <td className="border border-gray-300 dark:border-gray-600 p-1">
-                <Input
-                  value={formData.leftEyeNear?.cyl || ''}
-                  onChange={(e) => onComplexEyeChange?.('leftEyeNear', 'cyl', e.target.value)}
-                  className="h-8"
-                />
-              </td>
-            </tr>
-            <tr>
-              <td className="border border-gray-300 dark:border-gray-600 p-2 font-medium">Aks</td>
-              <td className="border border-gray-300 dark:border-gray-600 p-1">
-                <Input
-                  value={formData.rightEyeFar?.axis || ''}
-                  onChange={(e) => onComplexEyeChange?.('rightEyeFar', 'axis', e.target.value)}
-                  className="h-8"
-                />
-              </td>
-              <td className="border border-gray-300 dark:border-gray-600 p-1">
-                <Input
                   value={formData.rightEyeNear?.axis || ''}
                   onChange={(e) => onComplexEyeChange?.('rightEyeNear', 'axis', e.target.value)}
                   className="h-8"
@@ -220,8 +195,15 @@ export function PrescriptionForm({ formData, onChange, onEyeChange, onComplexEye
               </td>
               <td className="border border-gray-300 dark:border-gray-600 p-1">
                 <Input
-                  value={formData.leftEyeFar?.axis || ''}
-                  onChange={(e) => onComplexEyeChange?.('leftEyeFar', 'axis', e.target.value)}
+                  value={formData.leftEyeNear?.sph || ''}
+                  onChange={(e) => onComplexEyeChange?.('leftEyeNear', 'sph', e.target.value)}
+                  className="h-8"
+                />
+              </td>
+              <td className="border border-gray-300 dark:border-gray-600 p-1">
+                <Input
+                  value={formData.leftEyeNear?.cyl || ''}
+                  onChange={(e) => onComplexEyeChange?.('leftEyeNear', 'cyl', e.target.value)}
                   className="h-8"
                 />
               </td>
@@ -233,30 +215,68 @@ export function PrescriptionForm({ formData, onChange, onEyeChange, onComplexEye
                 />
               </td>
             </tr>
+            <tr>
+              <td className="border border-gray-300 dark:border-gray-600 p-2 font-medium">Cam Tipi</td>
+              <td className="border border-gray-300 dark:border-gray-600 p-1" colSpan={3}>
+                <Select 
+                  value={formData.rightEyeFar?.lensType || ''} 
+                  onValueChange={(value) => onComplexEyeChange?.('rightEyeFar', 'lensType', value)}
+                >
+                  <SelectTrigger className="h-8">
+                    <SelectValue placeholder="Lens tipi" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {lensTypeOptions.map((option) => (
+                      <SelectItem key={option.value} value={option.value}>
+                        {option.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </td>
+              <td className="border border-gray-300 dark:border-gray-600 p-1" colSpan={3}>
+                <Select 
+                  value={formData.leftEyeFar?.lensType || ''} 
+                  onValueChange={(value) => onComplexEyeChange?.('leftEyeFar', 'lensType', value)}
+                >
+                  <SelectTrigger className="h-8">
+                    <SelectValue placeholder="Lens tipi" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {lensTypeOptions.map((option) => (
+                      <SelectItem key={option.value} value={option.value}>
+                        {option.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </td>
+              <td className="border border-gray-300 dark:border-gray-600 p-1">
+                {/* Empty cell to align with lens color */}
+              </td>
+            </tr>
+            <tr>
+              <td className="border border-gray-300 dark:border-gray-600 p-2 font-medium">ADD</td>
+              <td className="border border-gray-300 dark:border-gray-600 p-1" colSpan={3}>
+                <Input
+                  id="add"
+                  value={formData.add}
+                  onChange={(e) => onChange('add', e.target.value)}
+                  className="h-8"
+                />
+              </td>
+              <td className="border border-gray-300 dark:border-gray-600 p-2 font-medium">PD</td>
+              <td className="border border-gray-300 dark:border-gray-600 p-1" colSpan={3}>
+                <Input
+                  id="pd"
+                  value={formData.pd}
+                  onChange={(e) => onChange('pd', e.target.value)}
+                  className="h-8"
+                />
+              </td>
+            </tr>
           </tbody>
         </table>
-      </div>
-
-      {/* ADD and PD fields */}
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <Label htmlFor="add" className="text-sm">ADD</Label>
-          <Input
-            id="add"
-            value={formData.add}
-            onChange={(e) => onChange('add', e.target.value)}
-            className="mt-1"
-          />
-        </div>
-        <div>
-          <Label htmlFor="pd" className="text-sm">PD</Label>
-          <Input
-            id="pd"
-            value={formData.pd}
-            onChange={(e) => onChange('pd', e.target.value)}
-            className="mt-1"
-          />
-        </div>
       </div>
     </div>
   );

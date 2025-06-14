@@ -28,7 +28,7 @@ export function Customers() {
   if (error) {
     return (
       <div className="text-center text-red-600 p-6">
-        Error loading customers. Please try again.
+        Müşteriler yüklenirken hata oluştu. Lütfen tekrar deneyin.
       </div>
     );
   }
@@ -37,14 +37,14 @@ export function Customers() {
     <div className="min-h-screen bg-background dark:bg-[#1f2937]">
       <div className="space-y-6 p-6">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-          <h1 className="text-2xl sm:text-3xl font-bold text-foreground dark:text-white">Customers</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold text-foreground dark:text-white">Müşteriler</h1>
         </div>
 
         {/* Search */}
         <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
           <Input
-            placeholder="Search customers..."
+            placeholder="Müşterilerde ara..."
             className="pl-10 bg-gray-50 border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-300"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -66,7 +66,7 @@ export function Customers() {
                 </Avatar>
                 <div className="flex-1 min-w-0">
                   <h3 className="font-semibold text-gray-900 dark:text-white truncate">{customer.name}</h3>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 truncate">ID: {customer.id_number || customer.id.slice(0, 8)}</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 truncate">TC: {customer.id_number || customer.id.slice(0, 8)}</p>
                   <p className="text-sm text-gray-600 dark:text-gray-300 truncate">{customer.email}</p>
                   {customer.phone && <p className="text-sm text-gray-600 dark:text-gray-300 truncate">{customer.phone}</p>}
                 </div>
@@ -77,7 +77,7 @@ export function Customers() {
 
         {filteredCustomers.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-gray-500 dark:text-gray-400">No customers found.</p>
+            <p className="text-gray-500 dark:text-gray-400">Müşteri bulunamadı.</p>
           </div>
         )}
 

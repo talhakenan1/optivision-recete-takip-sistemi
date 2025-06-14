@@ -1,3 +1,4 @@
+
 import { useQuery } from "@tanstack/react-query";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -65,31 +66,40 @@ export function CustomerDetailsModal({ customer, isOpen, onClose }: CustomerDeta
     }
   };
 
+  const getStatusText = (status: string) => {
+    switch (status) {
+      case "new": return "Yeni";
+      case "shipped": return "Teslim";
+      case "returned": return "İade";
+      default: return status;
+    }
+  };
+
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
+    return new Intl.NumberFormat('tr-TR', {
       style: 'currency',
-      currency: 'USD',
+      currency: 'TRY',
     }).format(amount);
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString();
+    return new Date(dateString).toLocaleDateString('tr-TR');
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-bold">Customer Details</DialogTitle>
+          <DialogTitle className="text-2xl font-bold">Müşteri Detayları</DialogTitle>
         </DialogHeader>
 
         <div className="space-y-6">
           {/* Customer Information */}
           <div className="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
-            <h3 className="text-lg font-semibold mb-4">Customer Information</h3>
+            <h3 className="text-lg font-semibold mb-4">Müşteri Bilgileri</h3>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <span className="font-medium text-gray-700 dark:text-gray-300">Name:</span>
+                <span className="font-medium text-gray-700 dark:text-gray-300">İsim:</span>
                 <p className="text-gray-900 dark:text-gray-100">{customer.name}</p>
               </div>
               <div>
@@ -97,23 +107,29 @@ export function CustomerDetailsModal({ customer, isOpen, onClose }: CustomerDeta
                 <p className="text-gray-900 dark:text-gray-100">{customer.email}</p>
               </div>
               <div>
-                <span className="font-medium text-gray-700 dark:text-gray-300">Phone:</span>
-                <p className="text-gray-900 dark:text-gray-100">{customer.phone || 'N/A'}</p>
+                <span className="font-medium text-gray-700 dark:text-gray-300">Telefon Numarası:</span>
+                <p className="text-gray-900 dark:text-gray-100">{customer.phone || 'Belirtilmemiş'}</p>
               </div>
               <div>
-                <span className="font-medium text-gray-700 dark:text-gray-300">ID Number:</span>
-                <p className="text-gray-900 dark:text-gray-100">{customer.id_number || 'N/A'}</p>
+                <span className="font-medium text-gray-700 dark:text-gray-300">TC Kimlik Numarası:</span>
+                <p className="text-gray-900 dark:text-gray-100">{customer.id_number || 'Belirtilmemiş'}</p>
               </div>
               <div>
-                <span className="font-medium text-gray-700 dark:text-gray-300">Customer Since:</span>
+                <span className="font-medium text-gray-700 dark:text-gray-300">Kayıt Tarihi:</span>
                 <p className="text-gray-900 dark:text-gray-100">{formatDate(customer.created_at)}</p>
               </div>
+              {customer.address && (
+                <div>
+                  <span className="font-medium text-gray-700 dark:text-gray-300">Adres:</span>
+                  <p className="text-gray-900 dark:text-gray-100">{customer.address}</p>
+                </div>
+              )}
             </div>
           </div>
 
           {/* Order History */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Order History</h3>
+            <h3 className="text-lg font-semibold mb-4">Sipariş Geçmişi</h3>
             {isLoading ? (
               <div className="flex items-center justify-center p-8">
                 <Loader2 className="w-6 h-6 animate-spin" />
@@ -126,12 +142,12 @@ export function CustomerDetailsModal({ customer, isOpen, onClose }: CustomerDeta
                     <div key={order.id} className="border dark:border-gray-700 rounded-lg p-4 bg-white dark:bg-gray-800">
                       <div className="flex justify-between items-start mb-3">
                         <div>
-                          <h4 className="font-medium text-gray-900 dark:text-gray-100">Order #{order.id.slice(0, 8)}</h4>
-                          <p className="text-sm text-gray-600 dark:text-gray-400">Date: {formatDate(order.order_date)}</p>
+                          <h4 className="font-medium text-gray-900 dark:text-gray-100">Sipariş #{order.id.slice(0, 8)}</h4>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">Tarih: {formatDate(order.order_date)}</p>
                         </div>
                         <div className="text-right">
                           <Badge className={getStatusColor(orderStatus)}>
-                            {orderStatus.charAt(0).toUpperCase() + orderStatus.slice(1)}
+                            {getStatusText(orderStatus)}
                           </Badge>
                           <p className="text-lg font-semibold mt-1 dark:text-gray-100">{formatCurrency(Number(order.total))}</p>
                         </div>
@@ -139,21 +155,21 @@ export function CustomerDetailsModal({ customer, isOpen, onClose }: CustomerDeta
                       
                       {order.prescriptions && order.prescriptions.length > 0 && (
                         <div className="mt-3 pt-3 border-t dark:border-gray-700">
-                          <h5 className="font-medium text-gray-700 dark:text-gray-300 mb-2">Prescription Details:</h5>
+                          <h5 className="font-medium text-gray-700 dark:text-gray-300 mb-2">Reçete Detayları:</h5>
                           {order.prescriptions.map((prescription: any, index: number) => (
                             <div key={index} className="text-sm text-gray-600 dark:text-gray-400 space-y-2">
                               {prescription.prescription_data?.productInfo && (
-                                <p><span className="font-medium">Product:</span> {prescription.prescription_data.productInfo}</p>
+                                <p><span className="font-medium">Ürün:</span> {prescription.prescription_data.productInfo}</p>
                               )}
                               {prescription.prescription_data?.lensType && (
-                                <p><span className="font-medium">Lens Type:</span> {prescription.prescription_data.lensType}</p>
+                                <p><span className="font-medium">Lens Tipi:</span> {prescription.prescription_data.lensType}</p>
                               )}
                               
                               {/* New Vision Details Grid - prioritize new format */}
                               {prescription.prescription_data?.rightEye || prescription.prescription_data?.leftEye ? (
                                 <div className="grid grid-cols-2 gap-4 mt-2 p-3 bg-gray-50 dark:bg-gray-700 rounded">
                                   <div className="space-y-1">
-                                    <h6 className="font-medium text-gray-700 dark:text-gray-300">Right Eye (OD)</h6>
+                                    <h6 className="font-medium text-gray-700 dark:text-gray-300">Sağ Göz</h6>
                                     {prescription.prescription_data?.rightEye?.sph && (
                                       <p><span className="font-medium">SPH:</span> {prescription.prescription_data.rightEye.sph}</p>
                                     )}
@@ -168,7 +184,7 @@ export function CustomerDetailsModal({ customer, isOpen, onClose }: CustomerDeta
                                     )}
                                   </div>
                                   <div className="space-y-1">
-                                    <h6 className="font-medium text-gray-700 dark:text-gray-300">Left Eye (OS)</h6>
+                                    <h6 className="font-medium text-gray-700 dark:text-gray-300">Sol Göz</h6>
                                     {prescription.prescription_data?.leftEye?.sph && (
                                       <p><span className="font-medium">SPH:</span> {prescription.prescription_data.leftEye.sph}</p>
                                     )}
@@ -199,17 +215,17 @@ export function CustomerDetailsModal({ customer, isOpen, onClose }: CustomerDeta
                                   </div>
                                   <div className="space-y-1">
                                     {prescription.prescription_data?.distanceVision && (
-                                      <p><span className="font-medium">Distance Vision:</span> {prescription.prescription_data.distanceVision}</p>
+                                      <p><span className="font-medium">Uzak Görüş:</span> {prescription.prescription_data.distanceVision}</p>
                                     )}
                                     {prescription.prescription_data?.nearVision && (
-                                      <p><span className="font-medium">Near Vision:</span> {prescription.prescription_data.nearVision}</p>
+                                      <p><span className="font-medium">Yakın Görüş:</span> {prescription.prescription_data.nearVision}</p>
                                     )}
                                   </div>
                                 </div>
                               )}
 
                               {prescription.notes && (
-                                <p><span className="font-medium">Notes:</span> {prescription.notes}</p>
+                                <p><span className="font-medium">Notlar:</span> {prescription.notes}</p>
                               )}
                             </div>
                           ))}
@@ -221,13 +237,13 @@ export function CustomerDetailsModal({ customer, isOpen, onClose }: CustomerDeta
               </div>
             ) : (
               <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-                No orders found for this customer.
+                Bu müşteri için sipariş bulunamadı.
               </div>
             )}
           </div>
 
           <div className="flex justify-end pt-4 border-t dark:border-gray-700">
-            <Button onClick={onClose}>Close</Button>
+            <Button onClick={onClose}>Kapat</Button>
           </div>
         </div>
       </DialogContent>

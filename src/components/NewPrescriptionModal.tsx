@@ -214,12 +214,12 @@ export function NewPrescriptionModal({ isOpen, onClose }: NewPrescriptionModalPr
 
   const handleSave = () => {
     if (!date) {
-      alert("Please select a purchase date");
+      alert("Lütfen satın alma tarihini seçin");
       return;
     }
 
     if (!formData.firstName || !formData.lastName || !formData.idNumber || !formData.email) {
-      alert("Please fill in all required fields");
+      alert("Lütfen tüm zorunlu alanları doldurun");
       return;
     }
 
@@ -242,40 +242,40 @@ export function NewPrescriptionModal({ isOpen, onClose }: NewPrescriptionModalPr
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-7xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-xl sm:text-2xl font-bold">New Prescription</DialogTitle>
+          <DialogTitle className="text-xl sm:text-2xl font-bold">Yeni Reçete</DialogTitle>
         </DialogHeader>
 
         <div className="space-y-6">
           {/* Customer Information */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Customer Information</h3>
+            <h3 className="text-lg font-semibold">Müşteri Bilgileri</h3>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
-                <Label htmlFor="idNumber">ID Number *</Label>
+                <Label htmlFor="idNumber">TC Kimlik Numarası *</Label>
                 <Input
                   id="idNumber"
-                  placeholder="Enter ID number"
+                  placeholder="TC Kimlik Numarası girin"
                   value={formData.idNumber}
                   onChange={(e) => handleInputChange("idNumber", e.target.value)}
                   required
                 />
-                <p className="text-xs text-gray-500 mt-1">Enter ID to auto-fill existing customer data</p>
+                <p className="text-xs text-gray-500 mt-1">Mevcut müşteri verilerini otomatik doldurmak için TC numarasını girin</p>
               </div>
               <div>
-                <Label htmlFor="firstName">Name *</Label>
+                <Label htmlFor="firstName">İsim *</Label>
                 <Input
                   id="firstName"
-                  placeholder="Enter customer's first name"
+                  placeholder="Müşterinin ismini girin"
                   value={formData.firstName}
                   onChange={(e) => handleInputChange("firstName", e.target.value)}
                   required
                 />
               </div>
               <div>
-                <Label htmlFor="lastName">Surname *</Label>
+                <Label htmlFor="lastName">Soyisim *</Label>
                 <Input
                   id="lastName"
-                  placeholder="Enter customer's last name"
+                  placeholder="Müşterinin soyismini girin"
                   value={formData.lastName}
                   onChange={(e) => handleInputChange("lastName", e.target.value)}
                   required
@@ -288,14 +288,14 @@ export function NewPrescriptionModal({ isOpen, onClose }: NewPrescriptionModalPr
                 <Input
                   id="email"
                   type="email"
-                  placeholder="customer@email.com"
+                  placeholder="musteri@email.com"
                   value={formData.email}
                   onChange={(e) => handleInputChange("email", e.target.value)}
                   required
                 />
               </div>
               <div>
-                <Label htmlFor="phone">Phone</Label>
+                <Label htmlFor="phone">Telefon Numarası</Label>
                 <Input
                   id="phone"
                   placeholder="0545297..."
@@ -305,17 +305,17 @@ export function NewPrescriptionModal({ isOpen, onClose }: NewPrescriptionModalPr
               </div>
             </div>
             <div>
-              <Label htmlFor="address">Address</Label>
+              <Label htmlFor="address">Adres</Label>
               <Textarea
                 id="address"
-                placeholder="Enter customer's address"
+                placeholder="Müşterinin adresini girin"
                 value={formData.address}
                 onChange={(e) => handleInputChange("address", e.target.value)}
               />
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <Label>Purchase Date *</Label>
+                <Label>Satın Alma Tarihi *</Label>
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
@@ -326,7 +326,7 @@ export function NewPrescriptionModal({ isOpen, onClose }: NewPrescriptionModalPr
                       )}
                     >
                       <CalendarIcon className="mr-2 h-4 w-4" />
-                      {date ? format(date, "PPP") : <span>Select purchase date</span>}
+                      {date ? format(date, "PPP") : <span>Satın alma tarihini seçin</span>}
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0" align="start">
@@ -345,12 +345,12 @@ export function NewPrescriptionModal({ isOpen, onClose }: NewPrescriptionModalPr
 
           {/* Product Information */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Product Information</h3>
+            <h3 className="text-lg font-semibold">Ürün Bilgisi</h3>
             <div>
-              <Label htmlFor="productInfo">Product Information</Label>
+              <Label htmlFor="productInfo">Ürün Bilgisi</Label>
               <Textarea
                 id="productInfo"
-                placeholder="Enter product details (e.g., Purchased glasses)"
+                placeholder="Ürün detaylarını girin (örn: Gözlük satın alındı)"
                 value={formData.productInfo}
                 onChange={(e) => handleInputChange("productInfo", e.target.value)}
               />
@@ -359,10 +359,10 @@ export function NewPrescriptionModal({ isOpen, onClose }: NewPrescriptionModalPr
 
           {/* Price Information */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Price Information</h3>
+            <h3 className="text-lg font-semibold">Fiyat Bilgisi</h3>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               <div>
-                <Label htmlFor="nearGlassPrice">Near Glass Price</Label>
+                <Label htmlFor="nearGlassPrice">Yakın Cam Fiyatı</Label>
                 <Input
                   id="nearGlassPrice"
                   type="number"
@@ -372,7 +372,7 @@ export function NewPrescriptionModal({ isOpen, onClose }: NewPrescriptionModalPr
                 />
               </div>
               <div>
-                <Label htmlFor="farGlassPrice">Far Glass Price</Label>
+                <Label htmlFor="farGlassPrice">Uzak Cam Fiyatı</Label>
                 <Input
                   id="farGlassPrice"
                   type="number"
@@ -382,7 +382,7 @@ export function NewPrescriptionModal({ isOpen, onClose }: NewPrescriptionModalPr
                 />
               </div>
               <div>
-                <Label htmlFor="nearFramePrice">Near Frame Price</Label>
+                <Label htmlFor="nearFramePrice">Yakın Çerçeve Fiyatı</Label>
                 <Input
                   id="nearFramePrice"
                   type="number"
@@ -392,7 +392,7 @@ export function NewPrescriptionModal({ isOpen, onClose }: NewPrescriptionModalPr
                 />
               </div>
               <div>
-                <Label htmlFor="farFramePrice">Far Frame Price</Label>
+                <Label htmlFor="farFramePrice">Uzak Çerçeve Fiyatı</Label>
                 <Input
                   id="farFramePrice"
                   type="number"
@@ -404,8 +404,8 @@ export function NewPrescriptionModal({ isOpen, onClose }: NewPrescriptionModalPr
             </div>
             <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg">
               <div className="flex justify-between items-center">
-                <span className="font-semibold">Total Price:</span>
-                <span className="text-xl font-bold">${calculateTotalPrice().toFixed(2)}</span>
+                <span className="font-semibold">Toplam Fiyat:</span>
+                <span className="text-xl font-bold">{calculateTotalPrice().toFixed(2)} ₺</span>
               </div>
             </div>
           </div>
@@ -420,14 +420,14 @@ export function NewPrescriptionModal({ isOpen, onClose }: NewPrescriptionModalPr
 
           <div className="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-3">
             <Button type="button" variant="outline" onClick={onClose} className="w-full sm:w-auto">
-              Cancel
+              İptal
             </Button>
             <Button 
               onClick={handleSave}
               disabled={isAddingPrescription}
               className="bg-blue-500 hover:bg-blue-600 text-white w-full sm:w-auto"
             >
-              {isAddingPrescription ? "Saving..." : "Save Prescription"}
+              {isAddingPrescription ? "Kaydediliyor..." : "Reçeteyi Kaydet"}
             </Button>
           </div>
         </div>
