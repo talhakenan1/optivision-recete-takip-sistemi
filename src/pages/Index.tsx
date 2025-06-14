@@ -64,7 +64,7 @@ const Index = () => {
       case "dashboard":
         return <Dashboard onNewPrescription={handleNewPrescription} onNavigate={handleSectionChange} />;
       case "orders":
-        return <Orders onNewPrescription={handleNewPrescription} />;
+        return <Orders />;
       case "customers":
         return <Customers />;
       case "settings":
