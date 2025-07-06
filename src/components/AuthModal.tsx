@@ -15,7 +15,6 @@ interface AuthModalProps {
 }
 
 export function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps) {
-  const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -28,27 +27,15 @@ export function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps) {
     setError("");
 
     try {
-      if (isLogin) {
-        const { error } = await supabase.auth.signInWithPassword({
-          email,
-          password,
-        });
-        if (error) throw error;
-        toast({
-          title: "Welcome back!",
-          description: "You have successfully logged in.",
-        });
-      } else {
-        const { error } = await supabase.auth.signUp({
-          email,
-          password,
-        });
-        if (error) throw error;
-        toast({
-          title: "Account created!",
-          description: "Please check your email to verify your account.",
-        });
-      }
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+      if (error) throw error;
+      toast({
+        title: "Hoş geldiniz!",
+        description: "Başarıyla giriş yaptınız.",
+      });
       onSuccess();
       onClose();
     } catch (error: any) {
@@ -63,10 +50,10 @@ export function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps) {
       <DialogContent className="max-w-md mx-4 sm:mx-0">
         <DialogHeader>
           <DialogTitle className="text-xl sm:text-2xl font-bold text-center">
-            {isLogin ? "Welcome Back" : "Create Account"}
+            Giriş Yap
           </DialogTitle>
           <p className="text-gray-600 text-center text-sm">
-            {isLogin ? "Sign in to your Visionary Optics account" : "Join Visionary Optics today"}
+            Visionary Optics hesabınıza giriş yapın
           </p>
         </DialogHeader>
 
@@ -78,7 +65,7 @@ export function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps) {
           )}
 
           <div>
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email">E-posta</Label>
             <Input
               id="email"
               type="email"
@@ -86,12 +73,12 @@ export function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps) {
               onChange={(e) => setEmail(e.target.value)}
               required
               className="mt-1"
-              placeholder="your@email.com"
+              placeholder="email@example.com"
             />
           </div>
 
           <div>
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor="password">Şifre</Label>
             <Input
               id="password"
               type="password"
@@ -109,18 +96,8 @@ export function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps) {
             disabled={loading}
             className="w-full bg-blue-500 hover:bg-blue-600 text-white"
           >
-            {loading ? "Please wait..." : (isLogin ? "Sign In" : "Create Account")}
+            {loading ? "Lütfen bekleyin..." : "Giriş Yap"}
           </Button>
-
-          <div className="text-center">
-            <button
-              type="button"
-              onClick={() => setIsLogin(!isLogin)}
-              className="text-blue-500 hover:text-blue-600 text-sm"
-            >
-              {isLogin ? "Need an account? Sign up" : "Already have an account? Sign in"}
-            </button>
-          </div>
         </form>
       </DialogContent>
     </Dialog>

@@ -9,6 +9,7 @@ import { Settings } from "@/components/Settings";
 import { NewPrescriptionModal } from "@/components/NewPrescriptionModal";
 import { PersonalInfoModal } from "@/components/PersonalInfoModal";
 import { AuthModal } from "@/components/AuthModal";
+import { LandingPage } from "@/components/LandingPage";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Loader2, Menu } from "lucide-react";
@@ -19,6 +20,7 @@ const Index = () => {
   const [isNewPrescriptionOpen, setIsNewPrescriptionOpen] = useState(false);
   const [isPersonalInfoOpen, setIsPersonalInfoOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [showLanding, setShowLanding] = useState(true);
   const { user, loading } = useAuth();
   const isMobile = useIsMobile();
 
@@ -40,24 +42,50 @@ const Index = () => {
 
   const handleAuthSuccess = () => {
     setIsAuthModalOpen(false);
+    setShowLanding(false);
+  };
+
+  const handleGetStarted = () => {
+    if (!user) {
+      setIsAuthModalOpen(true);
+    } else {
+      setShowLanding(false);
+    }
   };
 
   const renderContent = () => {
     if (!user) {
+      if (showLanding) {
+        return <LandingPage onGetStarted={handleGetStarted} />;
+      }
       return (
         <div className="flex items-center justify-center h-full px-4">
           <div className="text-center space-y-6 max-w-md">
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">Welcome to Visionary Optics</h2>
-            <p className="text-gray-600">Please sign in to access the management system.</p>
-            <Button 
-              onClick={() => setIsAuthModalOpen(true)}
-              className="bg-blue-500 hover:bg-blue-600 text-white px-8 py-3 w-full sm:w-auto"
-            >
-              Sign In
-            </Button>
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">Visionary Optics'e Hoş Geldiniz</h2>
+            <p className="text-gray-600">Sisteme erişim için lütfen giriş yapın.</p>
+            <div className="space-y-3">
+              <Button 
+                onClick={() => setIsAuthModalOpen(true)}
+                className="bg-blue-500 hover:bg-blue-600 text-white px-8 py-3 w-full sm:w-auto"
+              >
+                Giriş Yap
+              </Button>
+              <div className="text-center">
+                <button
+                  onClick={() => setShowLanding(true)}
+                  className="text-blue-500 hover:text-blue-600 text-sm underline"
+                >
+                  Ana sayfaya dön
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       );
+    }
+
+    if (showLanding) {
+      return <LandingPage onGetStarted={() => setShowLanding(false)} />;
     }
 
     switch (activeSection) {
@@ -85,7 +113,7 @@ const Index = () => {
   return (
     <div className="min-h-screen flex bg-gray-50 dark:bg-[#1f2937]">
       <SidebarProvider defaultOpen={!isMobile}>
-        {user && (
+        {user && !showLanding && (
           <AppSidebar 
             activeSection={activeSection} 
             onSectionChange={handleSectionChange}
@@ -93,12 +121,12 @@ const Index = () => {
           />
         )}
         <main className="flex-1 flex flex-col">
-          {user && isMobile && (
+          {user && !showLanding && isMobile && (
             <div className="flex items-center p-3 border-b bg-white dark:bg-[#1f2937]">
               <SidebarTrigger>
                 <Menu className="w-6 h-6" />
               </SidebarTrigger>
-              <h1 className="ml-3 text-lg font-semibold">OptiVision</h1>
+              <h1 className="ml-3 text-lg font-semibold">Visionary Optics</h1>
             </div>
           )}
           <div className="flex-1">
