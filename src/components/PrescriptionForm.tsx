@@ -96,6 +96,7 @@ export function PrescriptionForm({ formData, onChange, onEyeChange, onComplexEye
               <th className="border border-gray-300 dark:border-gray-600 p-2 text-center" colSpan={3}>SAĞ</th>
               <th className="border border-gray-300 dark:border-gray-600 p-2 text-center" colSpan={3}>SOL</th>
               <th className="border border-gray-300 dark:border-gray-600 p-2 text-center">Cam Rengi</th>
+              <th className="border border-gray-300 dark:border-gray-600 p-2 text-center">Cam Tipi</th>
             </tr>
             <tr className="bg-gray-50 dark:bg-gray-800">
               <th className="border border-gray-300 dark:border-gray-600 p-2 text-left"></th>
@@ -105,6 +106,7 @@ export function PrescriptionForm({ formData, onChange, onEyeChange, onComplexEye
               <th className="border border-gray-300 dark:border-gray-600 p-2 text-center">Sferik</th>
               <th className="border border-gray-300 dark:border-gray-600 p-2 text-center">Silinderik</th>
               <th className="border border-gray-300 dark:border-gray-600 p-2 text-center">Aks</th>
+              <th className="border border-gray-300 dark:border-gray-600 p-2 text-center"></th>
               <th className="border border-gray-300 dark:border-gray-600 p-2 text-center"></th>
             </tr>
           </thead>
@@ -163,6 +165,23 @@ export function PrescriptionForm({ formData, onChange, onEyeChange, onComplexEye
                   </SelectTrigger>
                   <SelectContent>
                     {lensColorOptions.map((option) => (
+                      <SelectItem key={option.value} value={option.value}>
+                        {option.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </td>
+              <td className="border border-gray-300 dark:border-gray-600 p-1" rowSpan={2}>
+                <Select 
+                  value={formData.leftEyeFar?.lensType || ''} 
+                  onValueChange={(value) => onComplexEyeChange?.('leftEyeFar', 'lensType', value)}
+                >
+                  <SelectTrigger className="h-8">
+                    <SelectValue placeholder="Cam tipi" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {lensTypeOptions.map((option) => (
                       <SelectItem key={option.value} value={option.value}>
                         {option.label}
                       </SelectItem>
@@ -238,53 +257,14 @@ export function PrescriptionForm({ formData, onChange, onEyeChange, onComplexEye
               <td className="border border-gray-300 dark:border-gray-600 p-1">
                 {/* Empty cell to align with lens color */}
               </td>
+              <td className="border border-gray-300 dark:border-gray-600 p-1">
+                {/* Empty cell to align with lens type */}
+              </td>
             </tr>
           </tbody>
         </table>
       </div>
 
-      {/* Lens Type Selection */}
-      <div className="space-y-4">
-        <h4 className="text-md font-semibold">Cam Tipi</h4>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <Label htmlFor="rightLensType">Sağ Göz Cam Tipi</Label>
-            <Select 
-              value={formData.rightEyeFar?.lensType || ''} 
-              onValueChange={(value) => onComplexEyeChange?.('rightEyeFar', 'lensType', value)}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Cam tipi seçin" />
-              </SelectTrigger>
-              <SelectContent>
-                {lensTypeOptions.map((option) => (
-                  <SelectItem key={option.value} value={option.value}>
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          <div>
-            <Label htmlFor="leftLensType">Sol Göz Cam Tipi</Label>
-            <Select 
-              value={formData.leftEyeFar?.lensType || ''} 
-              onValueChange={(value) => onComplexEyeChange?.('leftEyeFar', 'lensType', value)}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Cam tipi seçin" />
-              </SelectTrigger>
-              <SelectContent>
-                {lensTypeOptions.map((option) => (
-                  <SelectItem key={option.value} value={option.value}>
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }

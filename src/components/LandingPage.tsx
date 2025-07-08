@@ -86,27 +86,35 @@ export function LandingPage({ onGetStarted }: LandingPageProps) {
             Neden Visionary Optics?
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="space-y-4">
-              <h3 className="text-xl font-semibold text-blue-600 mb-3">✨ Kolay Kullanım</h3>
-              <p className="text-gray-600 dark:text-gray-300">
-                Sezgisel arayüz sayesinde dakikalar içinde sistemi öğrenin. Teknik bilgi gerektirmez.
-              </p>
+            <div className="space-y-6">
+              <div>
+                <h3 className="text-xl font-semibold text-blue-600 mb-3">✨ Kolay Kullanım</h3>
+                <p className="text-gray-600 dark:text-gray-300">
+                  Sezgisel arayüz sayesinde dakikalar içinde sistemi öğrenin. Teknik bilgi gerektirmez.
+                </p>
+              </div>
               
-              <h3 className="text-xl font-semibold text-green-600 mb-3">📊 Detaylı Takip</h3>
-              <p className="text-gray-600 dark:text-gray-300">
-                Her müşterinizin reçete geçmişini, sipariş durumunu ve ödeme bilgilerini tek yerden yönetin.
-              </p>
+              <div>
+                <h3 className="text-xl font-semibold text-green-600 mb-3">📊 Detaylı Takip</h3>
+                <p className="text-gray-600 dark:text-gray-300">
+                  Her müşterinizin reçete geçmişini, sipariş durumunu ve ödeme bilgilerini tek yerden yönetin.
+                </p>
+              </div>
             </div>
-            <div className="space-y-4">
-              <h3 className="text-xl font-semibold text-purple-600 mb-3">⚡ Hız ve Verimlilik</h3>
-              <p className="text-gray-600 dark:text-gray-300">
-                TC kimlik numarası ile anında müşteri bilgilerine ulaşın. Zaman kaybetmeyin.
-              </p>
+            <div className="space-y-6">
+              <div>
+                <h3 className="text-xl font-semibold text-purple-600 mb-3">⚡ Hız ve Verimlilik</h3>
+                <p className="text-gray-600 dark:text-gray-300">
+                  TC kimlik numarası ile anında müşteri bilgilerine ulaşın. Zaman kaybetmeyin.
+                </p>
+              </div>
               
-              <h3 className="text-xl font-semibold text-orange-600 mb-3">🔒 Güvenlik</h3>
-              <p className="text-gray-600 dark:text-gray-300">
-                Müşteri verileriniz en üst düzeyde güvenlik protokolleri ile korunur.
-              </p>
+              <div>
+                <h3 className="text-xl font-semibold text-orange-600 mb-3">🔒 Güvenlik</h3>
+                <p className="text-gray-600 dark:text-gray-300">
+                  Müşteri verileriniz en üst düzeyde güvenlik protokolleri ile korunur.
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -117,13 +125,13 @@ export function LandingPage({ onGetStarted }: LandingPageProps) {
             İşletmenizi Dijitalleştirin
           </h2>
           <p className="text-xl mb-6 opacity-90">
-            Bugün başlayın ve gözlükçü işletmenizi modern çağa taşıyın
+            Bugün başlayın ve işletmenizi modern çağa taşıyın
           </p>
           <Button 
             onClick={onGetStarted}
             className="bg-white text-blue-600 hover:bg-gray-100 px-8 py-4 text-lg font-semibold rounded-full shadow-lg"
           >
-            Sisteme Giriş Yap
+            Hemen Başla
           </Button>
         </div>
 
