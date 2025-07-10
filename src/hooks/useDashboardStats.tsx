@@ -17,14 +17,11 @@ export function useDashboardStats() {
         .select("*", { count: "exact", head: true })
         .eq("user_id", user.id);
 
-      // Get active customers count for this user (customers who have placed orders)
-      const { data: ordersWithCustomers } = await supabase
-        .from("orders")
-        .select("customer_id")
+      // Get active customers count directly from customers table
+      const { count: activeCustomers } = await supabase
+        .from("customers")
+        .select("*", { count: "exact", head: true })
         .eq("user_id", user.id);
-      
-      const uniqueCustomerIds = new Set(ordersWithCustomers?.map(order => order.customer_id) || []);
-      const activeCustomers = uniqueCustomerIds.size;
 
       // Get total revenue for this user (excluding returned orders)
       const { data: revenueData } = await supabase
@@ -47,7 +44,7 @@ export function useDashboardStats() {
 
       const statsResult = {
         totalOrders: totalOrders || 0,
-        activeCustomers: activeCustomers,
+        activeCustomers: activeCustomers || 0,
         totalRevenue: totalRevenue,
         newPrescriptions: newPrescriptions || 0,
       };
@@ -55,6 +52,7 @@ export function useDashboardStats() {
       return statsResult;
     },
     enabled: !!user,
+    staleTime: 24 * 60 * 60 * 1000, // Data stays fresh for 24 hours
   });
 
   return {

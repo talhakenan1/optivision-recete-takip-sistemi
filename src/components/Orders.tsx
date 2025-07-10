@@ -24,11 +24,8 @@ export function Orders() {
   const getOrderStatus = (orderDate: string, status: string) => {
     if (status === "returned") return "returned";
     
-    const today = new Date();
-    const orderDateTime = new Date(orderDate);
-    const diffInDays = Math.floor((today.getTime() - orderDateTime.getTime()) / (1000 * 60 * 60 * 24));
-    
-    return diffInDays <= 7 ? "new" : "shipped";
+    // All non-returned orders are considered "shipped"
+    return "shipped";
   };
 
   const filteredOrders = orders.filter(order => {
@@ -53,7 +50,6 @@ export function Orders() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "new": return "bg-blue-100 text-blue-800";
       case "shipped": return "bg-green-100 text-green-800";
       case "returned": return "bg-red-100 text-red-800";
       default: return "bg-gray-100 text-gray-800";
@@ -62,7 +58,6 @@ export function Orders() {
 
   const getStatusText = (status: string) => {
     switch (status) {
-      case "new": return "Yeni";
       case "shipped": return "Teslim";
       case "returned": return "İade";
       default: return status;
@@ -82,7 +77,6 @@ export function Orders() {
 
   const statusButtons = [
     { key: "all", label: "Hepsi" },
-    { key: "new", label: "Yeni" },
     { key: "shipped", label: "Teslim" },
     { key: "returned", label: "İade" },
   ];

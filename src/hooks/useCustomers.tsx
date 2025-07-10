@@ -20,7 +20,7 @@ export function useCustomers() {
       
       const { data, error } = await supabase
         .from("customers")
-        .select("*")
+        .select("id, name, email, phone, id_number, created_at")
         .eq("user_id", user.id)
         .order("created_at", { ascending: false });
 
@@ -32,6 +32,7 @@ export function useCustomers() {
       return data || [];
     },
     enabled: !!user,
+    staleTime: 24 * 60 * 60 * 1000, // Data stays fresh for 24 hours
   });
 
   const addCustomer = useMutation({

@@ -124,8 +124,6 @@ export function NewPrescriptionModal({ isOpen, onClose }: NewPrescriptionModalPr
     const fetchCustomerData = async () => {
       if (formData.idNumber && formData.idNumber.length > 0 && user) {
         try {
-          console.log("Fetching customer data for ID:", formData.idNumber, "and user:", user.id);
-          
           // Find customer by ID number for this specific user
           const { data: customer } = await supabase
             .from("customers")
@@ -133,8 +131,6 @@ export function NewPrescriptionModal({ isOpen, onClose }: NewPrescriptionModalPr
             .eq("id_number", formData.idNumber)
             .eq("user_id", user.id)
             .maybeSingle();
-
-          console.log("Found customer:", customer);
 
           if (customer) {
             // Split the name into first and last name
@@ -151,8 +147,6 @@ export function NewPrescriptionModal({ isOpen, onClose }: NewPrescriptionModalPr
               .order("created_at", { ascending: false })
               .limit(1)
               .maybeSingle();
-
-            console.log("Found last prescription:", lastPrescription);
 
             let prescriptionData: any = {};
             if (lastPrescription && lastPrescription.prescription_data) {
@@ -225,7 +219,6 @@ export function NewPrescriptionModal({ isOpen, onClose }: NewPrescriptionModalPr
 
     const totalPrice = calculateTotalPrice();
 
-    console.log("Saving prescription with form data:", formData);
     addPrescription({
       ...formData,
       price: totalPrice,

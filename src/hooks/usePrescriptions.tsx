@@ -77,16 +77,14 @@ export function usePrescriptions() {
     queryFn: async () => {
       if (!user) throw new Error("User not authenticated");
       
-      console.log("Fetching prescriptions for user:", user.id);
-      
       const { data, error } = await supabase
         .from("prescriptions")
         .select(`
-          *,
+          id,
+          prescription_data,
           customers (
             name,
-            email,
-            phone
+            email
           )
         `)
         .eq("user_id", user.id)
@@ -97,17 +95,15 @@ export function usePrescriptions() {
         throw error;
       }
       
-      console.log("Fetched prescriptions:", data);
       return data || [];
     },
     enabled: !!user,
+    staleTime: 24 * 60 * 60 * 1000, // Data stays fresh for 24 hours
   });
 
   const addPrescription = useMutation({
     mutationFn: async (prescriptionData: PrescriptionData) => {
       if (!user) throw new Error("User not authenticated");
-      
-      console.log("Adding prescription with data:", prescriptionData, "for user:", user.id);
       
       // First, check if customer exists by ID number for this specific user
       const { data: existingCustomer, error: customerError } = await supabase
@@ -126,7 +122,6 @@ export function usePrescriptions() {
 
       if (!existingCustomer) {
         // Create new customer for this user
-        console.log("Creating new customer for user:", user.id);
         const { data: newCustomer, error: createError } = await supabase
           .from("customers")
           .insert([{
@@ -145,10 +140,8 @@ export function usePrescriptions() {
           throw createError;
         }
         customerId = newCustomer.id;
-        console.log("New customer created with ID:", customerId);
       } else {
         customerId = existingCustomer.id;
-        console.log("Using existing customer with ID:", customerId);
         
         // Update customer address if provided
         if (prescriptionData.address) {
@@ -176,8 +169,6 @@ export function usePrescriptions() {
         console.error("Error creating order:", orderError);
         throw orderError;
       }
-
-      console.log("Order created with ID:", newOrder.id);
 
       // Create prescription for this user with the new structure
       const prescriptionRecord = {
@@ -214,8 +205,6 @@ export function usePrescriptions() {
         }
       };
 
-      console.log("Creating prescription:", prescriptionRecord);
-
       const { data: prescription, error: prescriptionError } = await supabase
         .from("prescriptions")
         .insert([prescriptionRecord])
@@ -227,14 +216,13 @@ export function usePrescriptions() {
         throw prescriptionError;
       }
 
-      console.log("Prescription created successfully:", prescription);
       return prescription;
     },
     onSuccess: () => {
+      // Only invalidate queries that actually need updating
       queryClient.invalidateQueries({ queryKey: ["prescriptions", user?.id] });
-      queryClient.invalidateQueries({ queryKey: ["customers", user?.id] });
-      queryClient.invalidateQueries({ queryKey: ["orders", user?.id] });
       queryClient.invalidateQueries({ queryKey: ["dashboard-stats", user?.id] });
+      // Dashboard charts will update automatically due to staleTime
       toast({
         title: "Success",
         description: "Prescription saved successfully",

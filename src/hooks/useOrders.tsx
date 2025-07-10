@@ -21,10 +21,12 @@ export function useOrders() {
       const { data, error } = await supabase
         .from("orders")
         .select(`
-          *,
+          id,
+          order_date,
+          status,
+          total,
           customers (
             name,
-            id_number,
             email
           )
         `)
@@ -39,6 +41,7 @@ export function useOrders() {
       return data || [];
     },
     enabled: !!user,
+    staleTime: 24 * 60 * 60 * 1000, // Data stays fresh for 24 hours
   });
 
   const updateOrderStatus = useMutation({

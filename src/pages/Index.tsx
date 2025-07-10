@@ -10,6 +10,7 @@ import { NewPrescriptionModal } from "@/components/NewPrescriptionModal";
 import { PersonalInfoModal } from "@/components/PersonalInfoModal";
 import { AuthModal } from "@/components/AuthModal";
 import { LandingPage } from "@/components/LandingPage";
+import { PremiumLoginAnimation } from "@/components/PremiumLoginAnimation";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Loader2, Menu } from "lucide-react";
@@ -21,6 +22,7 @@ const Index = () => {
   const [isPersonalInfoOpen, setIsPersonalInfoOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [showLanding, setShowLanding] = useState(true);
+  const [showPremiumAnimation, setShowPremiumAnimation] = useState(false);
   const { user, loading } = useAuth();
   const isMobile = useIsMobile();
 
@@ -42,6 +44,11 @@ const Index = () => {
 
   const handleAuthSuccess = () => {
     setIsAuthModalOpen(false);
+    setShowPremiumAnimation(true);
+  };
+  
+  const handleAnimationComplete = () => {
+    setShowPremiumAnimation(false);
     setShowLanding(false);
   };
 
@@ -152,6 +159,11 @@ const Index = () => {
           isOpen={isAuthModalOpen}
           onClose={() => setIsAuthModalOpen(false)}
           onSuccess={handleAuthSuccess}
+        />
+        
+        <PremiumLoginAnimation 
+          isVisible={showPremiumAnimation}
+          onComplete={handleAnimationComplete}
         />
       </SidebarProvider>
     </div>
