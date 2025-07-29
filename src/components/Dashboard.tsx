@@ -31,9 +31,9 @@ export function Dashboard({ onNewPrescription, onNavigate }: DashboardProps) {
 
   return (
     <div className="min-h-screen bg-background dark:bg-[#1f2937]">
-      <div className="space-y-6 p-6">
+      <div className="flex flex-col min-h-screen p-6">
         {/* Hero Section */}
-        <div className="relative h-96 rounded-2xl overflow-hidden bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-800">
+        <div className="relative flex-1 rounded-2xl overflow-hidden bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-800 mb-6 min-h-[60vh]">
           <div className="absolute inset-0 bg-black bg-opacity-20" />
           {/* Rastgele dağıtılmış ikonlar */}
           <div className="absolute top-8 left-12 opacity-15">
@@ -60,29 +60,33 @@ export function Dashboard({ onNewPrescription, onNavigate }: DashboardProps) {
           <div className="absolute top-16 right-8 opacity-20">
             <Users className="w-8 h-8 text-white animate-pulse" style={{ animationDelay: '0.5s' }} />
           </div>
-          <div className="relative z-10 flex flex-col items-center justify-center h-full text-white text-center px-6">
-            <div className="mb-6">
-              <Eye className="w-20 h-20 mx-auto mb-4 text-white" />
-            </div>
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 font-mono">Visionary Optics</h1>
-            <p className="text-lg md:text-xl mb-8 max-w-2xl opacity-90">
-              Gözlük satışlarınızı ve müşteri bilgilerinizi verimli bir şekilde yönetin.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100 hover:text-gray-900" onClick={() => onNavigate("orders")}>
-                <ShoppingBag className="w-4 h-4 mr-2" />
-                Siparişleri Görüntüle
-              </Button>
-              <Button size="lg" variant="outline" className="border-white text-blue-600 bg-white hover:bg-blue-50 hover:text-gray-900" onClick={() => onNavigate("customers")}>
-                <Users className="w-4 h-4 mr-2" />
-                Müşterileri Yönet
-              </Button>
+          <div className="relative z-10 flex flex-col items-center justify-center h-full text-white text-center px-6 py-12">
+            <div className="flex flex-col items-center justify-center space-y-8">
+              <div className="mb-4">
+                <Eye className="w-24 h-24 mx-auto text-white" />
+              </div>
+              <div className="space-y-6">
+                <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold leading-tight font-mono">Melis Optik</h1>
+                <p className="text-xl md:text-2xl lg:text-3xl max-w-3xl opacity-90 leading-relaxed">
+                  Gözlük satışlarınızı ve müşteri bilgilerinizi verimli bir şekilde yönetin.
+                </p>
+              </div>
+              <div className="flex flex-col sm:flex-row gap-6 mt-8">
+                <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100 hover:text-gray-900 px-10 py-5 text-xl font-semibold rounded-xl shadow-lg transition-all duration-200 hover:scale-105" onClick={() => onNavigate("orders")}>
+                  <ShoppingBag className="w-7 h-7 mr-3" />
+                  Siparişleri Görüntüle
+                </Button>
+                <Button size="lg" variant="outline" className="border-white text-blue-600 bg-white hover:bg-blue-50 hover:text-gray-900 px-10 py-5 text-xl font-semibold rounded-xl shadow-lg transition-all duration-200 hover:scale-105" onClick={() => onNavigate("customers")}>
+                  <Users className="w-7 h-7 mr-3" />
+                  Müşterileri Yönet
+                </Button>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Stats Cards - Moved to bottom */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-auto">
           {isLoading ? (
             Array.from({ length: 3 }).map((_, index) => (
               <Card key={index}>
@@ -226,8 +230,8 @@ export function Dashboard({ onNewPrescription, onNavigate }: DashboardProps) {
         </div>
 
         {/* Copyright Footer */}
-        <div className="text-center text-gray-500 dark:text-gray-400 text-sm mt-12">
-          © 2024 Visionary Optics. All rights reserved.
+        <div className="text-center text-gray-500 dark:text-gray-400 text-sm mt-6">
+          © 2024 Melis Optik. All rights reserved.
         </div>
       </div>
     </div>

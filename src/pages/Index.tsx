@@ -15,13 +15,19 @@ import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Loader2, Menu } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { Revenue } from "@/components/Revenue";
+import DebtManagement from "@/components/DebtManagement";
+import TelegramManagement from "@/components/TelegramManagement";
 
 const Index = () => {
   const [activeSection, setActiveSection] = useState("dashboard");
   const [isNewPrescriptionOpen, setIsNewPrescriptionOpen] = useState(false);
   const [isPersonalInfoOpen, setIsPersonalInfoOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const [showLanding, setShowLanding] = useState(true);
+  const [showLanding, setShowLanding] = useState(() => {
+    const stored = localStorage.getItem("showLanding");
+    return stored === null ? true : stored === "true";
+  });
   const [showPremiumAnimation, setShowPremiumAnimation] = useState(false);
   const { user, loading } = useAuth();
   const isMobile = useIsMobile();
@@ -45,11 +51,13 @@ const Index = () => {
   const handleAuthSuccess = () => {
     setIsAuthModalOpen(false);
     setShowPremiumAnimation(true);
+    localStorage.setItem("showLanding", "false");
   };
-  
+
   const handleAnimationComplete = () => {
     setShowPremiumAnimation(false);
     setShowLanding(false);
+    localStorage.setItem("showLanding", "false");
   };
 
   const handleGetStarted = () => {
@@ -57,6 +65,7 @@ const Index = () => {
       setIsAuthModalOpen(true);
     } else {
       setShowLanding(false);
+      localStorage.setItem("showLanding", "false");
     }
   };
 
@@ -68,7 +77,7 @@ const Index = () => {
       return (
         <div className="flex items-center justify-center h-full px-4">
           <div className="text-center space-y-6 max-w-md">
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">Visionary Optics'e Hoş Geldiniz</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">Melis Optik'e Hoş Geldiniz</h2>
             <p className="text-gray-600">Sisteme erişim için lütfen giriş yapın.</p>
             <div className="space-y-3">
               <Button 
@@ -102,6 +111,12 @@ const Index = () => {
         return <Orders />;
       case "customers":
         return <Customers />;
+      case "revenue":
+        return <Revenue />;
+      case "debts":
+        return <DebtManagement />;
+      case "telegram":
+        return <TelegramManagement />;
       case "settings":
         return <Settings onPersonalInfo={handlePersonalInfo} />;
       default:
@@ -133,7 +148,7 @@ const Index = () => {
               <SidebarTrigger>
                 <Menu className="w-6 h-6" />
               </SidebarTrigger>
-              <h1 className="ml-3 text-lg font-semibold">Visionary Optics</h1>
+              <h1 className="ml-3 text-lg font-semibold">Melis Optik</h1>
             </div>
           )}
           <div className="flex-1">

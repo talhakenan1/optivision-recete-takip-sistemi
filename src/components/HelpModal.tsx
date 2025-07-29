@@ -26,7 +26,7 @@ export function HelpModal({ isOpen, onClose }: HelpModalProps) {
           
           <TabsContent value="getting-started" className="space-y-4 mt-6">
             <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border dark:border-gray-700">
-              <h3 className="text-lg font-semibold mb-4 text-foreground dark:text-white">Welcome to Visionary Optics</h3>
+              <h3 className="text-lg font-semibold mb-4 text-foreground dark:text-white">Welcome to Melis Optik</h3>
               <div className="space-y-4 text-gray-700 dark:text-gray-300">
                 <p>
                   This application helps you manage your optical business efficiently. Here's what you can do:

@@ -56,7 +56,7 @@ export function LandingPage({ onGetStarted }: LandingPageProps) {
           </div>
           
           <h1 className="text-5xl font-bold text-gray-900 dark:text-white mb-6">
-            Visionary Optics
+            Melis Optik
           </h1>
           <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto">
             Gözlükçü işletmeniz için özel olarak tasarlanmış profesyonel yönetim sistemi. 
@@ -135,7 +135,7 @@ export function LandingPage({ onGetStarted }: LandingPageProps) {
           <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-green-500/10 to-blue-500/10 rounded-full translate-y-12 -translate-x-12"></div>
           
           <h2 className="text-3xl font-bold text-center mb-8 text-gray-900 dark:text-white relative z-10">
-            Neden Visionary Optics?
+            Neden Melis Optik?
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
             <div className="space-y-6">
@@ -241,7 +241,7 @@ export function LandingPage({ onGetStarted }: LandingPageProps) {
 
         {/* Footer */}
         <div className="text-center mt-12 text-gray-500 dark:text-gray-400">
-          <p>© 2024 Visionary Optics. Tüm hakları saklıdır.</p>
+          <p>© 2024 Melis Optik. Tüm hakları saklıdır.</p>
         </div>
       </div>
     </div>

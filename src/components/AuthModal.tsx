@@ -53,7 +53,7 @@ export function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps) {
             Giriş Yap
           </DialogTitle>
           <p className="text-gray-600 text-center text-sm">
-            Visionary Optics hesabınıza giriş yapın
+            Melis Optik hesabınıza giriş yapın
           </p>
         </DialogHeader>
 

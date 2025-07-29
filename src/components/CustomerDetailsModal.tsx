@@ -166,7 +166,93 @@ export function CustomerDetailsModal({ customer, isOpen, onClose }: CustomerDeta
                               )}
                               
                               {/* New Vision Details Grid - prioritize new format */}
-                              {prescription.prescription_data?.rightEye || prescription.prescription_data?.leftEye ? (
+                              {prescription.prescription_data?.rightEyeFar || prescription.prescription_data?.rightEyeNear || prescription.prescription_data?.leftEyeFar || prescription.prescription_data?.leftEyeNear ? (
+                                <div className="space-y-3 mt-2">
+                                  {/* Far Vision */}
+                                  {(prescription.prescription_data?.rightEyeFar || prescription.prescription_data?.leftEyeFar) && (
+                                    <div className="p-3 bg-gray-50 dark:bg-gray-700 rounded">
+                                      <h6 className="font-medium text-gray-700 dark:text-gray-300 mb-2">Uzak Görüş</h6>
+                                      <div className="grid grid-cols-2 gap-4">
+                                        <div className="space-y-1">
+                                          <h6 className="font-medium text-gray-600 dark:text-gray-400">Sağ Göz</h6>
+                                          {prescription.prescription_data?.rightEyeFar?.sph && (
+                                            <p><span className="font-medium">SPH:</span> {prescription.prescription_data.rightEyeFar.sph}</p>
+                                          )}
+                                          {prescription.prescription_data?.rightEyeFar?.cyl && (
+                                            <p><span className="font-medium">CYL:</span> {prescription.prescription_data.rightEyeFar.cyl}</p>
+                                          )}
+                                          {prescription.prescription_data?.rightEyeFar?.axis && (
+                                            <p><span className="font-medium">AXIS:</span> {prescription.prescription_data.rightEyeFar.axis}</p>
+                                          )}
+                                        </div>
+                                        <div className="space-y-1">
+                                          <h6 className="font-medium text-gray-600 dark:text-gray-400">Sol Göz</h6>
+                                          {prescription.prescription_data?.leftEyeFar?.sph && (
+                                            <p><span className="font-medium">SPH:</span> {prescription.prescription_data.leftEyeFar.sph}</p>
+                                          )}
+                                          {prescription.prescription_data?.leftEyeFar?.cyl && (
+                                            <p><span className="font-medium">CYL:</span> {prescription.prescription_data.leftEyeFar.cyl}</p>
+                                          )}
+                                          {prescription.prescription_data?.leftEyeFar?.axis && (
+                                            <p><span className="font-medium">AXIS:</span> {prescription.prescription_data.leftEyeFar.axis}</p>
+                                          )}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  )}
+                                  
+                                  {/* Near Vision */}
+                                  {(prescription.prescription_data?.rightEyeNear || prescription.prescription_data?.leftEyeNear) && (
+                                    <div className="p-3 bg-gray-50 dark:bg-gray-700 rounded">
+                                      <h6 className="font-medium text-gray-700 dark:text-gray-300 mb-2">Yakın Görüş</h6>
+                                      <div className="grid grid-cols-2 gap-4">
+                                        <div className="space-y-1">
+                                          <h6 className="font-medium text-gray-600 dark:text-gray-400">Sağ Göz</h6>
+                                          {prescription.prescription_data?.rightEyeNear?.sph && (
+                                            <p><span className="font-medium">SPH:</span> {prescription.prescription_data.rightEyeNear.sph}</p>
+                                          )}
+                                          {prescription.prescription_data?.rightEyeNear?.cyl && (
+                                            <p><span className="font-medium">CYL:</span> {prescription.prescription_data.rightEyeNear.cyl}</p>
+                                          )}
+                                          {prescription.prescription_data?.rightEyeNear?.axis && (
+                                            <p><span className="font-medium">AXIS:</span> {prescription.prescription_data.rightEyeNear.axis}</p>
+                                          )}
+                                        </div>
+                                        <div className="space-y-1">
+                                          <h6 className="font-medium text-gray-600 dark:text-gray-400">Sol Göz</h6>
+                                          {prescription.prescription_data?.leftEyeNear?.sph && (
+                                            <p><span className="font-medium">SPH:</span> {prescription.prescription_data.leftEyeNear.sph}</p>
+                                          )}
+                                          {prescription.prescription_data?.leftEyeNear?.cyl && (
+                                            <p><span className="font-medium">CYL:</span> {prescription.prescription_data.leftEyeNear.cyl}</p>
+                                          )}
+                                          {prescription.prescription_data?.leftEyeNear?.axis && (
+                                            <p><span className="font-medium">AXIS:</span> {prescription.prescription_data.leftEyeNear.axis}</p>
+                                          )}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  )}
+                                  
+                                  {/* ADD and PD - Global values */}
+                                  <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded">
+                                    <div className="grid grid-cols-2 gap-4">
+                                      {prescription.prescription_data?.add && (
+                                        <div>
+                                          <span className="font-medium text-gray-700 dark:text-gray-300">ADD:</span>
+                                          <p className="text-gray-900 dark:text-gray-100">{prescription.prescription_data.add}</p>
+                                        </div>
+                                      )}
+                                      {prescription.prescription_data?.pd && (
+                                        <div>
+                                          <span className="font-medium text-gray-700 dark:text-gray-300">PD:</span>
+                                          <p className="text-gray-900 dark:text-gray-100">{prescription.prescription_data.pd}</p>
+                                        </div>
+                                      )}
+                                    </div>
+                                  </div>
+                                </div>
+                              ) : prescription.prescription_data?.rightEye || prescription.prescription_data?.leftEye ? (
                                 <div className="grid grid-cols-2 gap-4 mt-2 p-3 bg-gray-50 dark:bg-gray-700 rounded">
                                   <div className="space-y-1">
                                     <h6 className="font-medium text-gray-700 dark:text-gray-300">Sağ Göz</h6>
@@ -178,9 +264,6 @@ export function CustomerDetailsModal({ customer, isOpen, onClose }: CustomerDeta
                                     )}
                                     {prescription.prescription_data?.rightEye?.axis && (
                                       <p><span className="font-medium">AXIS:</span> {prescription.prescription_data.rightEye.axis}</p>
-                                    )}
-                                    {prescription.prescription_data?.add && (
-                                      <p><span className="font-medium">ADD:</span> {prescription.prescription_data.add}</p>
                                     )}
                                   </div>
                                   <div className="space-y-1">
@@ -194,10 +277,26 @@ export function CustomerDetailsModal({ customer, isOpen, onClose }: CustomerDeta
                                     {prescription.prescription_data?.leftEye?.axis && (
                                       <p><span className="font-medium">AXIS:</span> {prescription.prescription_data.leftEye.axis}</p>
                                     )}
-                                    {prescription.prescription_data?.pd && (
-                                      <p><span className="font-medium">PD:</span> {prescription.prescription_data.pd}</p>
-                                    )}
                                   </div>
+                                  {/* ADD and PD for simple format */}
+                                  {(prescription.prescription_data?.add || prescription.prescription_data?.pd) && (
+                                    <div className="col-span-2 mt-2 pt-2 border-t border-gray-200 dark:border-gray-600">
+                                      <div className="grid grid-cols-2 gap-4">
+                                        {prescription.prescription_data?.add && (
+                                          <div>
+                                            <span className="font-medium text-gray-700 dark:text-gray-300">ADD:</span>
+                                            <p className="text-gray-900 dark:text-gray-100">{prescription.prescription_data.add}</p>
+                                          </div>
+                                        )}
+                                        {prescription.prescription_data?.pd && (
+                                          <div>
+                                            <span className="font-medium text-gray-700 dark:text-gray-300">PD:</span>
+                                            <p className="text-gray-900 dark:text-gray-100">{prescription.prescription_data.pd}</p>
+                                          </div>
+                                        )}
+                                      </div>
+                                    </div>
+                                  )}
                                 </div>
                               ) : (
                                 // Fallback to old format if new format not available

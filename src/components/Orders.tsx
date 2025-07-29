@@ -75,6 +75,35 @@ export function Orders() {
     return new Date(dateString).toLocaleDateString('tr-TR');
   };
 
+  // Günlük ve aylık toplamları hesapla (order_date'e göre)
+  const today = new Date();
+  const todayStr = today.toISOString().split("T")[0];
+  const currentMonth = today.getMonth();
+  const currentYear = today.getFullYear();
+
+  const dailyTotal = filteredOrders.reduce((sum, order) => {
+    const orderStatus = getOrderStatus(order.order_date, order.status);
+    const orderDate = new Date(order.order_date);
+    const orderDateStr = orderDate.toISOString().split("T")[0];
+    if (orderStatus !== "returned" && orderDateStr === todayStr) {
+      return sum + Number(order.total);
+    }
+    return sum;
+  }, 0);
+
+  const monthlyTotal = filteredOrders.reduce((sum, order) => {
+    const orderStatus = getOrderStatus(order.order_date, order.status);
+    const orderDate = new Date(order.order_date);
+    if (
+      orderStatus !== "returned" &&
+      orderDate.getMonth() === currentMonth &&
+      orderDate.getFullYear() === currentYear
+    ) {
+      return sum + Number(order.total);
+    }
+    return sum;
+  }, 0);
+
   const statusButtons = [
     { key: "all", label: "Hepsi" },
     { key: "shipped", label: "Teslim" },
@@ -171,8 +200,10 @@ export function Orders() {
               {/* Total Row */}
               {filteredOrders.length > 0 && (
                 <TableRow className="bg-gray-50 dark:bg-gray-700 font-semibold">
-                  <TableCell colSpan={4} className="text-right">Toplam:</TableCell>
-                  <TableCell className="font-bold text-lg">{formatCurrency(totalAmount)}</TableCell>
+                  <TableCell colSpan={2} className="text-right">Günlük Toplam:</TableCell>
+                  <TableCell className="font-bold text-lg">{formatCurrency(dailyTotal)}</TableCell>
+                  <TableCell className="text-right">Aylık Toplam:</TableCell>
+                  <TableCell className="font-bold text-lg">{formatCurrency(monthlyTotal)}</TableCell>
                 </TableRow>
               )}
             </TableBody>

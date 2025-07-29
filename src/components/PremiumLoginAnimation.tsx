@@ -51,7 +51,7 @@ export function PremiumLoginAnimation({ isVisible, onComplete }: PremiumLoginAni
         <div className={`mt-8 text-center transition-all duration-1000 delay-500 ${
           animationStage >= 2 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
         }`}>
-          <h2 className="text-3xl font-bold text-white font-mono mb-2">Visionary Optics</h2>
+          <h2 className="text-3xl font-bold text-white font-mono mb-2">Melis Optik</h2>
           <p className="text-white/80 text-lg">Premium sisteme hoş geldiniz</p>
         </div>
 

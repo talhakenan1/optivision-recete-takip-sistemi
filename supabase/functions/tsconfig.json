@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM"],
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "types": [],
+    "typeRoots": ["./node_modules/@types"],
+    "allowImportingTsExtensions": false,
+    "resolveJsonModule": true
+  },
+  "include": [
+    "**/*.ts",
+    "deno.d.ts",
+    "types.d.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

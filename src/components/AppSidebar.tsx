@@ -1,5 +1,5 @@
 
-import { Home, Package, Users, Settings, HelpCircle } from "lucide-react";
+import { Home, Package, Users, Settings, HelpCircle, CreditCard, MessageSquare } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -12,6 +12,7 @@ import {
   SidebarFooter,
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
+import { BarChart3 } from "lucide-react";
 
 interface AppSidebarProps {
   activeSection: string;
@@ -35,6 +36,21 @@ const menuItems = [
     title: "Müşteriler",
     icon: Users,
   },
+  {
+    id: "revenue",
+    title: "Ciro",
+    icon: BarChart3,
+  },
+  {
+    id: "debts",
+    title: "Borç Yönetimi",
+    icon: CreditCard,
+  },
+  {
+    id: "telegram",
+    title: "Telegram Yönetimi",
+    icon: MessageSquare,
+  },
 ];
 
 export function AppSidebar({ activeSection, onSectionChange, onNewPrescription }: AppSidebarProps) {
@@ -55,9 +71,9 @@ export function AppSidebar({ activeSection, onSectionChange, onNewPrescription }
       <SidebarHeader className="p-4 sm:p-6">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 bg-black rounded-md flex items-center justify-center">
-            <span className="text-white font-bold text-sm">V</span>
+            <span className="text-white font-bold text-sm">M</span>
           </div>
-          <span className="font-semibold text-base sm:text-lg">OptiVision</span>
+          <span className="font-semibold text-base sm:text-lg">Melis Optik</span>
         </div>
       </SidebarHeader>
       
